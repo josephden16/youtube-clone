@@ -10,8 +10,20 @@ module.exports = {
       lightGray: '#EBEBEB',
       dark: '#18151E'
     },
-    fontFamily: ['Mulish', 'sans-serif'],
-    extend: {},
+    fontFamily: {
+      sans: ['Mulish', 'sans-serif']
+    },
+    extend: {
+      borderRadius: theme => ({
+        'circle': '50%'
+      }),
+      backgroundColor: theme => ({
+        'transparent': 'transparent'
+      }),
+      borderWidth: theme => ({
+        '1': '1px'
+      })
+    },
   },
 
   variants: {

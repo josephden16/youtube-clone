@@ -1,0 +1,51 @@
+.layout {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+.video {
+  width: 87%;
+  margin: auto;
+}
+
+.videoPlayer {
+  width: 100%;
+  outline: none;
+}
+
+.videoList {
+  margin: auto;
+}
+
+.hideText {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+}
+
+
+@media screen and (min-width: 500px) {
+  .video {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 1080px) {
+  .videoPlayer {
+    width: 100%;
+    border-radius: 8px;
+  }
+
+  .fixed-height {
+    height: 500px;
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 2.5fr 1fr;
+    gap: 32px;
+  }
+
+  .video {
+    width: 230px;
+  }
+}
