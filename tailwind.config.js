@@ -4,11 +4,13 @@ module.exports = {
   theme: {
     colors: {
       red: '#FF0000',
+      blue: '#2196F3',
       gray: '#898989',
       black: '#000000',
       white: '#FFFFFF',
       lightGray: '#EBEBEB',
-      dark: '#18151E'
+      dark: '#18151E',
+      dark2: '#28282C'
     },
     fontFamily: {
       sans: ['Mulish', 'sans-serif']

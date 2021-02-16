@@ -1,0 +1,23 @@
+.video {
+  width: 100%;
+}
+
+.hideSidebar {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  transform: translateX(-300px);
+}
+
+
+
+@media screen and (min-width: 500px) {
+  .video {
+    width: 350px;
+  }
+}
+
+@media screen and (min-width: 1024px) {
+  .video {
+    width: 230px;
+  }
+}

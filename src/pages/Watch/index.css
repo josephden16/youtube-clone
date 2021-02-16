@@ -13,6 +13,12 @@
   outline: none;
 }
 
+.hideSidebar {
+  position: absolute;
+  clip: rect(1px, 1px, 1px, 1px);
+  transform: translateX(-300px);
+}
+
 .videoList {
   margin: auto;
 }
@@ -29,10 +35,10 @@
   }
 }
 
-@media screen and (min-width: 1080px) {
+@media screen and (min-width: 1024px) {
   .videoPlayer {
     width: 100%;
-    border-radius: 8px;
+    border-radius: 16px;
   }
 
   .fixed-height {
