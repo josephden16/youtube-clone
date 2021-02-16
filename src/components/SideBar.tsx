@@ -1,7 +1,7 @@
 import React from 'react';
 import { faClock, faFire, faFolder, faHeart, faHome, faScroll, faStar, faCog, faCompactDisc } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import profileImg from '../images/profile.jpg';
+import profileImg from '../images/user.png';
 import user from '../images/user.png';
 
 
@@ -48,10 +48,10 @@ const SideBar = () => {
 
         <li className="flex space-x-3">
           <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={profileImg} alt="channel" />
+            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={user} alt="channel" />
           </span>
           <span className="mt-1 text-sm">
-            Tega Denedo
+            Leah Berry
           </span>
         </li>
 
@@ -66,10 +66,10 @@ const SideBar = () => {
 
         <li className="flex space-x-3">
           <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={profileImg} alt="channel" />
+            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={user} alt="channel" />
           </span>
           <span className="mt-1 text-sm">
-            Tega Denedo
+            Leah Berry
           </span>
         </li>
 
