@@ -6,6 +6,7 @@ import SideBar from '../../components/SideBar';
 import channelImg from '../../images/Oval.png';
 import videoCover from '../../images/Cover.jpg';
 import './index.css';
+import Authentication from '../../components/Authentication';
 
 
 const Home = () => {
@@ -19,6 +20,7 @@ const Home = () => {
     <>
       <div className="dark:bg-dark md:pt-1 ml-2 mr-2 lg:mr-4 lg:ml-4">
         <Header handleMenu={handleSideBar} />
+        <Authentication />
         <div className="flex mt-20 lg:mt-8 lg:space-x-14 xl:space-x-20">
           <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
             <SideBar />
@@ -72,7 +74,6 @@ const Home = () => {
         </div>
       </div>
       <MobileFooter />
-
     </>
   )
 }

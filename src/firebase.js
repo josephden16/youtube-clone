@@ -18,6 +18,11 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 export const firestore = firebase.firestore();
+export const auth = firebase.auth();
+
+export const provider = new firebase.auth.GoogleAuthProvider();
+export const signInWithGoogle = () => auth.signInWithPopup(provider);
+export const signOut = () => auth.signOut();
 
 
 window.firebase = firebase;

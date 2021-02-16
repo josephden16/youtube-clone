@@ -1,12 +1,19 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBars, faBell, faMoon, faSearch, faSun, faVideo } from '@fortawesome/free-solid-svg-icons';
-import profileImg from '../images/profile.jpg';
+import { faArrowLeft, faBars, faBell, faMoon, faSearch, faSun, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
 import logoLight from '../images/logo-light.svg';
 import logoDark from '../images/logo-dark.svg';
+import { UserContext } from './providers/AuthProvider';
 
 
+
+const Profile = ({ user }) => {
+  if (user) {
+    return <img className="rounded-circle ml-2 mt-1 lg:-mt-1" style={{ width: '33px', height: '33px' }} src={user.photoURL} alt="profile" />
+  }
+  return <FontAwesomeIcon icon={faUser} className="text-gray dark:text-lightGray mt-1 lg:mt-0 ml-2" style={{fontSize: '21px'}} />
+}
 
 const Logo = ({ theme }) => {
   let classList = document.documentElement.classList;
@@ -43,6 +50,7 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
 const Header = (props: any) => {
   const [isOpen, setOpen] = useState(false);
   const [theme, setTheme] = useState(null);
+  const user = useContext(UserContext);
 
   const handleThemeToggle = () => {
     const isDarkModeEnabled = document.documentElement.classList.contains("dark");
@@ -79,7 +87,7 @@ const Header = (props: any) => {
 
   return (
     <>
-      <header className="transition-colors dark:bg-dark flex ml-2 mr-2 lg:ml-0 lg:mr-0 pt-2">
+      <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-2">
 
         <div className="flex">
           <button style={{ outline: 'none' }} onClick={handleMenuClick} className="lg:mt-3 hidden lg:block mr-4 outline-none">
@@ -99,7 +107,7 @@ const Header = (props: any) => {
             <FontAwesomeIcon style={{ fontSize: '20px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-1" icon={faVideo} />
             <FontAwesomeIcon style={{ fontSize: '20px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:ml-3 md:mt-2 lg:mr-4 lg:mt-1" icon={faBell} />
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
-            <img className="rounded-circle ml-2 lg:-mt-1" style={{ width: '33px', height: '33px' }} src={profileImg} alt="profile" />
+            <Profile user={user} />
           </div>
         </div>
       </header>
