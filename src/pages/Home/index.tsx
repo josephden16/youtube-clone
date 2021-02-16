@@ -30,7 +30,7 @@ const Home = () => {
                   <img src={channelImg} className="w-10 lg:w-12 lg:mr-3" alt="channel" />
                   <h2 className="font-bold text-xl lg:text-3xl">Dollie Blair</h2>
                 </div>
-                <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+                <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                   <Video />
                   <Video />
                   <Video />
@@ -41,7 +41,7 @@ const Home = () => {
 
             <section>
               <h2 className="text-center lg:text-left font-bold text-2xl lg:text-3xl ml-6 lg:ml-2  mb-8">Trending &#128293;</h2>
-              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                 <Video />
                 <Video />
                 <Video />
@@ -51,7 +51,7 @@ const Home = () => {
 
             <section>
               <h2 className="font-bold text-center lg:text-left text-2xl lg:text-3xl ml-6 lg:ml-2  mb-8">Most Viewed &#128065;</h2>
-              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                 <Video />
                 <Video />
                 <Video />
@@ -61,7 +61,7 @@ const Home = () => {
 
             <section>
               <h2 className="text-center lg:text-left font-bold text-2xl lg:text-3xl ml-6 lg:ml-2 mb-8">Most Liked &#128077;</h2>
-              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
+              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                 <Video />
                 <Video />
                 <Video />

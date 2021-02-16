@@ -13,7 +13,7 @@ const MobileFooter = () => {
 
 
   return (
-    <footer style={{ borderTop: '1px solid' }} className="dark:bg-dark dark:text-gray sticky w-full text-lightGray pb-2 pt-2 mt-4 pl-3 pr-3 bottom-0 bg-white lg:hidden">
+    <footer style={{ borderTop: '1px solid' }} className="transition-colors dark:bg-dark dark:text-gray sticky w-full text-lightGray pb-2 pt-2 mt-4 pl-3 pr-3 bottom-0 bg-white lg:hidden">
       <div className="flex dark:text-lightGray text-gray justify-between">
         <Link to="/" className={getClassName("/")}>
           <div className="flex text-center items-center flex-col">

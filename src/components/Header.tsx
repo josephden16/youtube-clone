@@ -79,7 +79,7 @@ const Header = (props: any) => {
 
   return (
     <>
-      <header className="dark:bg-dark flex ml-2 mr-2 lg:ml-0 lg:mr-0 pt-2">
+      <header className="transition-colors dark:bg-dark flex ml-2 mr-2 lg:ml-0 lg:mr-0 pt-2">
 
         <div className="flex">
           <button style={{ outline: 'none' }} onClick={handleMenuClick} className="lg:mt-3 hidden lg:block mr-4 outline-none">

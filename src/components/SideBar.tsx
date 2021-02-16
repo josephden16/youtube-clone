@@ -7,7 +7,7 @@ import user from '../images/user.png';
 
 const SideBar = () => {
   return (
-    <nav className="hidden lg:flex lg:flex-col lg:ml-0">
+    <nav className="transition-colors hidden lg:flex lg:flex-col lg:ml-0">
       <ul className="dark:text-lightGray m-0 p-0 space-y-4 text-gray mt-6">
         <li className="text-red space-x-3 hover:text-red cursor-pointer">
           <FontAwesomeIcon icon={faHome} /> <span className="text-sm">Home</span>

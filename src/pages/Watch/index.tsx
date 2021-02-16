@@ -56,13 +56,13 @@ const Watch = () => {
               <div className="lg:flex lg:flex-row lg:justify-between">
                 <span className="dark:text-lightGray text-sm text-gray lg:mt-4">123k views</span>
                 <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
-                  <button className="dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> 123k</button>
-                  <button className="dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> 435k</button>
-                  <button className="dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
+                  <button className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> 123k</button>
+                  <button className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> 435k</button>
+                  <button className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
                 </div>
               </div>
             </div>
-            <div className="dark:border-gray ml-4 mr-4 mt-3 mb-9 pb-3 border-lightGray border-b-1">
+            <div className="transition-colors dark:border-gray ml-4 mr-4 mt-3 mb-9 pb-3 border-lightGray border-b-1">
               <div>
                 <div className="flex flex-row justify-between mb-2">
                   <div className="flex flex-row space-x-2" style={{ alignItems: 'center' }}>
@@ -116,7 +116,7 @@ const Video = () => (
         <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">4:15</span>
       </div>
     </Link>
-    <div className="ml-2 mr-2">
+    <div className="transition-colors ml-2 mr-2">
       <h3 className="font-bold capitalize -mt-4">A brief history of Creation</h3>
       <div className="dark:text-lightGray text-gray text-xs flex justify-between">
         <div className="space-x-2">
