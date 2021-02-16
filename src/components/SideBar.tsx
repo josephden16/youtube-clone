@@ -1,7 +1,6 @@
 import React from 'react';
 import { faClock, faFire, faFolder, faHeart, faHome, faScroll, faStar, faCog, faCompactDisc } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import profileImg from '../images/user.png';
 import user from '../images/user.png';
 
 

@@ -1,5 +1,4 @@
 import React, { useContext } from 'react';
-import { toast } from 'react-toastify';
 import { signInWithGoogle, signOut } from '../firebase';
 import googleIcon from '../images/google-symbol.svg';
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,10 +6,6 @@ import { UserContext } from './providers/AuthProvider';
 
 const Authentication = () => {
   const user: any = useContext(UserContext);
-
-  const notify = () => toast.dark("wow so easy", {
-    position: 'top-right'
-  });
 
   const handleSignOut = async () => {
     await signOut();
