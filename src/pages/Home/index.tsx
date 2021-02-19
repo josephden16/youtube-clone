@@ -1,15 +1,16 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'
 import Header from '../../components/Header';
 import MobileFooter from '../../components/MobileFooter';
 import SideBar from '../../components/SideBar';
 import channelImg from '../../images/Oval.png';
-import videoCover from '../../images/Cover.jpg';
 import './index.css';
 import Authentication from '../../components/Authentication';
+import { VideosContext } from '../../components/providers/VideosProvider';
 
 
 const Home = () => {
+  const videos = useContext(VideosContext);
   const [navOpen, setNavOpen] = useState(true);
 
   const handleSideBar = () => {
@@ -33,15 +34,14 @@ const Home = () => {
                   <h2 className="font-bold text-xl lg:text-3xl">Dollie Blair</h2>
                 </div>
                 <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
-                  <Video />
-                  <Video />
-                  <Video />
-                  <Video />
+                  {videos.map(video => (
+                    <Video key={video.id} {...video} />
+                  ))}
                 </div>
               </div>
             </section>
 
-            <section>
+            {/* <section>
               <h2 className="text-center lg:text-left font-bold text-2xl lg:text-3xl ml-6 lg:ml-2  mb-8">Trending &#128293;</h2>
               <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                 <Video />
@@ -69,7 +69,7 @@ const Home = () => {
                 <Video />
                 <Video />
               </div>
-            </section>
+            </section> */}
           </main>
         </div>
       </div>
@@ -78,19 +78,19 @@ const Home = () => {
   )
 }
 
-const Video = () => (
+const Video = (props: any) => (
   <div className="video">
-    <Link to="/watch?v=122">
+    <Link to={`/watch?v=${props.id}`}>
       <div className="text-right static">
-        <img src={videoCover} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">4:15</span>
+        <img src={props.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">{props.duration}</span>
       </div>
     </Link>
     <div className="ml-2 mr-2">
-      <h3 className="font-bold capitalize -mt-4">A brief history of Creation</h3>
+      <h3 className="font-bold capitalize -mt-4">{props.title}</h3>
       <div className="dark:text-lightGray text-gray text-xs flex justify-between">
         <div className="space-x-2">
-          <span>80k views</span>
+          <span>{props.views} views</span>
           <span>&middot;</span>
           <span>3 days ago</span>
         </div>

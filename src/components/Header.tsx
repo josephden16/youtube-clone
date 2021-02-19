@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBars, faBell, faMoon, faSearch, faSun, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBars, faMoon, faSearch, faSun, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
 import logoLight from '../images/logo-light.svg';
 import logoDark from '../images/logo-dark.svg';
 import { UserContext } from './providers/AuthProvider';
@@ -105,7 +105,6 @@ const Header = (props: any) => {
           <div className="md:-mt-2 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '20px' }} icon={faSearch} /></button>
             <FontAwesomeIcon style={{ fontSize: '20px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-1" icon={faVideo} />
-            <FontAwesomeIcon style={{ fontSize: '20px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:ml-3 md:mt-2 lg:mr-4 lg:mt-1" icon={faBell} />
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
             <Profile user={user} />
           </div>
@@ -129,3 +128,4 @@ const MobileSearch = ({ open, handleClose }) => {
 
 
 export default Header;
+//TODO: Add notifications feature later... 

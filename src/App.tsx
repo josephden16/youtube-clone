@@ -15,7 +15,7 @@ function App() {
           })
         }
       </Switch>
-      <ToastContainer />
+      <ToastContainer className="font-sans" />
     </div>
   );
 }

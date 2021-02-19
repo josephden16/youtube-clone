@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/analytics';
 
@@ -21,8 +22,35 @@ export const firestore = firebase.firestore();
 export const auth = firebase.auth();
 
 export const provider = new firebase.auth.GoogleAuthProvider();
-export const signInWithGoogle = () => auth.signInWithPopup(provider);
-export const signOut = () => auth.signOut();
+export const signInWithGoogle = () => {
+  auth.signInWithPopup(provider)
+    .then(userCredential => {
+      const { user } = userCredential;
+      const userRef = firestore.collection('users').doc(user.uid);
+      const snapshot = userRef.get();
+      if (!snapshot.exists) {
+        const { displayName, email, photoURL } = user;
+        const createdAt = new Date();
+        userRef.set({
+          displayName,
+          email,
+          photoURL,
+          createdAt
+        }).then(() => console.log("user created successfully"))
+          .catch("failed to create user");
+      }
+    })
+    .catch(error => {
+      console.log(`error: ${error.message}`);
+    })
+};
+export const signOut = () => {
+  try {
+    auth.signOut()
+  } catch (error) {
+    console.error("Failed to sign out");
+  }
+};
 
 
 window.firebase = firebase;
