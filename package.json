@@ -10,7 +10,7 @@
     "@fortawesome/react-fontawesome": "^0.1.14",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "autoprefixer": "^9",
-    "firebase": "^8.2.6",
+    "firebase": "^8.2.9",
     "nprogress": "^0.2.0",
     "postcss": "^7",
     "react": "^17.0.1",

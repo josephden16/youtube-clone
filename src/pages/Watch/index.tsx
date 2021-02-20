@@ -10,7 +10,6 @@ import './index.css';
 import channelLogo from '../../images/channel-logo.png';
 import videoCover from '../../images/Cover.jpg';
 import MobileFooter from '../../components/MobileFooter';
-// import poster from '../../images/poster.png';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { toast } from 'react-toastify';
@@ -27,28 +26,20 @@ const Watch = () => {
   const [videoData, setVideoData] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // fetch data on initial page load
-  useEffect(() => {
-    const fetchData = async () => {
-      const videoSnapshot = await firestore.collection('videos').doc(v).get();
-      const data = videoSnapshot.data();
-      setVideoData(data);
-      setLoading(false);
-    }
-    fetchData();
-  }, [v]);
 
-  //subscribe to changes in firestore
+  //fetch data andsubscribe to changes in firestore
   useEffect(() => {
     let unsubscribeFromFirestore = firestore.collection('videos').doc(v).onSnapshot(snapshot => {
       const data = snapshot.data();
       setVideoData(data);
+      setLoading(false);
     });
 
     return () => {
       unsubscribeFromFirestore();
     }
-  })
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
 
   const handleSideBar = () => {
@@ -103,11 +94,6 @@ const VideoPlayer = ({ data, loading, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const video = useRef(null);
-  
-  useEffect(() => {
-    console.log(video);
-  }, []);
-
   const openDescription = () => {
     setOpen(!open);
   }
@@ -200,6 +186,3 @@ const Video = () => (
 export default Watch;
 //TODO: Add Comments
 //TODO: Add Views feature
-//TODO: Add
-// https://firebasestorage.googleapis.com/v0/b/clone-dbe6b.appspot.com/o/posters%2Fposter.png?alt=media&token=29abc305-9e92-4f54-8f2a-4792a6750b72
-// https://firebasestorage.googleapis.com/v0/b/clone-dbe6b.appspot.com/o/posters%2FCover.jpg?alt=media&token=969d6487-2ac2-453b-b712-37bb4516feaf 

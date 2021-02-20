@@ -3,7 +3,7 @@ import { Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import FancyRoute from './components/tools/FancyRoute';
 import routes from './routes';
-
+  
 
 function App() {
   return (

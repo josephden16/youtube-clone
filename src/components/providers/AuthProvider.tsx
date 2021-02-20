@@ -1,36 +1,27 @@
-import React, { createContext, Component } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { auth } from '../../firebase';
 
 export const UserContext = createContext(null);
 
 
-class UserProvider extends Component {
-  state = {
-    user: null
-  }
+const UserProvider = (props: any) => {
+  const [user, setUser] = useState(null);
 
-  unsubscribeFromAuth = null;
-
-  componentDidMount = () => {
-    this.unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
-      this.setState({ user });
+  useEffect(() => {
+    let unsubscribeFromAuth = auth.onAuthStateChanged(async user => {
+      setUser(user);
     })
-  }
 
-  componentWillUnmount = () => {
-    this.unsubscribeFromAuth();
-  }
+    return () => {
+      unsubscribeFromAuth();
+    }
+  })
 
-  render() {
-    const { children } = this.props;
-    const { user } = this.state;
-
-    return (
-      <UserContext.Provider value={user}>
-        {children}
-      </UserContext.Provider>
-    )
-  }
+  return (
+    <UserContext.Provider value={user}>
+      {props.children}
+    </UserContext.Provider>
+  )
 }
 
 

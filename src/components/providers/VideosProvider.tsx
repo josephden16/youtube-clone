@@ -1,42 +1,31 @@
-import React, { createContext, Component } from 'react';
+import React, { createContext, useState, useEffect } from 'react';
 import { firestore } from '../../firebase';
 
 export const VideosContext = createContext([]);
 
 
-class VideosProvider extends Component {
-  state = {
-    videos: []
-  }
-  unsubscribeFromFirestore = null;
+const VideosProvider = (props: any) => {
+  const [videos, setVideos] = useState([]);
 
-  componentDidMount = () => {
-    this.unsubscribeFromFirestore = firestore.collection('videos').onSnapshot(snapshot => {
+  useEffect(() => {
+    const fetchData = async () => {
+      const snapshot = await firestore.collection("videos").get();
       const videos = snapshot.docs.map(doc => {
         return {
           id: doc.id,
           ...doc.data()
         }
       })
-      this.setState({ videos })
-    })
-  }
+      setVideos(videos);
+    }
+    fetchData()
+  }, [])
 
-  componentWillUnmount = () => {
-    this.unsubscribeFromFirestore();
-  }
-
-  render() {
-    const { videos } = this.state;
-    const {children} = this.props;
-
-    return (
-      <VideosContext.Provider value={videos}>
-        {children}
-      </VideosContext.Provider>
-    )
-  }
+  return (
+    <VideosContext.Provider value={videos}>
+      {props.children}
+    </VideosContext.Provider>
+  )
 }
-
 
 export default VideosProvider;
