@@ -23,6 +23,11 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
   <title>YouTube Clone App</title>
+  <style>
+    .dark {
+      background-color: #181818;
+    }
+  </style>
   <script>
     // On page load or when changing themes, best to add inline in `head` to avoid FOUC
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {

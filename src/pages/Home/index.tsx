@@ -19,10 +19,10 @@ const Home = () => {
 
   return (
     <>
-      <div className="dark:bg-dark md:pt-1 ml-2 mr-2 lg:mr-4 lg:ml-4">
+      <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4">
         <Header handleMenu={handleSideBar} />
         <Authentication />
-        <div className="flex mt-20 lg:mt-8 lg:space-x-14 xl:space-x-20">
+        <div className="flex mt-16 lg:mt-8 lg:space-x-14 xl:space-x-20">
           <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
             <SideBar />
           </div>
@@ -43,7 +43,6 @@ const Home = () => {
                 </div>
               </div>
             </section>
-
             {/* <section>
               <h2 className="text-center lg:text-left font-bold text-2xl lg:text-3xl ml-6 lg:ml-2  mb-8">Trending &#128293;</h2>
               <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
@@ -53,26 +52,7 @@ const Home = () => {
                 <Video />
               </div>
             </section>
-
-            <section>
-              <h2 className="font-bold text-center lg:text-left text-2xl lg:text-3xl ml-6 lg:ml-2  mb-8">Most Viewed &#128065;</h2>
-              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
-                <Video />
-                <Video />
-                <Video />
-                <Video />
-              </div>
-            </section>
-
-            <section>
-              <h2 className="text-center lg:text-left font-bold text-2xl lg:text-3xl ml-6 lg:ml-2 mb-8">Most Liked &#128077;</h2>
-              <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
-                <Video />
-                <Video />
-                <Video />
-                <Video />
-              </div>
-            </section> */}
+           */}
           </main>
         </div>
       </div>
@@ -97,7 +77,7 @@ const Video = (props: any) => (
           <span>&middot;</span>
           <span>3 days ago</span>
         </div>
-        <div><span>Dollie Blair</span></div>
+        <div><span>Joseph</span></div>
       </div>
     </div>
   </div>

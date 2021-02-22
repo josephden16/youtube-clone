@@ -51,7 +51,7 @@ const Watch = () => {
   }
 
   return (
-    <div className="lg:mr-4 lg:ml-4">
+    <div className="dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
       <div className="hidden text-center">Video id: {v}</div>
       <div className="lg:pl-2 lg:pr-2">
         <Header handleMenu={handleSideBar} />
@@ -113,16 +113,17 @@ const VideoPlayer = ({ data, loading, videoId }) => {
   }
 
   const handleLike = async () => {
+    if (!user) {
+      toast.error("You must be signed in to perform this action");
+      return;
+    }
+
     //firestore references
     let unlikdedVideoDocumentRef = firestore.collection("users").doc(user.uid).collection("unlikedVideos").doc(data.id);
     let likedVideosCollectionRef = firestore.collection("users").doc(user.uid).collection("likedVideos");
     let likdedVideoDocumentRef = firestore.collection("users").doc(user.uid).collection("likedVideos").doc(data.id);
     let likes = data.likes;
     let unlikes = data.unlikes;
-    if (!user) {
-      toast.error("You must be signed in to perform this action");
-      return;
-    }
 
     let unlikeSnapshot = await unlikdedVideoDocumentRef.get();
 
@@ -153,16 +154,18 @@ const VideoPlayer = ({ data, loading, videoId }) => {
   }
 
   const handleUnlike = async () => {
+    if (!user) {
+      toast.error("You must be signed in to perform this action");
+      return;
+    }
+
     //firestore references
     let unlikedVideosCollectionRef = firestore.collection("users").doc(user.uid).collection("unlikedVideos");
     let unlikdedVideoDocumentRef = firestore.collection("users").doc(user.uid).collection("unlikedVideos").doc(data.id);
     let likdedVideoDocumentRef = firestore.collection("users").doc(user.uid).collection("likedVideos").doc(data.id);
     let likes = data.likes;
     let unlikes = data.unlikes;
-    if (!user) {
-      toast.error("You must be signed in to perform this action");
-      return;
-    }
+
 
     let likeSnapshot = await likdedVideoDocumentRef.get();
     if (likeSnapshot.exists) {
@@ -336,6 +339,10 @@ const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
 const Comment = ({ user, comment, videoId }) => {
   let [likes, setLikes] = useState(comment.likes);
   const handleLike = async () => {
+    if (!user) {
+      toast.error("You must be signed in to perform this action");
+      return;
+    }
     let commentRef = firestore.collection("comments").doc(videoId).collection("comments").doc(comment.id);
     let likedRef = firestore.collection("comments").doc(videoId).collection("comments").doc(comment.id).collection("liked").doc(user.uid);
     let likedSnapshot = await likedRef.get();
