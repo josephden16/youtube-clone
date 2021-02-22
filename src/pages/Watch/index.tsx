@@ -365,7 +365,7 @@ const Comment = ({ user, comment, videoId }) => {
   }
 
   return (
-    <div className="flex flex-col space-y-1 gap-2 ml-2 mr-2">
+    <div className="flex flex-col space-y-1 gap-2 mt-4 lg:mt-10 ml-2 mr-2">
       <div>
         <img className="rounded-circle w-8 lg:w-10" src={comment.userPhotoURL} alt={comment.userName} />
       </div>
