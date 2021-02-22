@@ -10,10 +10,9 @@ const firebaseConfig = {
   projectId: "fir-fc298",
   storageBucket: "fir-fc298.appspot.com",
   messagingSenderId: "1024622255174",
-  appId: "1:1024622255174:web:4743b571ab3da21f1e3e47",
-  measurementId: "G-PQNPZDG6TK"
+  appId: "1:1024622255174:web:22af8dc5d74b3f7b1e3e47",
+  measurementId: "G-8MZ3DQN4L6"
 };
-
 
 
 // Initialize Firebase
