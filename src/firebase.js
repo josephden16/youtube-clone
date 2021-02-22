@@ -27,6 +27,7 @@ export const provider = new firebase.auth.GoogleAuthProvider();
 export const signInWithGoogle = () => {
   auth.signInWithPopup(provider)
     .then(userCredentials => {
+      // create a new user document if it doesn't exist
       const { user } = userCredentials;
       const userRef = firestore.collection('users').doc(user.uid);
       const snapshot = userRef.get();

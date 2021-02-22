@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom'
 import Header from '../../components/Header';
 import MobileFooter from '../../components/MobileFooter';
 import SideBar from '../../components/SideBar';
-import channelImg from '../../images/Oval.png';
-import './index.css';
 import Authentication from '../../components/Authentication';
 import { VideosContext } from '../../components/providers/VideosProvider';
+import { formatVideoTime } from '../../utils';
+import './index.css';
 
 
 const Home = () => {
@@ -29,12 +29,15 @@ const Home = () => {
           <main className="lg:mt-8 w-full flex flex-col space-y-16">
             <section>
               <div>
-                <div className="text-center justify-center lg:justify-start flex flex-row mb-8 ml-5 lg:ml-1  items-center space-x-2">
+                {/* <div className="text-center justify-center lg:justify-start flex flex-row mb-8 ml-5 lg:ml-1  items-center space-x-2">
                   <img src={channelImg} className="w-10 lg:w-12 lg:mr-3" alt="channel" />
-                  <h2 className="font-bold text-xl lg:text-3xl">Dollie Blair</h2>
+                   <h2 className="font-bold text-xl lg:text-3xl">Dollie Blair</h2>
+                </div> */}
+                <div className="text-center justify-center lg:justify-start flex flex-row mb-8 ml-5 lg:ml-1  items-center space-x-2">
+                  <h2 className="font-bold text-xl lg:text-3xl">Videos &#127909;</h2>
                 </div>
                 <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
-                  {videos.map(video => (
+                  {videos && videos.map(video => (
                     <Video key={video.id} {...video} />
                   ))}
                 </div>
@@ -83,7 +86,7 @@ const Video = (props: any) => (
     <Link to={`/watch?v=${props.id}`}>
       <div className="text-right static">
         <img src={props.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">{props.duration}</span>
+        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(props.duration)}</span>
       </div>
     </Link>
     <div className="ml-2 mr-2">

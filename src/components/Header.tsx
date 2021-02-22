@@ -19,11 +19,11 @@ const Logo = ({ theme }) => {
   let classList = document.documentElement.classList;
 
   if (classList.contains("dark") || theme === "dark") {
-    return <img src={logoDark} className="mt-2 md:mt-3 lg:mt-3 w-36" alt="youtube" />
+    return <img src={logoDark} className="mt-2 md:mt-3 lg:mt-3 w-28" alt="youtube" />
   }
 
   if (!(classList.contains("dark")) || theme === "light") {
-    return <img src={logoLight} className="mt-2 md:mt-3 lg:mt-3 w-36" alt="youtube" />
+    return <img src={logoLight} className="mt-2 md:mt-3 lg:mt-3 w-28" alt="youtube" />
   }
 }
 
@@ -103,8 +103,8 @@ const Header = (props: any) => {
             <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} /></button>
           </div>
           <div className="md:-mt-2 flex align-middle items-center">
-            <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '20px' }} icon={faSearch} /></button>
-            <FontAwesomeIcon style={{ fontSize: '20px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-1" icon={faVideo} />
+            <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '17px' }} icon={faSearch} /></button>
+            <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-1" icon={faVideo} />
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
             <Profile user={user} />
           </div>
@@ -119,9 +119,9 @@ const Header = (props: any) => {
 const MobileSearch = ({ open, handleClose }) => {
   return (
     <div className={open ? "dark:bg-dark text-center w-full top-0 fixed bg-white z-50 pb-2 pt-4 pl-2 pr-4 flex lg:hidden" : 'hidden'}>
-      <button onClick={handleClose} className="mr-4"><FontAwesomeIcon size="lg" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
+      <button onClick={handleClose} className="mr-4"><FontAwesomeIcon size="1x" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
       <input className="dark:bg-dark2 bg-lightGray w-11/12 pt-2 pb-2 pl-4 pr-4 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
-      <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} /></button>
+      <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} size="1x" /></button>
     </div>
   )
 }
