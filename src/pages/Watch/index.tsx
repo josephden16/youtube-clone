@@ -14,7 +14,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
-import userImg from '../../images/user.png';
 
 
 const useQuery = () => {
