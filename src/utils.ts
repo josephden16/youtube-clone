@@ -1,3 +1,8 @@
+import dayjs from 'dayjs';
+import relativeTime from 'dayjs/plugin/relativeTime';
+dayjs.extend(relativeTime);
+
+
 export const formatVideoTime = (seconds: number) => {
   let date = new Date(0);
   date.setSeconds(seconds); // specify value in seconds
@@ -14,4 +19,17 @@ export const formatVideoTime = (seconds: number) => {
   }
 }
 
-//TODO: add dayjs date formatting
+
+export const formatTime = (seconds: number) => {
+  let date = dayjs.unix(seconds);
+  let time = dayjs().to(date);
+  return time;
+}
+
+
+export const getDiff = (seconds: number) => {
+  let timeViewed: any = dayjs.unix(seconds);
+  let now: any = dayjs();
+  let diff = Math.abs(now - timeViewed) / 1000;
+  return diff;
+}

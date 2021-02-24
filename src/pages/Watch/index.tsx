@@ -6,14 +6,15 @@ import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
 import { faHeart, faShare, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import './index.css';
 import channelLogo from '../../images/channel-logo.png';
 import videoCover from '../../images/Cover.jpg';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
+import { getDiff } from '../../utils';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
+import './index.css';
 
 
 const useQuery = () => {
@@ -26,7 +27,6 @@ const Watch = () => {
   const [navOpen, setNavOpen] = useState(false);
   const [videoData, setVideoData] = useState(null);
   const [loading, setLoading] = useState(true);
-
 
   //fetch data andsubscribe to changes in firestore
   useEffect(() => {
@@ -61,7 +61,7 @@ const Watch = () => {
           <SideBar />
         </div>
         <main className="layout mt-3 lg:mt-10 w-full">
-          <VideoPlayer videoId={v} data={videoData} loading={loading} />
+          <VideoPlayer setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos />
         </main>
       </div>
@@ -103,9 +103,10 @@ const RelatedVideos = () => {
   )
 }
 
-const VideoPlayer = ({ data, loading, videoId }) => {
+const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
+  const [viewed, setViewed] = useState(false);
   const video = useRef(null);
 
   const openDescription = () => {
@@ -133,6 +134,11 @@ const VideoPlayer = ({ data, loading, videoId }) => {
         timeAdded: new Date()
       });
       firestore.collection("videos").doc(videoId).set({ likes: likes + 1, unlikes: unlikes - 1 }, { merge: true });
+      setVideoData({
+        likes: likes + 1,
+        unlikes: unlikes - 1,
+        ...data
+      });
       await unlikdedVideoDocumentRef.delete();
       toast.dark("Added to your liked videos");
       return;
@@ -141,6 +147,10 @@ const VideoPlayer = ({ data, loading, videoId }) => {
     let likeSnapshot = await likdedVideoDocumentRef.get();
     if (likeSnapshot.exists) {
       firestore.collection("videos").doc(videoId).set({ likes: likes - 1 }, { merge: true });
+      setVideoData({
+        likes: likes + 1,
+        ...data
+      });
       await likdedVideoDocumentRef.delete();
       toast.dark("Removed from your liked videos");
     } else {
@@ -149,6 +159,10 @@ const VideoPlayer = ({ data, loading, videoId }) => {
         timeAdded: new Date()
       });
       firestore.collection("videos").doc(videoId).set({ likes: likes + 1 }, { merge: true });
+      setVideoData({
+        likes: likes + 1,
+        ...data
+      });
       toast.dark("Added to your liked videos");
     }
   }
@@ -174,20 +188,76 @@ const VideoPlayer = ({ data, loading, videoId }) => {
         timeAdded: new Date()
       })
       firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1, likes: likes - 1 }, { merge: true });
+      setVideoData({
+        likes: likes - 1,
+        unlikes: unlikes + 1,
+        ...data
+      });
     }
 
     let snapshot = await unlikdedVideoDocumentRef.get();
     if (snapshot.exists) {
       firestore.collection("videos").doc(videoId).set({ unlikes: unlikes - 1 }, { merge: true });
+      setVideoData({
+        unlikes: unlikes - 1,
+        ...data
+      });
       await unlikdedVideoDocumentRef.delete();
-      toast.dark("Removed from your unliked videos");
+      toast.dark("Dislike removed");
     } else {
       unlikedVideosCollectionRef.doc(data.id).set({
         video: firestore.collection("videos").doc(data.id),
         timeAdded: new Date()
       });
       firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1 }, { merge: true });
-      toast.dark("Added to Unliked videos");
+      setVideoData({
+        unlikes: unlikes + 1,
+        ...data
+      });
+      toast.dark("You disliked this video");
+    }
+  }
+
+  const getIPAddress = async () => {
+    let res = await fetch("https://api64.ipify.org?format=json");
+    let ip = await res.json();
+    return ip.ip;
+  }
+
+
+
+  //TODO:implement views feature here.
+  const handlePlay = async (evt: any) => {
+    if (viewed) return;
+    let currentTime = evt.target.currentTime;
+    if (currentTime > 1) {
+      setViewed(true);
+      let ipAddress: any = await getIPAddress();
+      let ipRef = firestore.collection("videos").doc(videoId).collection("views").doc(ipAddress);
+      let videoRef = firestore.collection("videos").doc(videoId);
+
+
+      let snapshot = await ipRef.get();
+      let viewsData = snapshot.data();
+
+      if (!snapshot.exists) {
+        await videoRef.set({ views: data.views + 1 }, { merge: true });
+        await ipRef.set({
+          ip: ipAddress,
+          timeViewed: new Date()
+        })
+      } else {
+        let timeViewed = viewsData.timeViewed.seconds;
+        let diff = getDiff(timeViewed);
+        if (diff >= 86400) {
+          await videoRef.set({ views: data.views + 1 }, { merge: true });
+          await ipRef.set({
+            ip: ipAddress,
+            timeViewed: new Date()
+          })
+        }
+        return;
+      }
     }
   }
 
@@ -195,7 +265,7 @@ const VideoPlayer = ({ data, loading, videoId }) => {
 
   return (
     <div>
-      <video ref={video} style={{ outline: 'none' }} className="videoPlayer transition-all duration-150" preload="none" controls poster={data.posterURL}>
+      <video onTimeUpdate={handlePlay} ref={video} style={{ outline: 'none' }} className="videoPlayer transition-all duration-150" preload="none" controls poster={data.posterURL}>
         <source src={data.videoURL} type='video/mp4' />
       </video>
       <div className="dark:border-gray flex flex-col ml-4 mr-4 mt-3 mb-4 lg:mt-6 border-lightGray border-b-1 space-y-3">
@@ -203,9 +273,9 @@ const VideoPlayer = ({ data, loading, videoId }) => {
         <div className="lg:flex lg:flex-row lg:justify-between">
           <span className="dark:text-lightGray text-sm text-gray lg:mt-4">{data.views} views</span>
           <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
-            <button onClick={handleLike} className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
-            <button onClick={handleUnlike} className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
-            <button className="transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
+            <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
+            <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
+            <button style={{ outline: 'none' }} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
           </div>
         </div>
       </div>
@@ -219,7 +289,7 @@ const VideoPlayer = ({ data, loading, videoId }) => {
                 <span className="dark:text-lightGray text-gray">245k subscribed</span>
               </div>
             </div>
-            <button style={{ outline: 'none' }} className="dark:bg-dark text-red bg-white">Subscribe</button>
+            <button style={{ outline: 'none' }} className="btn dark:bg-dark text-red bg-white">Subscribe</button>
           </div>
         </div>
         <div className={open ? 'text-gray' : 'hideText'}>
@@ -244,7 +314,7 @@ const Comments = ({ videoId, commentsCount }) => {
 
   const fetchData = async () => {
     try {
-      let commentsRef = firestore.collection("comments").doc(videoId).collection("comments").limit(5).orderBy("likes", "desc");
+      let commentsRef = firestore.collection("comments").doc(videoId).collection("comments");
       let snapshot = await commentsRef.get();
       let comments = snapshot.docs.map((doc) => {
         return {
@@ -256,7 +326,7 @@ const Comments = ({ videoId, commentsCount }) => {
       setComments(comments);
       setLoading(false);
     } catch (err) {
-      console.error(err);
+      console.log(`Error: ${err.message}`);
     }
   }
 
@@ -329,7 +399,7 @@ const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
         <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray outline-none" />
       </div>
       <div className="flex justify-end">
-        <button onClick={postComment} className="dark:bg-dark2 dark:text-lightGray hover:opacity-70 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
+        <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-lightGray hover:opacity-70 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
       </div>
     </div>
   )
@@ -362,7 +432,6 @@ const Comment = ({ user, comment, videoId }) => {
       }
       return;
     } else {
-      console.log(likes);
       await commentRef.set({
         likes: likes - 1
       }, { merge: true });
@@ -385,7 +454,7 @@ const Comment = ({ user, comment, videoId }) => {
           <span>{comment.message}</span>
         </div>
         <div className="dark:text-lightGray text-gray flex items-center space-x-2">
-          <button onClick={handleLike} className="hover:opacity-70 text-gray dark:text-lightGray">
+          <button style={{ outline: 'none' }} onClick={handleLike} className="hover:opacity-70 text-gray dark:text-lightGray">
             <FontAwesomeIcon icon={faHeart} />
           </button>
           <span className="text-sm">{likes}</span>

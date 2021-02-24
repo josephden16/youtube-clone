@@ -5,7 +5,7 @@ import MobileFooter from '../../components/MobileFooter';
 import SideBar from '../../components/SideBar';
 import Authentication from '../../components/Authentication';
 import { VideosContext } from '../../components/providers/VideosProvider';
-import { formatVideoTime } from '../../utils';
+import { formatVideoTime, formatTime } from '../../utils';
 import './index.css';
 
 
@@ -61,27 +61,31 @@ const Home = () => {
   )
 }
 
-const Video = (props: any) => (
-  <div className="video">
-    <Link to={`/watch?v=${props.id}`}>
-      <div className="text-right static">
-        <img src={props.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(props.duration)}</span>
-      </div>
-    </Link>
-    <div className="ml-2 mr-2">
-      <h3 className="font-bold capitalize -mt-4">{props.title}</h3>
-      <div className="dark:text-lightGray text-gray text-xs flex justify-between">
-        <div className="space-x-2">
-          <span>{props.views} views</span>
-          <span>&middot;</span>
-          <span>3 days ago</span>
+const Video = (props: any) => {
+  let time = formatTime(props.timeUploaded.seconds);
+
+  return (
+    <div className="video">
+      <Link to={`/watch?v=${props.id}`}>
+        <div className="text-right static">
+          <img src={props.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(props.duration)}</span>
         </div>
-        <div><span>Joseph</span></div>
+      </Link>
+      <div className="ml-2 mr-2">
+        <h3 className="font-bold capitalize -mt-4">{props.title}</h3>
+        <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
+          <div className="space-x-2">
+            <span>{props.views} views</span>
+            <span>&middot;</span>
+            <span>{time}</span>
+          </div>
+          <div><span>Joseph</span></div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  )
+};
 
 
 export default Home;

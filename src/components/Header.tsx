@@ -98,11 +98,11 @@ const Header = (props: any) => {
           </Link>
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
-          <div className="hidden lg:block lg:ml-32 lg:mt-0">
+          <div className="hidden lg:block lg:ml-32 lg:mt-1">
             <input style={{ width: '460px', paddingTop: '4px', paddingBottom: '4px' }} className="dark:bg-dark2 -mt-2 md:-mt-0 shadow-md dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
             <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} /></button>
           </div>
-          <div className="md:-mt-0 flex align-middle items-center">
+          <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
             <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />

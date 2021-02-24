@@ -28,6 +28,16 @@
   clip: rect(1px, 1px, 1px, 1px);
 }
 
+.btn {
+  outline: none;
+  cursor: pointer;
+  transition: opacity 300ms ease-out;
+}
+
+.btn:hover, .btn:active {
+  opacity: 0.8;
+}
+
 
 @media screen and (min-width: 500px) {
   .video {
