@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { signInWithGoogle } from '../firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowLeft, faBars, faMoon, faSearch, faSun, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
 import logoLight from '../images/logo-light.svg';
@@ -12,7 +13,12 @@ const Profile = ({ user }) => {
   if (user) {
     return <img className="rounded-circle ml-2 mt-1 lg:-mt-1" style={{ width: '33px', height: '33px' }} src={user.photoURL} alt="profile" />
   }
-  return <FontAwesomeIcon icon={faUser} className="text-gray dark:text-lightGray mt-1 lg:mt-0 ml-2" style={{fontSize: '19px'}} />
+  return (
+    <button style={{outline: 'none'}} onClick={signInWithGoogle} className="focus:text-opacity-60 space-x-1 pb-1 pt-1 flex items-center outline-none border-1 rounded-sm border-red dark:border-lightGray ml-1 mt-1 lg:mb-1">
+      <FontAwesomeIcon icon={faUser} className="text-red  dark:text-lightGray ml-1 lg:mt-0" style={{ fontSize: '15px' }} />
+      <span className="pr-1 text-xs dark:text-lightGray text-red">SIGN IN</span>
+    </button>
+  )
 }
 
 const Logo = ({ theme }) => {
@@ -90,7 +96,7 @@ const Header = (props: any) => {
       <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
 
         <div className="flex">
-          <button style={{ outline: 'none' }} onClick={handleMenuClick} className="lg:mt-3 hidden lg:block mr-4 outline-none">
+          <button style={{ outline: 'none' }} onClick={handleMenuClick} className={props.sidebar ? "lg:mt-3 hidden lg:block mr-4 outline-none" : "hidden"}>
             <FontAwesomeIcon style={{ fontSize: '18px' }} icon={faBars} />
           </button>
           <Link to="/">
@@ -118,9 +124,9 @@ const Header = (props: any) => {
 
 const MobileSearch = ({ open, handleClose }) => {
   return (
-    <div className={open ? "dark:bg-dark text-center w-full top-0 fixed bg-white z-50 pb-2 pt-2 pl-2 pr-4 flex lg:hidden" : 'hidden'}>
-      <button onClick={handleClose} className="mr-4 ml-1"><FontAwesomeIcon size="1x" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
-      <input className="dark:bg-dark2 bg-lightGray w-11/12 pt-1 pb-1 pl-4 pr-4 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
+    <div className={open ? "dark:bg-dark text-center w-full top-0 fixed bg-white z-50 mt-1 pb-2 pt-2 pl-2 pr-4 flex lg:hidden" : 'hidden'}>
+      <button onClick={handleClose} className="mr-4 ml-2"><FontAwesomeIcon size="1x" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
+      <input style={{width: '97%'}} className="dark:bg-dark2 bg-lightGray ml-0 pt-1 pb-1 pl-4 pr-4 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
       <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} size="1x" /></button>
     </div>
   )
@@ -128,4 +134,4 @@ const MobileSearch = ({ open, handleClose }) => {
 
 
 export default Header;
-//TODO: Add notifications feature later... 
+//TODO: Add notifications feature later...

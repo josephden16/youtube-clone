@@ -1,6 +1,8 @@
-import React, { useEffect, useState, useContext, useRef } from 'react';
+import React, { useEffect, useState, useContext, useRef, Component } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
+import videojs from 'video.js';
+import 'video.js/dist/video-js.css';
 import { firestore } from '../../firebase';
 import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
@@ -26,16 +28,26 @@ const Watch = () => {
   let v = query.get("v");
   const [navOpen, setNavOpen] = useState(false);
   const [videoData, setVideoData] = useState(null);
+  const [videoOptions, setVideoOptions] = useState(null);
   const [loading, setLoading] = useState(true);
 
   //fetch data andsubscribe to changes in firestore
   useEffect(() => {
     let unsubscribeFromFirestore = firestore.collection('videos').doc(v).onSnapshot(snapshot => {
-      const data = {
+      const data: any = {
         id: snapshot.id,
         ...snapshot.data()
       };
+      const videoJsOptions: any = {
+        autoplay: true,
+        controls: true,
+        sources: [{
+          src: data.videoURL,
+          type: data.type
+        }]
+      }
       setVideoData(data);
+      setVideoOptions(videoJsOptions);
       setLoading(false);
     });
 
@@ -51,17 +63,17 @@ const Watch = () => {
   }
 
   return (
-    <div className="dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
+    <div className="watch dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
       <div className="hidden text-center">Video id: {v}</div>
       <div className="lg:pl-2 lg:pr-2">
-        <Header handleMenu={handleSideBar} />
+        <Header sidebar={true} handleMenu={handleSideBar} />
       </div>
       <div className="flex flex-row">
         <div className={navOpen ? 'transition-transform mr-16' : 'hideSidebar transition-transform'}>
           <SideBar />
         </div>
         <main className="layout mt-3 lg:mt-10 w-full">
-          <VideoPlayer setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
+          <VideoPlayer videoOptions={videoOptions} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos />
         </main>
       </div>
@@ -103,11 +115,46 @@ const RelatedVideos = () => {
   )
 }
 
-const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
+
+class Player extends Component {
+  player: any;
+  videoNode: any;
+  props: any;
+
+  componentDidMount() {
+    // instantiate Video.js
+    this.player = videojs(this.videoNode, this.props, function onPlayerReady() {
+    });
+    this.player.fluid(true);
+    // this.player.fill(true);
+  }
+  // destroy player on unmount
+  componentWillUnmount() {
+    if (this.player) {
+      this.player.dispose()
+    }
+  }
+
+  // wrap the player in a div with a `data-vjs-player` attribute
+  // so videojs won't create additional wrapper in the DOM
+  // see https://github.com/videojs/video.js/pull/3856
+  render() {
+    return (
+      <div>
+        <div data-vjs-player>
+          <video poster={this.props.posterURL} onTimeUpdate={this.props.handlePlay} style={{ outline: 'none' }} className="vjs-matrix video-js transition-all duration-150" preload="none" ref={node => this.videoNode = node}></video>
+        </div>
+      </div>
+    )
+  }
+}
+
+
+const VideoPlayer = ({ data, loading, setVideoData, videoOptions, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
-  const video = useRef(null);
+  // const video = useRef(null);
 
   const openDescription = () => {
     setOpen(!open);
@@ -133,13 +180,13 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
         video: firestore.collection("videos").doc(data.id),
         timeAdded: new Date()
       });
-      firestore.collection("videos").doc(videoId).set({ likes: likes + 1, unlikes: unlikes - 1 }, { merge: true });
+      await firestore.collection("videos").doc(videoId).set({ likes: likes + 1, unlikes: unlikes - 1 }, { merge: true });
+      await unlikdedVideoDocumentRef.delete();
       setVideoData({
         likes: likes + 1,
         unlikes: unlikes - 1,
         ...data
       });
-      await unlikdedVideoDocumentRef.delete();
       toast.dark("Added to your liked videos");
       return;
     }
@@ -148,7 +195,7 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
     if (likeSnapshot.exists) {
       firestore.collection("videos").doc(videoId).set({ likes: likes - 1 }, { merge: true });
       setVideoData({
-        likes: likes + 1,
+        likes: likes - 1,
         ...data
       });
       await likdedVideoDocumentRef.delete();
@@ -158,11 +205,11 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
         video: firestore.collection("videos").doc(data.id),
         timeAdded: new Date()
       });
-      firestore.collection("videos").doc(videoId).set({ likes: likes + 1 }, { merge: true });
       setVideoData({
         likes: likes + 1,
         ...data
       });
+      await firestore.collection("videos").doc(videoId).set({ likes: likes + 1 }, { merge: true });
       toast.dark("Added to your liked videos");
     }
   }
@@ -193,6 +240,7 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
         unlikes: unlikes + 1,
         ...data
       });
+      return;
     }
 
     let snapshot = await unlikdedVideoDocumentRef.get();
@@ -224,9 +272,6 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
     return ip.ip;
   }
 
-
-
-  //TODO:implement views feature here.
   const handlePlay = async (evt: any) => {
     if (viewed) return;
     let currentTime = evt.target.currentTime;
@@ -265,17 +310,17 @@ const VideoPlayer = ({ data, loading, setVideoData, videoId }) => {
 
   return (
     <div>
-      <video onTimeUpdate={handlePlay} ref={video} style={{ outline: 'none' }} className="videoPlayer transition-all duration-150" preload="none" controls poster={data.posterURL}>
-        <source src={data.videoURL} type='video/mp4' />
-      </video>
+      <div className="videoPlayer">
+        <Player poster={data.posterURL} type={data.type} src={data.videoURL} handlePlay={handlePlay} {...videoOptions} />
+      </div>
       <div className="dark:border-gray flex flex-col ml-4 mr-4 mt-3 mb-4 lg:mt-6 border-lightGray border-b-1 space-y-3">
         <h1 className="capitalize font-bold text-xl lg:text-3xl">{data.title}</h1>
         <div className="lg:flex lg:flex-row lg:justify-between">
           <span className="dark:text-lightGray text-sm text-gray lg:mt-4">{data.views} views</span>
           <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
-            <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
-            <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
-            <button style={{ outline: 'none' }} className="btn transition-colors dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
+            <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
+            <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
+            <button style={{ outline: 'none' }} className="btn transition-colors dark:bg-dark2 shadow-md bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
           </div>
         </div>
       </div>
@@ -314,7 +359,7 @@ const Comments = ({ videoId, commentsCount }) => {
 
   const fetchData = async () => {
     try {
-      let commentsRef = firestore.collection("comments").doc(videoId).collection("comments");
+      let commentsRef = firestore.collection("comments").doc(videoId).collection("comments").orderBy("likes", "desc").limit(5);
       let snapshot = await commentsRef.get();
       let comments = snapshot.docs.map((doc) => {
         return {
@@ -341,7 +386,7 @@ const Comments = ({ videoId, commentsCount }) => {
 
   return (
     <div className="mt-5 mb-10 lg:ml-3 lg:mr-3">
-      <div className="ml-2 lg:ml-0">
+      <div className="ml-4 lg:ml-0">
         <span className="font-bold">{commentsCount === 1 ? `${commentsCount} Comment` : `${commentsCount} Comments`}</span>
       </div>
       {user && <AddComment videoId={videoId} fetchComments={fetchData} commentsCount={commentsCount} user={user} />}
@@ -489,5 +534,4 @@ const Video = () => (
 
 export default Watch;
 //TODO: Add Comments and ability to delete them
-//TODO: Add Views feature
 //TODO: Add subscribe feature

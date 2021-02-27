@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { faCompactDisc, faFire, faFolder, faHome } from '@fortawesome/free-solid-svg-icons';
+import { faCompactDisc, faFolder, faHome, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -22,10 +22,10 @@ const MobileFooter = () => {
           </div>
         </Link>
 
-        <Link to="/" className="hover:text-red">
+        <Link to="/videos" className={getClassName("/videos")}>
           <div className="flex flex-col items-center text-center">
-            <FontAwesomeIcon icon={faFire} />
-            <span className="text-xs">Trending</span>
+            <FontAwesomeIcon icon={faVideo} />
+            <span className="text-xs">My Videos</span>
           </div>
         </Link>
 

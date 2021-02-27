@@ -1,11 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
 import 'firebase/analytics';
 
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBNit-Csb9nEIOQ7yOXeszK_jdNNzTwKnk",
+  apiKey: "AIzaSyDBUd8ZvqpPX9j_wV6PnRubOhu-Qbz3gwo",
   authDomain: "fir-fc298.firebaseapp.com",
   projectId: "fir-fc298",
   storageBucket: "fir-fc298.appspot.com",
@@ -21,6 +22,7 @@ firebase.analytics();
 
 export const firestore = firebase.firestore();
 export const auth = firebase.auth();
+export const storage = firebase.storage();
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const signInWithGoogle = () => {

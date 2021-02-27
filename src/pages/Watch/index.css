@@ -34,10 +34,33 @@
   transition: opacity 300ms ease-out;
 }
 
-.btn:hover, .btn:active {
+.btn:hover,
+.btn:active {
   opacity: 0.8;
 }
 
+/* video js styles */
+/* Change all text and icon colors in the player. */
+.vjs-matrix.video-js {
+  /* color: #00ff00; */
+  outline: none;
+  background-color: transparent;
+}
+
+/* Change the border of the big play button. */
+.vjs-matrix .vjs-big-play-button {
+  border-color: #ff0000;
+  background-color: transparent;
+  left: 40%;
+  top: 40%;
+  outline: none;
+}
+/* Change the color of various "bars". */
+.vjs-matrix .vjs-volume-level,
+.vjs-matrix .vjs-play-progress,
+.vjs-matrix .vjs-slider-bar {
+  background: #ff0000;
+}
 
 @media screen and (min-width: 500px) {
   .video {
@@ -47,8 +70,15 @@
 
 @media screen and (min-width: 1024px) {
   .videoPlayer {
+    /* width: 1000px; */
+    border-radius: 0;
+  }
+
+  video {
     width: 100%;
-    border-radius: 16px;
+    height: 520px;
+    border-radius: 20px;
+    background: black;
   }
 
   .fixed-height {
@@ -64,4 +94,12 @@
   .video {
     width: 230px;
   }
+
+  .vjs-matrix .vjs-big-play-button {
+    border-color: #ff0000;
+    background-color: #ff0000;
+    left: 45%;
+    top: 45%;
+  }
+  
 }

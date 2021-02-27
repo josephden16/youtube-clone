@@ -1,5 +1,6 @@
 import React from 'react';
-import { faClock, faFire, faFolder, faHeart, faHome, faScroll, faStar, faCog, faCompactDisc } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom'
+import { faClock, faFire, faFolder, faHeart, faHome, faStar, faCog, faCompactDisc, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import user from '../images/user.png';
 
@@ -11,6 +12,9 @@ const SideBar = () => {
         <li className="text-red space-x-3 hover:text-red cursor-pointer">
           <FontAwesomeIcon icon={faHome} /> <span className="text-sm">Home</span>
         </li>
+        <li className="hover:text-red transition-colors cursor-pointer">
+          <Link className="space-x-2" to="/videos"><FontAwesomeIcon icon={faVideo} /> <span className="text-sm">My Videos</span></Link>
+        </li>
         <li className="space-x-4 hover:text-red transition-colors cursor-pointer">
           <FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span>
         </li>
@@ -19,9 +23,6 @@ const SideBar = () => {
         </li>
         <li className="space-x-3 hover:text-red transition-colors cursor-pointer">
           <FontAwesomeIcon icon={faFolder} /> <span className="text-sm">Library</span>
-        </li>
-        <li className="space-x-2 hover:text-red transition-colors cursor-pointer">
-          <FontAwesomeIcon icon={faScroll} /> <span className="text-sm">History</span>
         </li>
         <li className="space-x-3 hover:text-red transition-colors cursor-pointer">
           <FontAwesomeIcon icon={faClock} /> <span className="text-sm">Watch later</span>
