@@ -93,7 +93,6 @@ const Video = () => {
         .then(response => response.ref.getDownloadURL())
         .then(videoURL => {
           setVideoURL(videoURL);
-          toast.success("Video file uploaded");
           videoRef.add({
             title: title,
             description: description,
@@ -105,7 +104,7 @@ const Video = () => {
             ...defaultVideoData
           })
             .then(() => {
-              toast.success("Video upload successful");
+              toast.success("Video upload successful 🎉");
               setLoading(false);
             })
             .catch(() => {
