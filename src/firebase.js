@@ -48,6 +48,46 @@ export const signInWithGoogle = () => {
       console.log(`error-message: ${error.message}, error-code: ${error.code}`);
     })
 };
+
+export const createUserProfileDocument = async (authenticatedUser, additionalData) => {
+  if (!authenticatedUser) return;
+
+  const user = authenticatedUser;
+
+  const userRef = firestore.collection("users").doc(user.uid);
+  const snapshot = await userRef.get();
+
+
+  if (!snapshot.exists) {
+    const { displayName, email, photoURL } = user;
+    try {
+      userRef.set({
+        displayName,
+        email,
+        photoURL,
+        createdAt: new Date(),
+        ...additionalData
+      });
+      console.log("user created successfully")
+    } catch (error) {
+      console.log(`error-message: ${error.message}, error-code: ${error.code}`);
+    }
+  }
+
+  return getUserDocument(user.uid);
+
+}
+
+const getUserDocument = (uid) => {
+  if (!uid) return null;
+
+  try {
+    return firestore.collection("users").doc(uid);
+  } catch (error) {
+    console.log('Error fetching user document', error.message);
+  }
+}
+
 export const signOut = () => {
   try {
     auth.signOut()

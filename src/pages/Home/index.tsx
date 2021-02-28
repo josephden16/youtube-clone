@@ -75,7 +75,7 @@ const Video = (props: any) => {
         </div>
       </Link>
       <div className="ml-2 mr-2">
-        <h3 className="font-bold capitalize -mt-4">{props.title}</h3>
+        <h3 className="font-bold text-sm capitalize -mt-4">{props.title}</h3>
         <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
           <div className="space-x-2 text-sm">
             <span>{props.views} views</span>

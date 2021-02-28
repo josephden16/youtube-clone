@@ -13,7 +13,7 @@ import videoCover from '../../images/Cover.jpg';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
-import { getDiff } from '../../utils';
+import { formatTime, getDiff, formatVideoTime } from '../../utils';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
 import './index.css';
@@ -74,7 +74,7 @@ const Watch = () => {
         </div>
         <main className="layout mt-3 lg:mt-10 w-full">
           <VideoPlayer videoOptions={videoOptions} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
-          <RelatedVideos />
+          <RelatedVideos videoId={v} />
         </main>
       </div>
       <MobileFooter />
@@ -91,8 +91,28 @@ const Loading = ({ loading, msg }) => {
   )
 }
 
-const RelatedVideos = () => {
+const RelatedVideos = ({ videoId }) => {
+  const [relatedVideos, seteRelatedVideos] = useState(null);
   const [checked, setCheck] = useState(false);
+
+  useEffect(() => {
+    const fetchRelatedVideos = async () => {
+      const ref = await firestore
+        .collection("videos")
+        .orderBy("views", "desc").get();
+      const data = ref.docs.map(doc => {
+        if (doc.id !== videoId) {
+          return {
+            id: doc.id,
+            ...doc.data()
+          }
+        }
+      });
+      seteRelatedVideos(data);
+    }
+    fetchRelatedVideos();
+  }, [videoId]);
+
   const handleSwitch = () => {
     setCheck(!checked);
   }
@@ -106,11 +126,11 @@ const RelatedVideos = () => {
           <Switch checked={checked} onClick={handleSwitch} className="ml-2" />
         </div>
       </div>
-      <Video />
-      <Video />
-      <Video />
-      <Video />
-      <Video />
+      <>
+        {relatedVideos && relatedVideos.map((video: any) => {
+          return <Video video={video} />
+        })}
+      </>
     </div>
   )
 }
@@ -386,8 +406,8 @@ const Comments = ({ videoId, commentsCount }) => {
 
   return (
     <div className="mt-5 mb-10 lg:ml-3 lg:mr-3">
-      <div className="ml-4 lg:ml-0">
-        <span className="font-bold">{commentsCount === 1 ? `${commentsCount} Comment` : `${commentsCount} Comments`}</span>
+      <div className="ml-4 lg:ml-1">
+        <span className="font-bold">Comments {commentsCount}</span>
       </div>
       {user && <AddComment videoId={videoId} fetchComments={fetchData} commentsCount={commentsCount} user={user} />}
       <div className="space-y-8 ml-2 lg:ml-0">
@@ -453,6 +473,12 @@ const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
 
 const Comment = ({ user, comment, videoId }) => {
   let [likes, setLikes] = useState(comment.likes);
+  let time: string = "some time ago";
+
+  if (comment.timePosted) {
+    let unixTime = comment.timePosted.seconds;
+    time = formatTime(unixTime);
+  }
   const handleLike = async () => {
     if (!user) {
       toast.error("You must be signed in to perform this action");
@@ -493,7 +519,7 @@ const Comment = ({ user, comment, videoId }) => {
       <div className="flex flex-col space-y-2 flex-wrap">
         <div className="text-xs lg:text-sm space-x-2">
           <span className="font-bold">{comment.userName}</span>
-          <span className="text-gray dark:text-lightGray">3 months ago</span>
+          <span className="text-gray dark:text-lightGray">{time}</span>
         </div>
         <div className="text-sm lg:text-base">
           <span>{comment.message}</span>
@@ -510,27 +536,33 @@ const Comment = ({ user, comment, videoId }) => {
 }
 
 
-const Video = () => (
-  <div className="video">
-    <Link to="/watch?v=122">
-      <div className="text-right static">
-        <img src={videoCover} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-        <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">4:15</span>
-      </div>
-    </Link>
-    <div className="transition-colors ml-2 mr-2">
-      <h3 className="font-bold capitalize -mt-4">A brief history of Creation</h3>
-      <div className="dark:text-lightGray text-gray text-xs flex justify-between">
-        <div className="space-x-2">
-          <span>80k views</span>
-          <span>&middot;</span>
-          <span>3 days ago</span>
+const Video = ({ video }) => {
+  let time: string = "some time ago";
+
+  if (!video) return null;
+
+  return (
+    <div className="video">
+      <Link to={`/watch?v=${video.id}`}>
+        <div className="text-right static">
+          <img src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
-        <div><span>Dollie Blair</span></div>
+      </Link>
+      <div className="transition-colors ml-2 mr-2">
+        <h3 className="font-bold capitalize text-sm -mt-4">{video.title}</h3>
+        <div className="dark:text-lightGray text-gray text-xs flex justify-between">
+          <div className="space-x-2">
+            <span>{video.views} views</span>
+            <span>&middot;</span>
+            <span>{video.timeUploaded ? time : formatTime}</span>
+          </div>
+          <div><span>Joseph</span></div>
+        </div>
       </div>
     </div>
-  </div>
-);
+  )
+};
 
 export default Watch;
 //TODO: Add Comments and ability to delete them
