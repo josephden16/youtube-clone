@@ -9,7 +9,6 @@ import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
 import { faHeart, faShare, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import channelLogo from '../../images/channel-logo.png';
-import videoCover from '../../images/Cover.jpg';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
@@ -99,13 +98,12 @@ const RelatedVideos = ({ videoId }) => {
     const fetchRelatedVideos = async () => {
       const ref = await firestore
         .collection("videos")
-        .orderBy("views", "desc").get();
+        .where("id", "!=", videoId)
+        .get();
       const data = ref.docs.map(doc => {
-        if (doc.id !== videoId) {
-          return {
-            id: doc.id,
-            ...doc.data()
-          }
+        return {
+          id: doc.id,
+          ...doc.data()
         }
       });
       seteRelatedVideos(data);
@@ -546,7 +544,7 @@ const Video = ({ video }) => {
       <Link to={`/watch?v=${video.id}`}>
         <div className="text-right static">
           <img src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
+          <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </Link>
       <div className="transition-colors ml-2 mr-2">
@@ -555,7 +553,7 @@ const Video = ({ video }) => {
           <div className="space-x-2">
             <span>{video.views} views</span>
             <span>&middot;</span>
-            <span>{video.timeUploaded ? time : formatTime}</span>
+            <span>{video.timeUploaded ? formatTime(video.timeUploaded.seconds) : time}</span>
           </div>
           <div><span>Joseph</span></div>
         </div>

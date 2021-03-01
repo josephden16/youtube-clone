@@ -71,7 +71,7 @@ const Video = (props: any) => {
       <Link to={`/watch?v=${props.id}`}>
         <div className="poster text-right static">
           <img loading="lazy" src={props.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-80 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(props.duration, 10))}</span>
+          <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(props.duration, 10))}</span>
         </div>
       </Link>
       <div className="ml-2 mr-2">

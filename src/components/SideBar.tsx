@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom'
-import { faClock, faFire, faFolder, faHeart, faHome, faStar, faCog, faCompactDisc, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faFire, faFolder, faHeart, faHome, faCompactDisc, faVideo } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import userImg from '../images/user.png';
 import { UserContext } from './providers/AuthProvider';
