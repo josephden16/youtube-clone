@@ -1,6 +1,7 @@
 import Home from './pages/Home';
 import Watch from './pages/Watch';
 import Videos from './pages/Videos';
+import Channel from './pages/Channel';
 
 const routes = [
   {
@@ -20,6 +21,12 @@ const routes = [
     path: '/videos',
     exact: true,
     component: Videos
+  }, 
+  {
+    title: 'Channel',
+    path: '/channel/:id',
+    exact: true,
+    component: Channel
   }
 ]
 

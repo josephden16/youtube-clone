@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useContext, useRef, Component } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Link } from 'react-router-dom'
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import { firestore } from '../../firebase';
@@ -541,12 +540,12 @@ const Video = ({ video }) => {
 
   return (
     <div className="video">
-      <Link to={`/watch?v=${video.id}`}>
+      <a href={`/watch?v=${video.id}`}>
         <div className="text-right static">
           <img src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
-      </Link>
+      </a>
       <div className="transition-colors ml-2 mr-2">
         <h3 className="font-bold capitalize text-sm -mt-4">{video.title}</h3>
         <div className="dark:text-lightGray text-gray text-xs flex justify-between">

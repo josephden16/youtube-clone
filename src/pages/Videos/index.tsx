@@ -93,7 +93,10 @@ const Video = () => {
         .then(response => response.ref.getDownloadURL())
         .then(videoURL => {
           setVideoURL(videoURL);
-          videoRef.add({
+          const ref = videoRef.doc();
+          const id = ref.id;
+          videoRef.doc(id).set({
+            id: id,
             title: title,
             description: description,
             type: type,
@@ -121,8 +124,8 @@ const Video = () => {
     setPosterURL("");
     setVideoURL("");
   }
-
   if (!user) {
+
     return (
       <>
         <div className="lg:ml-0">
