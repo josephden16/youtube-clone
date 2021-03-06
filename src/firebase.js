@@ -57,7 +57,6 @@ export const createUserProfileDocument = async (authenticatedUser, additionalDat
   const userRef = firestore.collection("users").doc(user.uid);
   const snapshot = await userRef.get();
 
-
   if (!snapshot.exists) {
     const { displayName, email, photoURL } = user;
     try {
@@ -76,6 +75,32 @@ export const createUserProfileDocument = async (authenticatedUser, additionalDat
 
   return getUserDocument(user.uid);
 
+}
+
+export const createUserChannelDocument = async (authenticatedUser) => {
+  if (!authenticatedUser) return;
+
+  const user = authenticatedUser;
+
+  const channelRef = firestore.collection("channels").doc(user.uid);
+  const snapshot = await channelRef.get();
+
+  if (snapshot.exists) return;
+
+  if (!snapshot.exists) {
+    const { displayName, email, photoURL } = user;
+    try {
+      channelRef.set({
+        channelName: displayName,
+        email,
+        channelPhotoURL: photoURL,
+        createdAt: new Date(),
+      });
+      console.log("channel created successfully")
+    } catch (error) {
+      console.log(`error-message: ${error.message}, error-code: ${error.code}`);
+    }
+  }
 }
 
 const getUserDocument = (uid) => {

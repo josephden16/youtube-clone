@@ -5,3 +5,8 @@
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */
 }
+
+.link:active {
+  border-color: #ff0000;
+  color: #ff0000;
+}

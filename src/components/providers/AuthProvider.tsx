@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { auth, createUserProfileDocument } from '../../firebase';
+import { auth, createUserChannelDocument, createUserProfileDocument } from '../../firebase';
 
 export const UserContext = createContext(null);
 
@@ -11,6 +11,7 @@ const UserProvider = (props: any) => {
     let unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
         const userRef = await createUserProfileDocument(userAuth, {});
+        await createUserChannelDocument(userAuth);
         userRef.onSnapshot(snapshot => {
           setUser({ uid: snapshot.id, ...snapshot.data() });
         })

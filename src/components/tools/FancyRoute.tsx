@@ -4,21 +4,22 @@ import nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import './FancyRoute.css'
 
-nprogress.configure({easing: 'ease-out', speed: 1000, trickleSpeed: 500, showSpinner: false});
+nprogress.configure({ easing: 'ease-out', speed: 1000, trickleSpeed: 500, showSpinner: false });
 
 
 class FancyRoute extends React.Component {
-  componentWillMount () {
+  props: any;
+  componentWillMount() {
     nprogress.start()
   }
 
-  componentDidMount () {
+  componentDidMount() {
     nprogress.done()
   }
 
-  render () {
+  render() {
     return (
-      <Route {...this.props} />
+      <Route path={this.props.path} exact={this.props.exact}  {...this.props} />
     )
   }
 }

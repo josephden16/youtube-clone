@@ -24,9 +24,8 @@ const routes = [
   }, 
   {
     title: 'Channel',
-    path: '/channel/:id',
-    exact: true,
-    component: Channel
+    path: '/channel/:id/',
+    component: Channel,
   }
 ]
 

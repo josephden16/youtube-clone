@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useContext, useRef, Component } from 'react';
+import { Link } from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
@@ -7,7 +8,6 @@ import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
 import { faHeart, faShare, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
-import channelLogo from '../../images/channel-logo.png';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
@@ -26,6 +26,7 @@ const Watch = () => {
   let v = query.get("v");
   const [navOpen, setNavOpen] = useState(false);
   const [videoData, setVideoData] = useState(null);
+  const [channelData, setChannelData] = useState(null);
   const [videoOptions, setVideoOptions] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -44,6 +45,13 @@ const Watch = () => {
           type: data.type
         }]
       }
+
+      const channelRef = firestore.collection("channels").doc(data.channelId);
+      channelRef.get().then((snapshot) => {
+        let data = snapshot.data();
+        setChannelData(data);
+      });
+
       setVideoData(data);
       setVideoOptions(videoJsOptions);
       setLoading(false);
@@ -71,7 +79,7 @@ const Watch = () => {
           <SideBar />
         </div>
         <main className="layout mt-3 lg:mt-10 w-full">
-          <VideoPlayer videoOptions={videoOptions} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
+          <VideoPlayer videoOptions={videoOptions} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos videoId={v} />
         </main>
       </div>
@@ -125,7 +133,7 @@ const RelatedVideos = ({ videoId }) => {
       </div>
       <>
         {relatedVideos && relatedVideos.map((video: any) => {
-          return <Video video={video} />
+          return <Video key={video.id} video={video} />
         })}
       </>
     </div>
@@ -167,7 +175,7 @@ class Player extends Component {
 }
 
 
-const VideoPlayer = ({ data, loading, setVideoData, videoOptions, videoId }) => {
+const VideoPlayer = ({ data, channelData, loading, setVideoData, videoOptions, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
@@ -343,21 +351,25 @@ const VideoPlayer = ({ data, loading, setVideoData, videoOptions, videoId }) => 
       </div>
       <div className="transition-colors dark:border-gray ml-4 mr-4 mt-3 mb-9 pb-3 border-lightGray border-b-1">
         <div>
-          <div className="flex flex-row justify-between mb-2">
+          <div className="flex flex-row justify-between mb-4">
             <div className="flex flex-row space-x-2" style={{ alignItems: 'center' }}>
-              <img style={{ width: '60px' }} src={channelLogo} alt={'channel logo'} />
+              <img style={{ width: '60px' }} className="rounded-circle" src={channelData && channelData.channelPhotoURL} alt={'channel logo'} />
               <div>
-                <h3 className="font-bold text-lg">Entertainment</h3>
-                <span className="dark:text-lightGray text-gray">245k subscribed</span>
+                <a href={`/channel/${data.channelId}`} className="font-bold block hover:text-gray text-lg">{channelData && channelData.channelName}</a>
+                <span className="dark:text-lightGray text-gray">{channelData && channelData.subscribersCount} subscribed</span>
               </div>
             </div>
             <button style={{ outline: 'none' }} className="btn dark:bg-dark text-red bg-white">Subscribe</button>
           </div>
         </div>
-        <div className={open ? 'text-gray' : 'hideText'}>
-          <p className="dark:text-lightGray lg:ml-16">
-            A successful marketing plan relies heavily on the pulling-power of advertising copy. Writing result-oriented ad copy is difficult, as it must appeal to, entice, and convince consumers to take action. There is no magic formula to write perfect ad copy; it is based on a number of factors, including ad placement, demographic, even the consumer’s mood when they see your ad.
-          </p>
+        <div className={open ? 'text-gray' : 'hideText mb-2'}>
+          <p className="dark:text-lightGray lg:ml-16 text-sm mb-3">Published {formatTime(data.timeUploaded.seconds)}</p>
+          {data.description && <p className="dark:text-lightGray lg:ml-16 text-sm">
+            {data.description}
+          </p>}
+          {!data.description && <p className="dark:text-lightGray lg:ml-16 text-sm">
+            This video does not have a description
+          </p>}
         </div>
         <button onClick={openDescription} style={{ outline: 'none' }} className="dark:text-lightGray mt-2 uppercase text-gray text-sm font-bold">
           {open ? 'show less' : 'show more'}
@@ -543,7 +555,7 @@ const Video = ({ video }) => {
       <a href={`/watch?v=${video.id}`}>
         <div className="text-right static">
           <img src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
+          <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </a>
       <div className="transition-colors ml-2 mr-2">
@@ -554,7 +566,7 @@ const Video = ({ video }) => {
             <span>&middot;</span>
             <span>{video.timeUploaded ? formatTime(video.timeUploaded.seconds) : time}</span>
           </div>
-          <div><span>Joseph</span></div>
+          <div><Link to={`/channel/${video.channelId}`} className="font-bold hover:text-gray">Joseph</Link></div>
         </div>
       </div>
     </div>

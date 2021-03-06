@@ -15,24 +15,21 @@ const SideBar = () => {
 
   return (
     <nav className="transition-colors hidden lg:flex lg:flex-col lg:ml-0">
-      <ul className="dark:text-lightGray m-0 p-0 w-full space-y-5 text-gray mt-6">
+      <ul className="dark:text-lightGray m-0 w-full space-y-5 text-gray mt-6">
         <li className={getClassName('/') + ` space-x-3 items-center flex hover:text-red cursor-pointer`}>
-          <Link to="/" className="space-x-2"><FontAwesomeIcon icon={faHome} /> <span className="text-sm">Home</span></Link>
-        </li>
-        <li className={getClassName('/videos') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link className="space-x-2" to="/videos"><FontAwesomeIcon icon={faVideo} /> <span className="text-sm">My Videos</span></Link>
+          <Link to="/" className="space-x-2 -p-3"><FontAwesomeIcon icon={faHome} /> <span className="text-sm">Home</span></Link>
         </li>
         <li className={getClassName('/trending-videos') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link to="/trending-videos" className="space-x-2"><FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span></Link>
+          <Link to="/trending-videos" className="space-x-3"><FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span></Link>
         </li>
         <li className={getClassName('/subscriptions') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link to="/subscriptions" className="space-x-1"><FontAwesomeIcon icon={faCompactDisc} /> <span className="text-sm">Subscriptions</span></Link>
+          <Link to="/subscriptions" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faCompactDisc} /> <span className="text-sm">Subscriptions</span></Link>
         </li>
         <li className={getClassName('/library') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link to="library" className="space-x-1"><FontAwesomeIcon icon={faFolder} /> <span className="text-sm">Library</span></Link>
+          <Link to="library" className="space-x-2"><FontAwesomeIcon icon={faFolder} /> <span className="text-sm">Library</span></Link>
         </li>
         <li className={getClassName('/feed/#liked-videos') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link to="/liked-videos" className="space-x-1"><FontAwesomeIcon icon={faHeart} /> <span className="text-sm">Likes</span></Link>
+          <Link to="/liked-videos" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faHeart} /> <span className="text-sm">Liked Videos</span></Link>
         </li>
       </ul>
 
@@ -92,3 +89,4 @@ const SideBar = () => {
 }
 
 export default SideBar;
+//FIXME: fix sidebar alignment.

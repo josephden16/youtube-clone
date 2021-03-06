@@ -1,8 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom'
 import { signInWithGoogle, signOut } from '../firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBars, faMoon, faSearch, faSignOutAlt, faSun, faUser, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBars, faMoon, faSearch, faSignOutAlt, faSun, faUser, faUserAlt, faVideo } from '@fortawesome/free-solid-svg-icons';
 import logoLight from '../images/logo-light.svg';
 import logoDark from '../images/logo-dark.svg';
 import { UserContext } from './providers/AuthProvider';
@@ -131,8 +131,13 @@ const Header = (props: any) => {
           </div>
         </div>
       </header>
-      <div className={modalOpen ? "dark:bg-dark2 bg-lightGray rounded-md p-2 absolute right-4 mt-3 lg:right-8 z-40 w-52 opacity-100 transition-opacity" : "hidden opacity-0"}>
-        <button onClick={handleSignOut} className="space-x-2 w-full font-bold">
+      <div className={modalOpen ? "dark:bg-dark2 bg-lightGray rounded-md p-2 space-y-3 absolute right-4 mt-3 lg:right-8 z-40 w-52 opacity-100 transition-opacity" : "hidden opacity-0"}>
+        {user && <button className="space-x-2 flex items-center justify-center hover:opacity-70 w-full font-bold">
+          <Link to={`/channel/${user.uid}`}>
+            <span>Your Channel</span> <FontAwesomeIcon icon={faUserAlt} />
+          </Link>
+        </button>}
+        <button onClick={handleSignOut} className="space-x-2 hover:opacity-70 w-full font-bold">
           <span>Sign out</span> <FontAwesomeIcon icon={faSignOutAlt} />
         </button>
       </div>

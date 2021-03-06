@@ -16,6 +16,8 @@ const Home = () => {
     setNavOpen(!navOpen);
   }
 
+  if (!videos) return null;
+
   return (
     <>
       <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4">
@@ -82,7 +84,7 @@ const Video = (props: any) => {
             <span>&middot;</span>
             <span>{time}</span>
           </div>
-          <div><span className="text-sm">Joseph</span></div>
+          <div><Link to={`/channel/${props.channelId}`} className="text-sm font-bold hover:text-gray">Joseph</Link></div>
         </div>
       </div>
     </div>
