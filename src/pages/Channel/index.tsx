@@ -9,6 +9,8 @@ import VideoUpload from '../../components/VideoUpload';
 import { firestore } from '../../firebase';
 import { formatTime, formatVideoTime } from '../../utils';
 import { UserContext } from '../../components/providers/AuthProvider';
+import { toast } from 'react-toastify';
+import loadingImg from '../../images/loading.svg';
 import './index.css';
 
 
@@ -19,8 +21,8 @@ const Channel = ({ match }) => {
   const [navOpen, setNavOpen] = useState(true);
   const [data, setData] = useState(null);
   const [videos, setVideos] = useState(null);
-
-  // class name states for each tab
+  const user = useContext(UserContext);
+  // class name states for each tab (updated whenever the URL changes)
   const [homeClass, setHomeClass] = useState("")
   const [videoClass, setVideoClass] = useState("")
   const [playlistClass, setPlaylistClass] = useState("")
@@ -103,10 +105,72 @@ const Channel = ({ match }) => {
   }, [id]);
 
 
-  if (!data || !id) return null;
+  const handleSubscribe = async () => {
+    if (!user) {
+      toast.error("You must be signed in to subscribe");
+      return;
+    }
+
+    const channelId = id;
+    const userId = user.uid;
+    const userRef = firestore.collection("users").doc(userId);
+    const channelRef = firestore.collection("channels").doc(channelId);
+    const subscriberRef = channelRef.collection("subscribers").doc(userId);
+    const snapshot = await subscriberRef.get();
+
+    if (userId === channelId) {
+      toast.warning("You can't subscribe to your own channel");
+      return;
+    }
+
+    if (!(snapshot.exists)) {
+      try {
+        await userRef.collection("subscriptions").doc(channelId).set({
+          channelId: channelId,
+          channelPhotoURL: data.channelPhotoURL,
+          channelDisplayName: data.channelName
+        }, { merge: true })
+        await subscriberRef.set({
+          userId: userId,
+          userDisplayName: user.displayName
+        }, { merge: true });
+        await channelRef.set({
+          subscribersCount: data.subscribersCount + 1
+        }, { merge: true });
+        setData({
+          ...data,
+          subscribersCount: data.subscribersCount + 1
+        })
+        toast.success("You've subscribed to this channel");
+      } catch (error) {
+        toast.error("Failed to subscribe to channel");
+      }
+    } else {
+      try {
+        await channelRef.collection("subscriptions").doc(userId).delete();
+        await channelRef.set({
+          subscribersCount: data.subscribersCount - 1
+        }, { merge: true });
+        setData({
+          ...data,
+          subscribersCount: data.subscribersCount - 1
+        })
+        toast.success("You've unsubscribed from this channel");
+      } catch (error) {
+        toast.error("Failed to unsubscribe from channel");
+      }
+    }
+  }
+
+  if (!data || !id) return (
+    <div className="flex flex-col items-center h-full mt-8 lg:mt-20">
+      <img src={loadingImg} className="w-12 text-center" alt="loading" />
+      <span>Fetching Channel Data</span>
+    </div>
+  );
 
   return (
-    <>
+    <div>
       <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4 transition-all duration-300">
         <Header sidebar={true} handleMenu={handleSideBar} />
         <div className="flex mt-10 lg:mt-8 md:space-x-8 lg:space-x-6 xl:space-x-16">
@@ -128,7 +192,7 @@ const Channel = ({ match }) => {
                 {/* <button>
                   <FontAwesomeIcon icon={faBell} />
                 </button> */}
-                <button className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
+                <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
               </div>
             </section>
             <section className="ml-2 lg:ml-0 overflow-scroll no-scrollbar">
@@ -138,13 +202,13 @@ const Channel = ({ match }) => {
                   </Link>
                 <Link className={videoClass} to={`${url}/videos`}>
                   Videos
-                  </Link>
+                </Link>
                 <Link className={playlistClass} to={`${url}/playlists`}>
                   Playlists
-                  </Link>
+                </Link>
                 <Link className={aboutClass} to={`${url}/about`}>
                   About
-                  </Link>
+                </Link>
                 <li className="flex items-center mb-1 lg:block space-x-4">
                   <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
                   <input className="dark:bg-dark dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
@@ -161,7 +225,7 @@ const Channel = ({ match }) => {
         </div>
       </div>
       <MobileFooter />
-    </>
+    </div>
   )
 }
 
@@ -225,7 +289,7 @@ const Videos = ({ id, videos, channelName }) => {
   return (
     <section>
       <div>
-        {(user && user.uid === id) && <VideoUpload channelName={channelName} channelId={id} />}
+        {(user && user.user.uid === id) && <VideoUpload channelName={channelName} channelId={id} />}
       </div>
       <div>
         <h2 className="hidden lg:block mb-4 font-bold text-2xl">Uploads &#127909;</h2>

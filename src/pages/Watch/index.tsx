@@ -49,7 +49,10 @@ const Watch = () => {
       const channelRef = firestore.collection("channels").doc(data.channelId);
       channelRef.get().then((snapshot) => {
         let data = snapshot.data();
-        setChannelData(data);
+        setChannelData({
+          id: snapshot.id,
+          ...data
+        })
       });
 
       setVideoData(data);
@@ -79,7 +82,7 @@ const Watch = () => {
           <SideBar />
         </div>
         <main className="layout mt-3 lg:mt-10 w-full">
-          <VideoPlayer videoOptions={videoOptions} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
+          <VideoPlayer videoOptions={videoOptions} setChannelData={setChannelData} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos videoId={v} />
         </main>
       </div>
@@ -175,7 +178,7 @@ class Player extends Component {
 }
 
 
-const VideoPlayer = ({ data, channelData, loading, setVideoData, videoOptions, videoId }) => {
+const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData, videoOptions, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
@@ -331,6 +334,63 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, videoOptions, v
     }
   }
 
+  const handleSubscribe = async () => {
+    if (!user) {
+      toast.error("You must be signed in to subscribe");
+      return;
+    }
+
+    const channelId = channelData.id;
+    const userId = user.uid;
+    const userRef = firestore.collection("users").doc(userId);
+    const channelRef = firestore.collection("channels").doc(channelId);
+    const subscriberRef = channelRef.collection("subscribers").doc(userId);
+    const snapshot = await subscriberRef.get();
+
+    if (userId === channelId) {
+      toast.warning("You can't subscribe to your own channel");
+      return;
+    }
+
+    if (!(snapshot.exists)) {
+      try {
+        await userRef.collection("subscriptions").doc(channelId).set({
+          channelId: channelId,
+          channelPhotoURL: data.channelPhotoURL,
+          channelDisplayName: data.channelName
+        }, { merge: true })
+        await subscriberRef.set({
+          userId: userId,
+          userDisplayName: user.displayName
+        }, { merge: true });
+        await channelRef.set({
+          subscribersCount: data.subscribersCount + 1
+        }, { merge: true });
+        setChannelData({
+          ...data,
+          subscribersCount: data.subscribersCount + 1
+        })
+        toast.success("You've subscribed to this channel");
+      } catch (error) {
+        toast.error("Failed to subscribe to channel");
+      }
+    } else {
+      try {
+        await channelRef.collection("subscriptions").doc(userId).delete();
+        await channelRef.set({
+          subscribersCount: data.subscribersCount - 1
+        }, { merge: true });
+        setChannelData({
+          ...data,
+          subscribersCount: data.subscribersCount - 1
+        })
+        toast.success("You've unsubscribed from this channel");
+      } catch (error) {
+        toast.error("Failed to unsubscribe from channel");
+      }
+    }
+  }
+
   if (loading) return <Loading loading={loading} msg={"Fetching video data..."} />
 
   return (
@@ -359,7 +419,7 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, videoOptions, v
                 <span className="dark:text-lightGray text-gray">{channelData && channelData.subscribersCount} subscribed</span>
               </div>
             </div>
-            <button style={{ outline: 'none' }} className="btn dark:bg-dark text-red bg-white">Subscribe</button>
+            <button onClick={handleSubscribe} style={{ outline: 'none' }} className="btn dark:bg-dark text-red bg-white">Subscribe</button>
           </div>
         </div>
         <div className={open ? 'text-gray' : 'hideText mb-2'}>

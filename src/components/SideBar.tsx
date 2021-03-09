@@ -1,9 +1,10 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom'
 import { faFire, faFolder, faHeart, faHome, faCompactDisc } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import userImg from '../images/user.png';
 import { UserContext } from './providers/AuthProvider';
+import { firestore } from '../firebase';
+// import userImg from '../images/user.png';
 
 
 const SideBar = () => {
@@ -12,6 +13,8 @@ const SideBar = () => {
   const getClassName = (path: string) => {
     return location.pathname === path ? "text-red" : "";
   }
+
+
 
   return (
     <nav className="transition-colors hidden lg:flex lg:flex-col lg:ml-0">
@@ -32,55 +35,7 @@ const SideBar = () => {
           <Link to="/liked-videos" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faHeart} /> <span className="text-sm">Liked Videos</span></Link>
         </li>
       </ul>
-
-      <ul className={user ? "dark:text-lightGray m-0 mt-16 space-y-5 text-gray" : 'hidden'}>
-        <h2 className="dark:text-white font-bold text-xl mb-2">Subscriptions</h2>
-        <li className="flex space-x-3">
-          <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={userImg} alt="channel" />
-          </span>
-          <span className="mt-1 text-sm">
-            Leah Berry
-          </span>
-        </li>
-
-        <li className="flex space-x-3">
-          <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={userImg} alt="channel" />
-          </span>
-          <span className="mt-1 text-sm">
-            Leah Berry
-          </span>
-        </li>
-
-        <li className="flex space-x-3">
-          <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={userImg} alt="channel" />
-          </span>
-          <span className="mt-1 text-sm">
-            Leah Berry
-          </span>
-        </li>
-
-        <li className="flex space-x-3">
-          <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={userImg} alt="channel" />
-          </span>
-          <span className="mt-1 text-sm">
-            Leah Berry
-          </span>
-        </li>
-
-        <li className="flex space-x-3">
-          <span>
-            <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={userImg} alt="channel" />
-          </span>
-          <span className="mt-1 text-sm">
-            Leah Berry
-          </span>
-        </li>
-      </ul>
-
+      <Subscriptions user={user} />
       {/* <div className="flex items-center dark:text-lightGray dark:hover:text-lightGray text-gray text-xl mt-28 mb-8 hover:text-black transition-colors cursor-pointer">
         <FontAwesomeIcon icon={faCog} /> <span className="ml-2 text-sm">Settings</span>
       </div> */}
@@ -88,5 +43,41 @@ const SideBar = () => {
   )
 }
 
+const Subscriptions = ({ user }) => {
+  if (!user) return null;
+
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  const [subscriptions, setSubscriptions] = useState(null);
+  // eslint-disable-next-line react-hooks/rules-of-hooks
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      const subscriptionsRef = firestore.collection("users").doc(user.uid).collection("subscriptions");
+      const snapshot = await subscriptionsRef.get();
+      let data = snapshot.docs.map(doc => ({ ...doc.data() }));
+      setSubscriptions(data);
+    }
+    fetchSubscriptions();
+  }, [user.uid]);
+
+  if (!subscriptions) return null;
+
+  return (
+    <ul className={user ? "dark:text-lightGray m-0 mt-16 space-y-4 text-gray" : 'hidden'}>
+      {subscriptions.length > 0 && <h2 className="dark:text-white font-bold text-xl mb-4">Subscriptions</h2>}
+      {subscriptions && subscriptions.map((channel: any) => (
+        <li key={channel.channelId}>
+          <Link to={`/channel/${channel.channelId}`} className="flex space-x-3">
+            <span>
+              <img className="rounded-circle" style={{ width: '30px', height: '30px' }} src={channel.channelPhotoURL} alt="channel" />
+            </span>
+            <span className="mt-1 text-sm">
+              {channel.channelDisplayName}
+            </span>
+          </Link>
+        </li>
+      ))}
+    </ul>
+  )
+}
+
 export default SideBar;
-//FIXME: fix sidebar alignment.

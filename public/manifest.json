@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "YouTube Clone",
+  "name": "YouTube Clone App Sample",
   "icons": [
     {
       "src": "favicon.ico",
@@ -21,5 +21,8 @@
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "background_color": "#ffffff",
+  "//_comment1": "Some browsers will use this to enable push notifications.",
+  "//_comment2": "It is the same for all projects, this is not your project's sender ID",
+  "gcm_sender_id": "1024622255174"
 }

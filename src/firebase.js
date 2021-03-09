@@ -3,6 +3,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import 'firebase/storage';
 import 'firebase/analytics';
+import 'firebase/messaging';
 
 
 const firebaseConfig = {
@@ -23,6 +24,9 @@ firebase.analytics();
 export const firestore = firebase.firestore();
 export const auth = firebase.auth();
 export const storage = firebase.storage();
+export const messaging = firebase.messaging();
+// Add the public key generated from the console here.
+messaging.getToken({vapidKey: "BEDIMxaXeYDAWJ_7dfbc8hPR_wRH5VN3duNooD8EGFKEa260OuSFKJWTdw0i3ULxPMUck25Q6vlzpl5pwPovKgM"});
 
 export const provider = new firebase.auth.GoogleAuthProvider();
 export const signInWithGoogle = () => {
@@ -95,6 +99,8 @@ export const createUserChannelDocument = async (authenticatedUser) => {
         email,
         channelPhotoURL: photoURL,
         createdAt: new Date(),
+        subscribersCount: 0,
+        videosCount: 0
       });
       console.log("channel created successfully")
     } catch (error) {
@@ -122,6 +128,7 @@ export const signOut = () => {
 };
 
 
+//TODO: remove this in the fianl deploy
 window.firebase = firebase;
 
 

@@ -125,7 +125,11 @@ const Header = (props: any) => {
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
-            <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
+            {user &&
+              <Link to={`/channel/${user.uid}/videos`}>
+                <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
+              </Link>
+            }
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
             <Profile handleSignIn={handleSignIn} handleModal={handleModal} user={user} />
           </div>
