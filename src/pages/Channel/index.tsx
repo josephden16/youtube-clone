@@ -173,12 +173,12 @@ const Channel = ({ match }) => {
     <div>
       <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4 transition-all duration-300">
         <Header sidebar={true} handleMenu={handleSideBar} />
-        <div className="flex mt-10 lg:mt-8 md:space-x-8 lg:space-x-6 xl:space-x-16">
+        <div className="flex mt-10 lg:mt-8 md:space-x-8 lg:space-x-11 xl:space-x-14">
           <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
             <SideBar />
           </div>
           <main className="lg:mt-4 w-full flex flex-col space-y-16">
-            <section className="flex flex-col md:flex-row md:justify-between space-y-3 ml-1 lg:ml-0 md:mr-3">
+            <section className="flex flex-col md:flex-row md:justify-between space-y-3 ml-0 lg:-ml-2 xl:-ml-1 md:mr-3">
               <div className="flex flex-col md:flex-row md:items-center md:space-x-4 lg:space-x-6">
                 <div>
                   <img className="w-20 lg:w-auto rounded-circle" src={data.channelPhotoURL} alt="channel owner" />
@@ -211,7 +211,7 @@ const Channel = ({ match }) => {
                 </Link>
                 <li className="flex items-center mb-1 lg:block space-x-4">
                   <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
-                  <input className="dark:bg-dark dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
+                  <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
                 </li>
               </ul>
             </section>
@@ -242,12 +242,12 @@ const Home = ({ data, videos }) => {
   return (
     <section>
       {videos && <div>
-        <div className="flex flex-col lg:items-center mb-8 lg:flex-row lg:space-x-6">
-          <div className="poster text-right static">
-            <img loading="lazy" src={videos[0].posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+        <div className="flex flex-col sm:w-3/4 md:w-11/12 lg:w-9/12 xl:w-3/5 mb-8">
+          <div className="poster text-right static w-11/12">
+            <img loading="lazy" src={videos[0].posterURL} alt="cover" className="w-full rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
             <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(videos[0].duration, 10))}</span>
           </div>
-          <div className="text-left ml-1 lg:ml-0">
+          <div className="text-left ml-0 lg:ml-0">
             <h2 className="font-bold text-2xl lg:text-xl mb-3">{videos[0].title}</h2>
             <p className="dark:text-lightGray mb-3">
               {videos[0].description}
@@ -259,9 +259,9 @@ const Home = ({ data, videos }) => {
         </div>
 
         <div>
-          <h2 className="lg:block ml-1 mb-4 font-bold text-2xl">{data.channelName} Videos &#127909;</h2>
-          <div className="flex flex-col space-y-8 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 xl:grid-cols-4 lg:space-y-0">
-            {videos && videos.map((video, index) => (
+          <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{data.channelName}'s Videos &#127909;</h2>
+          <div className="flex flex-col space-y-8 sm:grid sm:grid-cols-2 md:space-y-0 md:space-x-0 md:gap-8 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
+            {videos && videos.map((video: any, index: number) => (
               <Video key={index} video={video} />
             ))}
           </div>
@@ -289,12 +289,12 @@ const Videos = ({ id, videos, channelName }) => {
   return (
     <section>
       <div>
-        {(user && user.user.uid === id) && <VideoUpload channelName={channelName} channelId={id} />}
+        {(user && user.uid === id) && <VideoUpload channelName={channelName} channelId={id} />}
       </div>
       <div>
         <h2 className="hidden lg:block mb-4 font-bold text-2xl">Uploads &#127909;</h2>
         <div className="flex flex-col space-y-8 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 xl:grid-cols-4 lg:space-y-0">
-          {videos && videos.map((video, index) => (
+          {videos && videos.map((video: any, index: number) => (
             <Video key={index} video={video} />
           ))}
           {
@@ -315,7 +315,7 @@ const Video = ({ video }) => {
   }
 
   return (
-    <div className="lg:w-60 xl:w-64">
+    <div className="w-10/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
       <a href={`/watch?v=${video.id}`}>
         <div className="poster text-right static">
           <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />

@@ -20,7 +20,7 @@ const Home = () => {
 
   return (
     <>
-      <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4">
+      <div className="dark:bg-dark h-full md:pt-0 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4">
         <Header sidebar={true} handleMenu={handleSideBar} />
         <div className="flex mt-16 lg:mt-8 lg:space-x-12 xl:space-x-16">
           <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
@@ -33,9 +33,9 @@ const Home = () => {
                   <img src={channelImg} className="w-10 lg:w-12 lg:mr-3" alt="channel" />
                    <h2 className="font-bold text-xl lg:text-3xl">Dollie Blair</h2>
                 </div> */}
-                <div className="text-center justify-center lg:justify-start flex flex-row mb-8 ml-5 lg:ml-1 items-center space-x-2">
+                {videos && <div className="text-center justify-center lg:justify-start flex flex-row mb-8 ml-5 lg:ml-1 items-center space-x-2">
                   <h2 className="font-bold text-3xl lg:text-3xl">Videos &#127909;</h2>
-                </div>
+                </div>}
                 <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
                   {videos && videos.map(video => (
                     <Video key={video.id} {...video} />

@@ -119,15 +119,15 @@ const Header = (props: any) => {
           </Link>
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
-          <div className="hidden lg:block lg:ml-32 lg:mt-1">
-            <input style={{ width: '460px', paddingTop: '4px', paddingBottom: '4px' }} className="dark:bg-dark2 -mt-2 md:-mt-0 shadow-md dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
+          <div className="hidden lg:block lg:ml-24 lg:mt-1">
+            <input style={{ width: '460px', paddingTop: '4px', paddingBottom: '4px' }} className="dark:bg-dark2 -mt-2 md:-mt-0 shadow-md placeholder-black dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
             <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} /></button>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
-            <button onClick={openSearch} className="mt-1 md:mr-4 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
+            <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
             {user &&
               <Link to={`/channel/${user.uid}/videos`}>
-                <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden md:block text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
+                <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
               </Link>
             }
             <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
@@ -154,7 +154,7 @@ const Header = (props: any) => {
 const MobileSearch = ({ open, handleClose }) => {
   return (
     <div className={open ? "dark:bg-dark text-center w-full top-0 fixed bg-white z-50 mt-1 pb-2 pt-2 pl-2 pr-4 flex lg:hidden" : 'hidden'}>
-      <button onClick={handleClose} className="mr-3 -ml-1"><FontAwesomeIcon size="1x" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
+      <button onClick={handleClose} className="mr-2 md:mr-3 ml-0"><FontAwesomeIcon size="1x" className="dark:text-white text-gray" icon={faArrowLeft} /></button>
       <input style={{ width: '97%' }} className="dark:bg-dark2 bg-lightGray ml-0 pt-1 pb-1 pl-4 pr-4 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
       <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} size="1x" /></button>
     </div>

@@ -419,7 +419,7 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
                 <span className="dark:text-lightGray text-gray">{channelData && channelData.subscribersCount} subscribed</span>
               </div>
             </div>
-            <button onClick={handleSubscribe} style={{ outline: 'none' }} className="btn dark:bg-dark text-red bg-white">Subscribe</button>
+            <button onClick={handleSubscribe} style={{ outline: 'none' }} className="btn dark:bg-dark text-red font-bold bg-white">Subscribe</button>
           </div>
         </div>
         <div className={open ? 'text-gray' : 'hideText mb-2'}>

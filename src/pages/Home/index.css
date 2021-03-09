@@ -21,11 +21,12 @@
 @media screen and (min-width: 1024px) {
   .video-home {
     width: 250px;
-  }
-  .video-home:nth-of-type(1) {
     margin-left: 0;
   }
-  .video-home:nth-of-type(5) {
+  /* .video-home:nth-of-type(1) {
     margin-left: 0;
   }
+  .video-home:nth-of-type(4) {
+    margin-left: 0;
+  } */
 }
