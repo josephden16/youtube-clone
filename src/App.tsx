@@ -1,9 +1,10 @@
 import React from 'react';
 import { Switch } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import FancyRoute from './components/tools/FancyRoute';
 import routes from './routes';
-  
+
 
 function App() {
   return (

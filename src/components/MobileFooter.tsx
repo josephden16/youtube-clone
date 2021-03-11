@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom'
-import { faCompactDisc, faFolder, faHome, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faCompactDisc, faFireAlt, faFolder, faHome } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
@@ -8,7 +8,7 @@ const MobileFooter = () => {
   const location = useLocation();
 
   const getClassName = (path: string) => {
-    return location.pathname === path ? "text-red" : "";
+    return location.pathname === path ? "text-red hover:text-red" : "";
   }
 
 
@@ -22,10 +22,10 @@ const MobileFooter = () => {
           </div>
         </Link>
 
-        <Link to="/videos" className={getClassName("/videos")}>
+        <Link to="/trending" className={getClassName("/videos")}>
           <div className="flex flex-col items-center text-center">
-            <FontAwesomeIcon icon={faVideo} />
-            <span className="text-xs">My Videos</span>
+            <FontAwesomeIcon icon={faFireAlt} />
+            <span className="text-xs">Trending</span>
           </div>
         </Link>
 
@@ -36,7 +36,7 @@ const MobileFooter = () => {
           </div>
         </Link>
 
-        <Link to="/" className="hover:text-red">
+        <Link to="/library" className="hover:text-red">
           <div className="flex flex-col items-center text-center">
             <FontAwesomeIcon icon={faFolder} />
             <span className="text-xs">Library</span>

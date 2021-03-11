@@ -11,7 +11,7 @@ import { UserContext } from './providers/AuthProvider';
 
 const Profile = ({ user, handleModal, handleSignIn }) => {
   if (user) {
-    return <img onClick={handleModal} className="rounded-circle ml-2 mt-1 lg:-mt-1 cursor-pointer" style={{ width: '33px', height: '33px' }} src={user.photoURL} alt="profile" />
+    return <img onClick={handleModal} className="rounded-circle ml-2 mt-1 lg:-mt-1 cursor-pointer" style={{ width: '30px', height: '30px' }} src={user.photoURL} alt="profile" />
   }
   return (
     <button style={{ outline: 'none' }} onClick={handleSignIn} className="focus:text-opacity-60 space-x-1 pb-1 pt-1 flex items-center outline-none border-1 rounded-sm border-red dark:border-lightGray ml-2 mt-1 lg:mb-1">
@@ -25,11 +25,11 @@ const Logo = ({ theme }) => {
   let classList = document.documentElement.classList;
 
   if (classList.contains("dark") || theme === "dark") {
-    return <img src={logoDark} className="mt-2 md:mt-3 lg:mt-3 w-28" alt="youtube" />
+    return <img src={logoDark} className="mt-2 md:mt-3 lg:mt-3 w-30" alt="youtube" />
   }
 
   if (!(classList.contains("dark")) || theme === "light") {
-    return <img src={logoLight} className="mt-2 md:mt-3 lg:mt-3 w-28" alt="youtube" />
+    return <img src={logoLight} className="mt-2 md:mt-3 lg:mt-3 w-30" alt="youtube" />
   }
 }
 

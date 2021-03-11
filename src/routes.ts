@@ -1,7 +1,7 @@
 import Home from './pages/Home';
 import Watch from './pages/Watch';
-import Videos from './pages/Videos';
 import Channel from './pages/Channel';
+import Library from './pages/Library';
 
 const routes = [
   {
@@ -17,15 +17,14 @@ const routes = [
     component: Watch
   },
   {
-    title: 'Videos',
-    path: '/videos',
-    exact: true,
-    component: Videos
-  }, 
-  {
     title: 'Channel',
     path: '/channel/:id/',
     component: Channel,
+  },
+  {
+    title: 'Library',
+    path: '/library',
+    component: Library,
   }
 ]
 

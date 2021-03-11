@@ -7,7 +7,7 @@ import { firestore } from '../../firebase';
 import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
-import { faHeart, faShare, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faPlus, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
@@ -391,6 +391,28 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
     }
   }
 
+  const saveToWatchLater = async () => {
+    if (!user) {
+      toast.error("You must be signed in to perform this action");
+      return;
+    }
+
+    const watchLaterRef = firestore.collection("users").doc(user.uid).collection("watchLater");
+    const videoRef = watchLaterRef.doc(data.id);
+
+    const snapshot = await videoRef.get();
+
+    if (!snapshot.exists) {
+      await videoRef.set({
+        timeAdded: new Date(),
+      });
+      toast.success("Saved to watch later.")
+    } else {
+      videoRef.delete();
+      toast.success("Removed from watch later.")
+    }
+  }
+
   if (loading) return <Loading loading={loading} msg={"Fetching video data..."} />
 
   return (
@@ -405,14 +427,14 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
           <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
             <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
             <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
-            <button style={{ outline: 'none' }} className="btn transition-colors dark:bg-dark2 shadow-md bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faShare} /> Share</button>
+            <button style={{ outline: 'none' }} onClick={saveToWatchLater} className="space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faPlus} /><span className="text-xs lg:text-sm">watch later</span></button>
           </div>
         </div>
       </div>
       <div className="transition-colors dark:border-gray ml-4 mr-4 mt-3 mb-9 pb-3 border-lightGray border-b-1">
         <div>
           <div className="flex flex-row justify-between mb-4">
-            <div className="flex flex-row space-x-2" style={{ alignItems: 'center' }}>
+            <div className="flex flex-row space-x-3" style={{ alignItems: 'center' }}>
               <img style={{ width: '60px' }} className="rounded-circle" src={channelData && channelData.channelPhotoURL} alt={'channel logo'} />
               <div>
                 <a href={`/channel/${data.channelId}`} className="font-bold block hover:text-gray text-lg">{channelData && channelData.channelName}</a>
@@ -530,10 +552,10 @@ const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
     <div className="space-y-3 mt-4 ml-2 mr-2 mb-6">
       <div className="flex space-x-4 lg:space-x-6 justify-items-start">
         <img src={user.photoURL} className="rounded-circle w-8 lg:w-10" alt={user.displayName} />
-        <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray outline-none" />
+        <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray placeholder-lightGray outline-none" />
       </div>
       <div className="flex justify-end">
-        <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-lightGray hover:opacity-70 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
+        <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-white hover:opacity-70 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
       </div>
     </div>
   )
@@ -635,4 +657,4 @@ const Video = ({ video }) => {
 
 export default Watch;
 //TODO: Add Comments and ability to delete them
-//TODO: Add subscribe feature
+//TODO: Put all data fetching functions in root function
