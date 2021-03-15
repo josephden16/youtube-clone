@@ -1,37 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom'
-import Header from '../../components/Header';
-import MobileFooter from '../../components/MobileFooter';
-import SideBar from '../../components/SideBar';
+import Layout from '../../components/Layout';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { firestore } from '../../firebase';
-import { formatTime, formatVideoTime } from '../../utils';
+import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
 
 
 const Library = () => {
-  const [navOpen, setNavOpen] = useState(true);
-  const handleSideBar = () => {
-    setNavOpen(!navOpen);
-  }
-
   const user = useContext(UserContext);
-
   return (
-    <div>
-      <div className="dark:bg-dark h-full md:pt-0 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4 transition-all duration-300">
-        <Header sidebar={true} handleMenu={handleSideBar} />
-        <div className="flex mt-10 lg:mt-8 md:space-x-8 lg:space-x-11 xl:space-x-14">
-          <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
-            <SideBar />
-          </div>
-          <main>
-            {!user && null}
-            {user && <Main userId={user.uid} />}
-          </main>
-        </div>
-      </div>
-      <MobileFooter />
-    </div>
+    <Layout>
+      {!user && null}
+      {user && <Main userId={user.uid} />}
+    </Layout>
   )
 }
 
@@ -50,7 +31,11 @@ const Main = ({ userId }) => {
         const data = snapshot.data();
         videos.push(data);
       });
-      setLikedVideos(videos);
+      if (videos.length > 0) {
+        setLikedVideos(videos);
+      } else {
+        setLikedVideos(null);
+      }
     }
 
     fetchVideos();
@@ -67,7 +52,11 @@ const Main = ({ userId }) => {
         const data = snapshot.data();
         videos.push(data);
       });
-      setWatchLaterVideos(videos);
+      if (videos.length > 0) {
+        setWatchLaterVideos(videos);
+      } else {
+        setWatchLaterVideos(null);
+      }
     }
     fetchVideos();
   }, [userId])
@@ -91,7 +80,7 @@ const Main = ({ userId }) => {
           </div>
         </div>
         {
-          (likedVideos && likedVideos.length < 1) && <div className="text-center">No liked videos</div>
+          (!likedVideos) && <div className="text-center">No liked videos</div>
         }
         <div className="flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
 
@@ -104,7 +93,7 @@ const Main = ({ userId }) => {
 
       <section className="border-b-1 pb-2 border-lightGray dark:border-gray w-full">
         <div className="flex flex-row w-full justify-center lg:justify-between">
-          <div className="flex flex-row w-full justify-center lg:justify-between sm:mb-10 mb-8">
+          <div className="flex flex-row w-full justify-center mb-8 sm:mb-10 lg:justify-between">
             <div>
               <div className="flex items-center space-x-3">
                 <div className="text-2xl lg:text-2xl font-bold">&#128337; Watch Later</div>
@@ -117,7 +106,7 @@ const Main = ({ userId }) => {
           </div>
         </div>
         {
-          (watchLaterVideos && watchLaterVideos.length < 1) && <div className="text-center">No videos saved to watch later</div>
+          (!watchLaterVideos) && <div className="text-center">No videos saved to watch later</div>
         }
         <div className="flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
           {watchLaterVideos && watchLaterVideos.map((video: any, index: number) => (
@@ -138,14 +127,6 @@ const Video = ({ video }) => {
     time = formatTime(video.timeUploaded.seconds);
   }
 
-  const formatTitle = (title: string) => {
-    if (title.length >= 23) {
-      return title.substring(0, 23) + "...";
-    }
-
-    return title;
-  }
-
   return (
     <div className="w-10/12 m-auto sm:w-4/5 lg:w-auto  xl:w-64">
       <Link to={`/watch?v=${video.id}`}>
@@ -162,7 +143,7 @@ const Video = ({ video }) => {
             <span>&middot;</span>
             <span>{time}</span>
           </div>
-          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{video.channelName}</Link></div>
+          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
         </div>
       </div>
     </div>

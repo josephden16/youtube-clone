@@ -33,3 +33,22 @@ export const getDiff = (seconds: number) => {
   let diff = Math.abs(now - timeViewed) / 1000;
   return diff;
 }
+
+export const formatTitle = (title: string) => {
+  if (title.length >= 23) {
+    return title.substring(0, 23) + "...";
+  }
+
+  return title;
+}
+
+
+export const formatChannelName = (name: string) => {
+  if (!name) return;
+  
+  if (name.length > 7) {
+    return name.substring(0, 7) + "...";
+  }
+
+  return name;
+}

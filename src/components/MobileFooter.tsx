@@ -8,7 +8,7 @@ const MobileFooter = () => {
   const location = useLocation();
 
   const getClassName = (path: string) => {
-    return location.pathname === path ? "text-red hover:text-red" : "";
+    return location.pathname === path ? "text-red hover:text-red" : "hover:text-red";
   }
 
 
@@ -22,22 +22,22 @@ const MobileFooter = () => {
           </div>
         </Link>
 
-        <Link to="/trending" className={getClassName("/videos")}>
+        <Link to="/trending" className={getClassName("/trending")}>
           <div className="flex flex-col items-center text-center">
             <FontAwesomeIcon icon={faFireAlt} />
             <span className="text-xs">Trending</span>
           </div>
         </Link>
 
-        <Link to="/" className="hover:text-red">
+        <Link to="/subscriptions" className={getClassName("/subscriptions")}>
           <div className="flex flex-col items-center text-center">
             <FontAwesomeIcon icon={faCompactDisc} />
             <span className="text-xs">Subscriptions</span>
           </div>
         </Link>
 
-        <Link to="/library" className="hover:text-red">
-          <div className="flex flex-col items-center text-center">
+        <Link to="/library" className={getClassName("/library")}>
+          <div className="flex flex-col items-center text-c enter">
             <FontAwesomeIcon icon={faFolder} />
             <span className="text-xs">Library</span>
           </div>

@@ -11,7 +11,7 @@ import { faHeart, faPlus, faThumbsDown, faThumbsUp } from '@fortawesome/free-sol
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
-import { formatTime, getDiff, formatVideoTime } from '../../utils';
+import { formatTime, getDiff, formatVideoTime, formatTitle, formatChannelName } from '../../utils';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
 import './index.css';
@@ -38,7 +38,7 @@ const Watch = () => {
         ...snapshot.data()
       };
       const videoJsOptions: any = {
-        autoplay: true,
+        autoplay: false,
         controls: true,
         sources: [{
           src: data.videoURL,
@@ -74,14 +74,14 @@ const Watch = () => {
   return (
     <div className="watch dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
       <div className="hidden text-center">Video id: {v}</div>
-      <div className="lg:pl-2 lg:pr-2">
+      <div className="">
         <Header sidebar={true} handleMenu={handleSideBar} />
       </div>
       <div className="flex flex-row">
         <div className={navOpen ? 'transition-transform mr-16' : 'hideSidebar transition-transform'}>
           <SideBar />
         </div>
-        <main className="layout mt-3 lg:mt-10 w-full">
+        <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full space-x-10">
           <VideoPlayer videoOptions={videoOptions} setChannelData={setChannelData} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos videoId={v} />
         </main>
@@ -413,8 +413,9 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
     }
   }
 
+  
   if (loading) return <Loading loading={loading} msg={"Fetching video data..."} />
-
+  
   return (
     <div>
       <div className="videoPlayer">
@@ -435,7 +436,9 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
         <div>
           <div className="flex flex-row justify-between mb-4">
             <div className="flex flex-row space-x-3" style={{ alignItems: 'center' }}>
-              <img style={{ width: '60px' }} className="rounded-circle" src={channelData && channelData.channelPhotoURL} alt={'channel logo'} />
+              <Link to={channelData && `/channel/${channelData.id}`}>
+                <img style={{ width: '60px' }} className="rounded-circle" src={channelData && channelData.channelPhotoURL} alt={'channel logo'} />
+              </Link>
               <div>
                 <a href={`/channel/${data.channelId}`} className="font-bold block hover:text-gray text-lg">{channelData && channelData.channelName}</a>
                 <span className="dark:text-lightGray text-gray">{channelData && channelData.subscribersCount} subscribed</span>
@@ -550,7 +553,7 @@ const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
 
   return (
     <div className="space-y-3 mt-4 ml-2 mr-2 mb-6">
-      <div className="flex space-x-4 lg:space-x-6 justify-items-start">
+      <div className="flex ml-2 lg:ml-0 space-x-4 lg:space-x-6 justify-items-start">
         <img src={user.photoURL} className="rounded-circle w-8 lg:w-10" alt={user.displayName} />
         <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray placeholder-lightGray outline-none" />
       </div>
@@ -641,14 +644,14 @@ const Video = ({ video }) => {
         </div>
       </a>
       <div className="transition-colors ml-2 mr-2">
-        <h3 className="font-bold capitalize text-sm -mt-4">{video.title}</h3>
+        <h3 className="font-bold capitalize text-sm -mt-4">{formatTitle(video.title)}</h3>
         <div className="dark:text-lightGray text-gray text-xs flex justify-between">
           <div className="space-x-2">
             <span>{video.views} views</span>
             <span>&middot;</span>
             <span>{video.timeUploaded ? formatTime(video.timeUploaded.seconds) : time}</span>
           </div>
-          <div><Link to={`/channel/${video.channelId}`} className="font-bold hover:text-gray">Joseph</Link></div>
+          <div><Link to={`/channel/${video.channelId}`} className="font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
         </div>
       </div>
     </div>

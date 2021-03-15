@@ -23,7 +23,7 @@ const UserProvider = (props: any) => {
     return () => {
       unsubscribeFromAuth();
     }
-  })
+  }, [props])
 
   return (
     <UserContext.Provider value={user}>

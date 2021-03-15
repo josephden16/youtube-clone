@@ -2,6 +2,8 @@ import Home from './pages/Home';
 import Watch from './pages/Watch';
 import Channel from './pages/Channel';
 import Library from './pages/Library';
+import Subscriptions from './pages/Subscriptions';
+
 
 const routes = [
   {
@@ -25,6 +27,11 @@ const routes = [
     title: 'Library',
     path: '/library',
     component: Library,
+  },
+  {
+    title: 'Subscriptions',
+    path: '/subscriptions',
+    component: Subscriptions
   }
 ]
 

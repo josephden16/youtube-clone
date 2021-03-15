@@ -23,9 +23,9 @@ const SideBar = () => {
         <li className={getClassName('/trending-videos') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
           <Link to="/trending-videos" className="space-x-3"><FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span></Link>
         </li>
-        <li className={getClassName('/subscriptions') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
+        {user && <li className={getClassName('/subscriptions') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
           <Link to="/subscriptions" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faCompactDisc} /> <span className="text-sm">Subscriptions</span></Link>
-        </li>
+        </li>}
         <li className={getClassName('/library') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
           <Link to="library" className="space-x-2"><FontAwesomeIcon icon={faFolder} /> <span className="text-sm">Library</span></Link>
         </li>
@@ -33,7 +33,7 @@ const SideBar = () => {
           <Link to="/liked-videos" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faHeart} /> <span className="text-sm">Liked Videos</span></Link>
         </li> */}
       </ul>
-      <Subscriptions user={user} />
+      {user && <Subscriptions user={user} />}
       {/* <div className="flex items-center dark:text-lightGray dark:hover:text-lightGray text-gray text-xl mt-28 mb-8 hover:text-black transition-colors cursor-pointer">
         <FontAwesomeIcon icon={faCog} /> <span className="ml-2 text-sm">Settings</span>
       </div> */}
@@ -42,9 +42,6 @@ const SideBar = () => {
 }
 
 const Subscriptions = ({ user }) => {
-  if (!user) return null;
-
-  // eslint-disable-next-line react-hooks/rules-of-hooks
   const [subscriptions, setSubscriptions] = useState(null);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   useEffect(() => {
@@ -55,7 +52,7 @@ const Subscriptions = ({ user }) => {
       snapshot.docs.forEach(async doc => {
         const channelRef = firestore.collection("channels").doc(doc.id);
         const snapshot = await channelRef.get();
-        const data = {channelId: snapshot.id, ...snapshot.data()};
+        const data = { channelId: snapshot.id, ...snapshot.data() };
         channels.push(data);
       });
       setSubscriptions(channels);

@@ -97,6 +97,7 @@ const VideoUpload = ({ channelId, channelName }) => {
             title: title,
             description: description,
             channelId: channelId,
+            channelName: channelName,
             type: type,
             duration: duration,
             videoURL: videoURL,
@@ -133,13 +134,13 @@ const VideoUpload = ({ channelId, channelName }) => {
           <div className="dark:text-lightGray text-black text-sm space-x-2 font-bold w-11/12 lg:w-96 flex flex-row flex-nowrap">
             <label htmlFor="poster" className="w-56 space-x-3 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80">
               <input ref={posterFile} type="file" className="hidden" accept="image/*" id="poster" name="poster" placeholder="Video poster" title="poster" />
-              <FontAwesomeIcon icon={faUpload} /> <span>Upload Poster (optional)</span>
+              <FontAwesomeIcon icon={faUpload} /> <span>Attach Poster (optional)</span>
             </label>
           </div>
           <div className="dark:text-lightGray text-black text-sm w-11/12 font-bold lg:w-96 space-x-2">
             <label htmlFor="video" className="flex items-center space-x-3 w-56 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80">
               <input accept="video/*" className="hidden" onChange={updateDuration} ref={videoFile} type="file" name="file" id="video" />
-              <FontAwesomeIcon icon={faUpload} /> <span>Upload Video</span>
+              <FontAwesomeIcon icon={faUpload} /> <span>Attach Video</span>
             </label>
           </div>
           <button disabled={loading ? true : false} onClick={handleSubmit} className="bg-red  text-white hover:opacity-80 font-bold rounded-md w-32 p-2 flex flex-col items-center cursor-pointer">

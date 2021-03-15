@@ -2,23 +2,20 @@ import React, { useContext, useEffect, useState } from 'react';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Link, Switch, Route, useParams, useRouteMatch, useLocation } from 'react-router-dom';
-import Header from '../../components/Header';
-import MobileFooter from '../../components/MobileFooter';
-import SideBar from '../../components/SideBar';
 import VideoUpload from '../../components/VideoUpload';
 import { firestore } from '../../firebase';
-import { formatTime, formatVideoTime } from '../../utils';
+import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
 import './index.css';
+import Layout from '../../components/Layout';
 
 
 const Channel = ({ match }) => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let { path, url } = useRouteMatch();
   const { id } = useParams<{ id: string }>();
-  const [navOpen, setNavOpen] = useState(true);
   const [data, setData] = useState(null);
   const [videos, setVideos] = useState(null);
   const user = useContext(UserContext);
@@ -29,9 +26,6 @@ const Channel = ({ match }) => {
   const [aboutClass, setAboutClass] = useState("")
 
   let location = useLocation();
-  const handleSideBar = () => {
-    setNavOpen(!navOpen);
-  }
 
   // changes the styles of the active tab
   useEffect(() => {
@@ -170,62 +164,50 @@ const Channel = ({ match }) => {
   );
 
   return (
-    <div>
-      <div className="dark:bg-dark h-full md:pt-1 ml-2 mr-2 pb-20 lg:mr-4 lg:ml-4 transition-all duration-300">
-        <Header sidebar={true} handleMenu={handleSideBar} />
-        <div className="flex mt-10 lg:mt-8 md:space-x-8 lg:space-x-11 xl:space-x-14">
-          <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar transition-transform'}>
-            <SideBar />
+    <Layout>
+      <div className="lg:mt-4 w-full flex flex-col space-y-16">
+        <section className="flex flex-col w-full md:flex-row md:justify-between lg:items-center space-y-3 ml-0 lg:-ml-2 xl:-ml-1 md:mr-3">
+          <div className="flex flex-col md:flex-row md:items-center md:space-x-4  lg:space-x-6">
+            <div>
+              <img className="w-20 lg:w-auto rounded-circle" src={data.channelPhotoURL} alt="channel owner" />
+            </div>
+            <div>
+              <h2 className="font-bold lg:text-xl">{data.channelName}</h2>
+              <div className="dark:text-lightGray">{data.subscribersCount} subscribed</div>
+            </div>
           </div>
-          <main className="lg:mt-4 w-full flex flex-col space-y-16">
-            <section className="flex flex-col md:flex-row md:justify-between space-y-3 ml-0 lg:-ml-2 xl:-ml-1 md:mr-3">
-              <div className="flex flex-col md:flex-row md:items-center md:space-x-4 lg:space-x-6">
-                <div>
-                  <img className="w-20 lg:w-auto rounded-circle" src={data.channelPhotoURL} alt="channel owner" />
-                </div>
-                <div>
-                  <h2 className="font-bold lg:text-xl">{data.channelName}</h2>
-                  <div className="dark:text-lightGray">{data.subscribersCount} subscribed</div>
-                </div>
-              </div>
-              <div>
-                {/* <button>
-                  <FontAwesomeIcon icon={faBell} />
-                </button> */}
-                <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
-              </div>
-            </section>
-            <section className="ml-2 lg:ml-0 overflow-scroll no-scrollbar">
-              <ul className="flex flex-row m-0 p-0 space-x-6 lg:space-x-12 items-center text-sm lg:text-base dark:text-lightGray dark:border-dark">
-                <Link className={homeClass} to={`${url}`}>
-                  Home
-                  </Link>
-                <Link className={videoClass} to={`${url}/videos`}>
-                  Videos
-                </Link>
-                <Link className={playlistClass} to={`${url}/playlists`}>
-                  Playlists
-                </Link>
-                <Link className={aboutClass} to={`${url}/about`}>
-                  About
-                </Link>
-                <li className="flex items-center mb-1 lg:block space-x-4">
-                  <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
-                  <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
-                </li>
-              </ul>
-            </section>
-            <Switch>
-              <Route path={`${match.url}/playlists`} component={Playlist} />
-              <Route path={`${match.url}/about`} component={About} />
-              <Route path={`${match.url}/videos`} render={() => <Videos channelName={data.channelName} id={id} videos={videos} />} />
-              <Route exact path={path} render={() => <Home data={data} videos={videos} />} />
-            </Switch>
-          </main>
-        </div>
+          <div>
+            <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
+          </div>
+        </section>
+        <section className="ml-2 lg:ml-0 overflow-scroll no-scrollbar">
+          <ul className="flex flex-row m-0 p-0 space-x-6 lg:space-x-12 items-center text-sm lg:text-base dark:text-lightGray dark:border-dark">
+            <Link className={homeClass} to={`${url}`}>
+              Home
+            </Link>
+            <Link className={videoClass} to={`${url}/videos`}>
+              Videos
+            </Link>
+            <Link className={playlistClass} to={`${url}/playlists`}>
+              Playlists
+            </Link>
+            <Link className={aboutClass} to={`${url}/about`}>
+              About
+            </Link>
+            <li className="flex items-center mb-1 lg:block space-x-4">
+              <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
+              <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
+            </li>
+          </ul>
+        </section>
+        <Switch>
+          <Route path={`${match.url}/playlists`} component={Playlist} />
+          <Route path={`${match.url}/about`} component={About} />
+          <Route path={`${match.url}/videos`} render={() => <Videos channelName={data.channelName} id={id} videos={videos} />} />
+          <Route exact path={path} render={() => <Home data={data} videos={videos} />} />
+        </Switch>
       </div>
-      <MobileFooter />
-    </div>
+    </Layout>
   )
 }
 
@@ -314,6 +296,7 @@ const Video = ({ video }) => {
     time = formatTime(video.timeUploaded.seconds);
   }
 
+
   return (
     <div className="w-10/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
       <a href={`/watch?v=${video.id}`}>
@@ -323,14 +306,14 @@ const Video = ({ video }) => {
         </div>
       </a>
       <div className="ml-2 mr-2">
-        <h3 className="font-bold text-sm capitalize -mt-4">{video.title}</h3>
+        <h3 className="font-bold text-sm capitalize -mt-4">{formatTitle(video.title)}</h3>
         <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
           <div className="space-x-2 text-sm">
             <span>{video.views} views</span>
             <span>&middot;</span>
             <span>{time}</span>
           </div>
-          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">Joseph</Link></div>
+          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
         </div>
       </div>
     </div>
@@ -338,4 +321,5 @@ const Video = ({ video }) => {
 }
 
 export default Channel;
-//TODO: add discussion tab later
+// TODO: add discussion tab later
+//TODO: fix  component not adapting to route change
