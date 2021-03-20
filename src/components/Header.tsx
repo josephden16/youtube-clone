@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react';
 import { Link } from 'react-router-dom'
 import { signInWithGoogle, signOut } from '../firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft, faBars, faMoon, faSearch, faSignOutAlt, faSun, faUser, faUserAlt, faVideo } from '@fortawesome/free-solid-svg-icons';
+import { faArrowLeft, faBars, faExchangeAlt, faMoon, faSearch, faSignOutAlt, faSun, faUser, faUserAlt, faVideo } from '@fortawesome/free-solid-svg-icons';
 import logoLight from '../images/logo-light.svg';
 import logoDark from '../images/logo-dark.svg';
 import { UserContext } from './providers/AuthProvider';
@@ -11,7 +11,11 @@ import { UserContext } from './providers/AuthProvider';
 
 const Profile = ({ user, handleModal, handleSignIn }) => {
   if (user) {
-    return <img onClick={handleModal} className="rounded-circle ml-2 mt-1 lg:-mt-1 cursor-pointer" style={{ width: '30px', height: '30px' }} src={user.photoURL} alt="profile" />
+    return (
+      <button style={{outline: 'none'}} onClick={handleModal}>
+        <img  className=" rounded-circle mt-1 lg:-mt-1 ml-2 cursor-pointer" style={{ width: '30px', height: '30px' }} src={user.photoURL} alt="profile" />
+      </button>
+    ) 
   }
   return (
     <button style={{ outline: 'none' }} onClick={handleSignIn} className="focus:text-opacity-60 space-x-1 pb-1 pt-1 flex items-center outline-none border-1 rounded-sm border-red dark:border-lightGray ml-3 -mr-2 mt-1 lg:mb-1">
@@ -39,14 +43,14 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
 
   if (currentTheme === 'light') {
     return (
-      <button style={{ outline: 'none' }} className={className} onClick={handleThemeToggle}>
+      <button className={className} onClick={handleThemeToggle}>
         <FontAwesomeIcon style={{ fontSize: '17px', color: 'black' }} className="mt-1 lg:mt-2" icon={faMoon} />
       </button>
     )
   }
 
   return (
-    <button style={{ outline: 'none' }} className={className} onClick={handleThemeToggle}>
+    <button className={className} onClick={handleThemeToggle}>
       <FontAwesomeIcon style={{ fontSize: '18px', color: 'gold' }} className="mt-1 lg:mt-2" icon={faSun} />
     </button>
   )
@@ -111,7 +115,7 @@ const Header = (props: any) => {
       <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
 
         <div className="flex">
-          <button style={{ outline: 'none' }} onClick={handleMenuClick} className={props.sidebar ? "lg:mt-3 hidden lg:block mr-4 outline-none" : "hidden"}>
+          <button onClick={handleMenuClick} className={props.sidebar ? "lg:mt-3 hidden lg:block mr-4 dark:focus:outline-white focus:outline-black" : "hidden"}>
             <FontAwesomeIcon style={{ fontSize: '18px' }} icon={faBars} />
           </button>
           <Link to="/">
@@ -120,8 +124,8 @@ const Header = (props: any) => {
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
           <div className="hidden lg:block lg:ml-24 lg:mt-1">
-            <input style={{ width: '460px', paddingTop: '5px', paddingBottom: '5px' }} className="dark:bg-dark2 -mt-2 md:-mt-0 shadow-md placeholder-black dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
-            <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8" icon={faSearch} /></button>
+            <input style={{ width: '460px', paddingTop: '5px', paddingBottom: '5px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-black dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
+            <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8 text-sm" icon={faSearch} /></button>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
@@ -130,7 +134,7 @@ const Header = (props: any) => {
                 <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
               </Link>
             }
-            <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
+            <ThemeToggle className="focus:outline-black ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
             <Profile handleSignIn={handleSignIn} handleModal={handleModal} user={user} />
           </div>
         </div>
@@ -142,7 +146,7 @@ const Header = (props: any) => {
           </Link>
         </button>}
         {user && <button onClick={handleSignIn} className="space-x-2 flex items-center justify-center hover:opacity-70 w-full font-bold">
-          <span>Switch Account</span> <FontAwesomeIcon icon={faUserAlt} />
+          <span>Switch Account</span> <FontAwesomeIcon icon={faExchangeAlt} />
         </button>}
         <button onClick={handleSignOut} className="space-x-2 hover:opacity-70 w-full font-bold">
           <span>Sign out</span> <FontAwesomeIcon icon={faSignOutAlt} />

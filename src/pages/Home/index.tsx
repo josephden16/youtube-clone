@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { VideosContext } from '../../components/providers/VideosProvider';
 import { formatVideoTime, formatTime, formatChannelName, formatTitle } from '../../utils';
 import Layout from '../../components/Layout';
-import './index.css';
+import './home.css';
 
 
 const Home = () => {
@@ -13,11 +13,10 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="lg:mt-8 w-full flex flex-col space-y-16">
+      <div className="lg:mt-8 lg:-ml-4 w-full flex flex-col space-y-16">
         <section>
           <div>
-            {videos && <h2 className="text-center mb-6 lg:mb-10 lg:text-left font-bold text-3xl lg:text-3xl">Videos &#127909;</h2>}
-            <div className="flex flex-col space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
+            <div className="grid grid-cols-1 w-full space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
               {videos && videos.map(video => (
                 <Video key={video.id} video={video} />
               ))}
@@ -40,7 +39,7 @@ const Video = ({ video }) => {
     <div className="video-home">
       <Link to={`/watch?v=${video.id}`}>
         <div className="poster text-right static">
-          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <img loading="lazy" src={video.posterURL} width="500" height="200px" style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </Link>

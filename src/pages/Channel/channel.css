@@ -1,6 +1,9 @@
 .no-scrollbar {
   -ms-overflow-style: none; /* Internet Explorer 10+ */
   scrollbar-width: none; /* Firefox */
+  white-space:  nowrap;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
 }
 .no-scrollbar::-webkit-scrollbar {
   display: none; /* Safari and Chrome */

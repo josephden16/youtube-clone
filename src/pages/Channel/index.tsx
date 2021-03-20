@@ -8,8 +8,8 @@ import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../
 import { UserContext } from '../../components/providers/AuthProvider';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
-import './index.css';
 import Layout from '../../components/Layout';
+import './channel.css';
 
 
 const Channel = ({ match }) => {
@@ -23,7 +23,6 @@ const Channel = ({ match }) => {
   const [homeClass, setHomeClass] = useState("")
   const [videoClass, setVideoClass] = useState("")
   const [playlistClass, setPlaylistClass] = useState("")
-  const [aboutClass, setAboutClass] = useState("")
 
   let location = useLocation();
 
@@ -34,34 +33,29 @@ const Channel = ({ match }) => {
     switch (location.pathname) {
       case (match.url):
         setHomeClass(activeClass);
-        setAboutClass(defaultClass);
         setVideoClass(defaultClass);
         setPlaylistClass(defaultClass);
         break;
       case (`${match.url}/videos`):
         setHomeClass(defaultClass);
-        setAboutClass(defaultClass);
         setVideoClass(activeClass);
         setPlaylistClass(defaultClass);
         break;
 
       case (`${match.url}/about`):
         setHomeClass(defaultClass);
-        setAboutClass(activeClass);
         setVideoClass(defaultClass);
         setPlaylistClass(defaultClass);
         break;
 
       case (`${match.url}/playlists`):
         setHomeClass(defaultClass);
-        setAboutClass(defaultClass);
         setVideoClass(defaultClass);
         setPlaylistClass(activeClass);
         break;
 
       default:
         setHomeClass(activeClass);
-        setAboutClass(defaultClass);
         setVideoClass(defaultClass);
         setPlaylistClass(defaultClass);
         break;
@@ -69,11 +63,11 @@ const Channel = ({ match }) => {
   }, [location.pathname, match.url])
 
   useEffect(() => {
-    const fetchChannelData = async () => {
+    const fetchdata = async () => {
       const channelRef = firestore.collection('channels').doc(id);
       let snapshot = await channelRef.get();
       if (snapshot.exists) {
-        let data = snapshot.data();
+        let data = { id: snapshot.id, ...snapshot.data() };
         setData(data);
       }
     }
@@ -94,9 +88,10 @@ const Channel = ({ match }) => {
         setVideos(videos);
       }
     }
-    fetchChannelData();
+    fetchdata();
     fetchChannelVideos();
   }, [id]);
+
 
 
   const handleSubscribe = async () => {
@@ -105,7 +100,7 @@ const Channel = ({ match }) => {
       return;
     }
 
-    const channelId = id;
+    const channelId = data.id;
     const userId = user.uid;
     const userRef = firestore.collection("users").doc(userId);
     const channelRef = firestore.collection("channels").doc(channelId);
@@ -137,11 +132,13 @@ const Channel = ({ match }) => {
         })
         toast.success("You've subscribed to this channel");
       } catch (error) {
+        console.log(error);
         toast.error("Failed to subscribe to channel");
       }
     } else {
       try {
-        await channelRef.collection("subscriptions").doc(userId).delete();
+        await subscriberRef.delete();
+        await userRef.collection("subscriptions").doc(channelId).delete();
         await channelRef.set({
           subscribersCount: data.subscribersCount - 1
         }, { merge: true });
@@ -151,6 +148,7 @@ const Channel = ({ match }) => {
         })
         toast.success("You've unsubscribed from this channel");
       } catch (error) {
+        console.log(error);
         toast.error("Failed to unsubscribe from channel");
       }
     }
@@ -165,8 +163,8 @@ const Channel = ({ match }) => {
 
   return (
     <Layout>
-      <div className="lg:mt-4 w-full flex flex-col space-y-16">
-        <section className="flex flex-col w-full md:flex-row md:justify-between lg:items-center space-y-3 ml-0 lg:-ml-2 xl:-ml-1 md:mr-3">
+      <div className="lg:mt-4 lg:-ml-3 flex flex-col w-full space-y-16">
+        <section className="flex flex-col md:flex-row md:justify-between lg:items-center space-y-3 ml-2 lg:-ml-2 xl:-ml-1 md:mr-3">
           <div className="flex flex-col md:flex-row md:items-center md:space-x-4  lg:space-x-6">
             <div>
               <img className="w-20 lg:w-auto rounded-circle" src={data.channelPhotoURL} alt="channel owner" />
@@ -180,7 +178,7 @@ const Channel = ({ match }) => {
             <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
           </div>
         </section>
-        <section className="ml-2 lg:ml-0 overflow-scroll no-scrollbar">
+        <section className="ml-2 lg:ml-0 no-scrollbar w-80 sm:w-full">
           <ul className="flex flex-row m-0 p-0 space-x-6 lg:space-x-12 items-center text-sm lg:text-base dark:text-lightGray dark:border-dark">
             <Link className={homeClass} to={`${url}`}>
               Home
@@ -191,9 +189,6 @@ const Channel = ({ match }) => {
             <Link className={playlistClass} to={`${url}/playlists`}>
               Playlists
             </Link>
-            <Link className={aboutClass} to={`${url}/about`}>
-              About
-            </Link>
             <li className="flex items-center mb-1 lg:block space-x-4">
               <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
               <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
@@ -202,7 +197,6 @@ const Channel = ({ match }) => {
         </section>
         <Switch>
           <Route path={`${match.url}/playlists`} component={Playlist} />
-          <Route path={`${match.url}/about`} component={About} />
           <Route path={`${match.url}/videos`} render={() => <Videos channelName={data.channelName} id={id} videos={videos} />} />
           <Route exact path={path} render={() => <Home data={data} videos={videos} />} />
         </Switch>
@@ -223,32 +217,35 @@ const Home = ({ data, videos }) => {
   }
   return (
     <section>
-      {videos && <div>
-        <div className="flex flex-col sm:w-3/4 md:w-11/12 lg:w-9/12 xl:w-3/5 mb-8">
-          <div className="poster text-right static w-11/12">
-            <img loading="lazy" src={videos[0].posterURL} alt="cover" className="w-full rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-            <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(videos[0].duration, 10))}</span>
-          </div>
-          <div className="text-left ml-0 lg:ml-0">
-            <h2 className="font-bold text-2xl lg:text-xl mb-3">{videos[0].title}</h2>
-            <p className="dark:text-lightGray mb-3">
-              {videos[0].description}
-            </p>
-            <p className="dark:text-lightGray text-sm mb-3">
-              {videos[0].views} views  ·  {time}
-            </p>
-          </div>
-        </div>
-
+      {videos &&
         <div>
-          <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{data.channelName}'s Videos &#127909;</h2>
-          <div className="flex flex-col space-y-8 sm:grid sm:grid-cols-2 md:space-y-0 md:space-x-0 md:gap-8 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
-            {videos && videos.map((video: any, index: number) => (
-              <Video key={index} video={video} />
-            ))}
+          <div className="flex flex-col w-11/12 sm:w-96 mb-8">
+            <Link to={`/watch?v=${videos[0].id}`}>
+              <div className="poster text-right static">
+                <img loading="lazy" src={videos[0].posterURL} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+                <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(videos[0].duration, 10))}</span>
+              </div>
+              <div className="text-left ml-1 lg:ml-0">
+                <h2 className="font-bold text-2xl lg:text-xl mb-3">{videos[0].title}</h2>
+                <p className="dark:text-lightGray mb-3">
+                  {videos[0].description}
+                </p>
+                <p className="dark:text-lightGray text-sm mb-3">
+                  {videos[0].views} views  ·  {time}
+                </p>
+              </div>
+            </Link>
           </div>
-        </div>
-      </div>}
+
+          <div>
+            <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{data.channelName}'s Videos &#127909;</h2>
+            <div className="flex flex-col space-y-8 sm:grid sm:grid-cols-2 md:space-y-0 md:space-x-0 md:gap-8 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
+              {videos && videos.map((video: any, index: number) => (
+                <Video key={index} video={video} />
+              ))}
+            </div>
+          </div>
+        </div>}
       {
         !videos && <div className="text-left">This channel has no videos</div>
       }
@@ -260,10 +257,6 @@ const Playlist = () => {
   return (
     <div className="text-center text-sm">This channel has no playlists</div>
   )
-}
-
-const About = () => {
-  return <div className="text-center text-sm">About Section</div>
 }
 
 const Videos = ({ id, videos, channelName }) => {
@@ -298,7 +291,7 @@ const Video = ({ video }) => {
 
 
   return (
-    <div className="w-10/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
+    <div className="w-11/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
       <a href={`/watch?v=${video.id}`}>
         <div className="poster text-right static">
           <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />

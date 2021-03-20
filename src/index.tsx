@@ -7,7 +7,6 @@ import reportWebVitals from './reportWebVitals';
 import UserProvider from './components/providers/AuthProvider';
 import VideosProvider from './components/providers/VideosProvider';
 
-
 ReactDOM.render(
   <React.StrictMode>
     <Router>

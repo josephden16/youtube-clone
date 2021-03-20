@@ -10,11 +10,12 @@ const UserProvider = (props: any) => {
   useEffect(() => {
     let unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if (userAuth) {
+        // creates a new user profile document if none exists 
         const userRef = await createUserProfileDocument(userAuth, {});
         await createUserChannelDocument(userAuth);
         userRef.onSnapshot(snapshot => {
           setUser({ uid: snapshot.id, ...snapshot.data() });
-        })
+        });
       } else {
         setUser(null);
       }

@@ -81,7 +81,7 @@ const Watch = () => {
         <div className={navOpen ? 'transition-transform mr-16' : 'hideSidebar transition-transform'}>
           <SideBar />
         </div>
-        <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full space-x-10">
+        <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full lg:space-x-10">
           <VideoPlayer videoOptions={videoOptions} setChannelData={setChannelData} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
           <RelatedVideos videoId={v} />
         </main>
@@ -126,7 +126,7 @@ const RelatedVideos = ({ videoId }) => {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 ml-3 mr-3 lg:m-0">
       <div style={{ alignItems: 'center' }} className="video flex flex-row justify-between">
         <h3 className="text-2xl font-bold">Next</h3>
         <div className="mr-2">
@@ -134,11 +134,11 @@ const RelatedVideos = ({ videoId }) => {
           <Switch checked={checked} onClick={handleSwitch} className="ml-2" />
         </div>
       </div>
-      <>
+      <div className="flex flex-col space-y-6">
         {relatedVideos && relatedVideos.map((video: any) => {
           return <Video key={video.id} video={video} />
         })}
-      </>
+      </div>
     </div>
   )
 }
@@ -356,36 +356,39 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
       try {
         await userRef.collection("subscriptions").doc(channelId).set({
           channelId: channelId,
-          channelPhotoURL: data.channelPhotoURL,
-          channelDisplayName: data.channelName
+          channelPhotoURL: channelData.channelPhotoURL,
+          channelDisplayName: channelData.channelName
         }, { merge: true })
         await subscriberRef.set({
           userId: userId,
           userDisplayName: user.displayName
         }, { merge: true });
         await channelRef.set({
-          subscribersCount: data.subscribersCount + 1
+          subscribersCount: channelData.subscribersCount + 1
         }, { merge: true });
         setChannelData({
-          ...data,
-          subscribersCount: data.subscribersCount + 1
+          ...channelData,
+          subscribersCount: channelData.subscribersCount + 1
         })
         toast.success("You've subscribed to this channel");
       } catch (error) {
+        console.log(error);
         toast.error("Failed to subscribe to channel");
       }
     } else {
       try {
-        await channelRef.collection("subscriptions").doc(userId).delete();
+        await subscriberRef.delete();
+        await userRef.collection("subscriptions").doc(channelId).delete();
         await channelRef.set({
-          subscribersCount: data.subscribersCount - 1
+          subscribersCount: channelData.subscribersCount - 1
         }, { merge: true });
         setChannelData({
-          ...data,
-          subscribersCount: data.subscribersCount - 1
+          ...channelData,
+          subscribersCount: channelData.subscribersCount - 1
         })
         toast.success("You've unsubscribed from this channel");
       } catch (error) {
+        console.log(error);
         toast.error("Failed to unsubscribe from channel");
       }
     }
@@ -413,9 +416,9 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
     }
   }
 
-  
+
   if (loading) return <Loading loading={loading} msg={"Fetching video data..."} />
-  
+
   return (
     <div>
       <div className="videoPlayer">
@@ -444,7 +447,7 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
                 <span className="dark:text-lightGray text-gray">{channelData && channelData.subscribersCount} subscribed</span>
               </div>
             </div>
-            <button onClick={handleSubscribe} style={{ outline: 'none' }} className="btn dark:bg-dark text-red font-bold bg-white">Subscribe</button>
+            <button onClick={handleSubscribe} style={{ outline: 'none' }} className="btn dark:bg-dark text-red font-bold bg-white uppercase">Subscribe</button>
           </div>
         </div>
         <div className={open ? 'text-gray' : 'hideText mb-2'}>
