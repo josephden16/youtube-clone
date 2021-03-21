@@ -7,14 +7,14 @@ import { firestore } from '../../firebase';
 import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
-import { faHeart, faPlus, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
+import { faClock, faHeart, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { formatTime, getDiff, formatVideoTime, formatTitle, formatChannelName } from '../../utils';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
-import './index.css';
+import './watch.css';
 
 
 const useQuery = () => {
@@ -431,7 +431,7 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
           <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
             <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
             <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
-            <button style={{ outline: 'none' }} onClick={saveToWatchLater} className="space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faPlus} /><span className="text-xs lg:text-sm">watch later</span></button>
+            <button style={{ outline: 'none' }} onClick={saveToWatchLater} className="space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faClock} /><span className="text-xs lg:text-sm capitalize">watch later</span></button>
           </div>
         </div>
       </div>

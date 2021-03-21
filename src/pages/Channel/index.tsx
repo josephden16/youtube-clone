@@ -74,7 +74,7 @@ const Channel = ({ match }) => {
     const fetchChannelVideos = async () => {
       const ref = firestore
         .collection("videos")
-        .where("channelId", "==", id).orderBy("views", "desc");
+        .where("channelId", "==", id).orderBy("timeUploaded", "desc");
       const snapshot = await ref.get();
       if (!snapshot.empty) {
         let videos = snapshot.docs.map((doc) => {

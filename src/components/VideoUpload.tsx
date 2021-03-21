@@ -77,47 +77,84 @@ const VideoUpload = ({ channelId, channelName }) => {
           .then(posterURL => {
             setPosterURL(posterURL);
             toast.success("Poster file uploaded");
+            storage.ref()
+              .child('videos')
+              .child(videoFile.current.name)
+              .put(videoFile.current.files[0])
+              .then(response => response.ref.getDownloadURL())
+              .then(videoURL => {
+                setVideoURL(videoURL);
+                const ref = videoRef.doc();
+                const id = ref.id;
+                videoRef.doc(id).set({
+                  id: id,
+                  title: title,
+                  description: description,
+                  channelId: channelId,
+                  channelName: channelName,
+                  type: type,
+                  duration: duration,
+                  videoURL: videoURL,
+                  posterURL: posterURL ? posterURL : defaultPoster,
+                  timeUploaded: new Date(),
+                  ...defaultVideoData
+                })
+                  .then(() => {
+                    toast.success("Video upload successful 🎉");
+                    setLoading(false);
+                    document.location.reload();
+                  })
+                  .catch(() => {
+                    toast.error("Upload failed");
+                    setLoading(false);
+                  })
+              })
+              .catch(() => {
+                toast.error("Video upload failed");
+                setLoading(false);
+              })
           })
           .catch(() => {
             toast.error("Poster upload failed");
             setLoading(false);
           })
-      }
-      storage.ref()
-        .child('videos')
-        .child(videoFile.current.name)
-        .put(videoFile.current.files[0])
-        .then(response => response.ref.getDownloadURL())
-        .then(videoURL => {
-          setVideoURL(videoURL);
-          const ref = videoRef.doc();
-          const id = ref.id;
-          videoRef.doc(id).set({
-            id: id,
-            title: title,
-            description: description,
-            channelId: channelId,
-            channelName: channelName,
-            type: type,
-            duration: duration,
-            videoURL: videoURL,
-            posterURL: posterURL ? posterURL : defaultPoster,
-            timeUploaded: new Date(),
-            ...defaultVideoData
+      } else {
+        storage.ref()
+          .child('videos')
+          .child(videoFile.current.name)
+          .put(videoFile.current.files[0])
+          .then(response => response.ref.getDownloadURL())
+          .then(videoURL => {
+            setVideoURL(videoURL);
+            const ref = videoRef.doc();
+            const id = ref.id;
+            videoRef.doc(id).set({
+              id: id,
+              title: title,
+              description: description,
+              channelId: channelId,
+              channelName: channelName,
+              type: type,
+              duration: duration,
+              videoURL: videoURL,
+              posterURL: posterURL ? posterURL : defaultPoster,
+              timeUploaded: new Date(),
+              ...defaultVideoData
+            })
+              .then(() => {
+                toast.success("Video upload successful 🎉");
+                setLoading(false);
+              })
+              .catch(() => {
+                toast.error("Upload failed");
+                setLoading(false);
+              })
           })
-            .then(() => {
-              toast.success("Video upload successful 🎉");
-              setLoading(false);
-            })
-            .catch(() => {
-              toast.error("Upload failed");
-              setLoading(false);
-            })
-        })
-        .catch(() => {
-          toast.error("Video upload failed");
-          setLoading(false);
-        })
+          .catch(() => {
+            toast.error("Video upload failed");
+            setLoading(false);
+          })
+      }
     }
 
     setPosterURL("");

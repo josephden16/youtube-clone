@@ -13,15 +13,11 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="lg:mt-8 lg:-ml-4 w-full flex flex-col space-y-16">
-        <section>
-          <div>
-            <div className="grid grid-cols-1 w-full space-y-12 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
-              {videos && videos.map(video => (
-                <Video key={video.id} video={video} />
-              ))}
-            </div>
-          </div>
+      <div className="lg:mt-8 lg:-ml-4 w-full block space-y-16">
+        <section className="flex flex-wrap  space-y-12  sm:grid sm:space-y-0 sm:gap-5 sm:grid-cols-3  lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
+            {videos && videos.map(video => (
+              <Video key={video.id} video={video} />
+            ))}
         </section>
       </div>
     </Layout>
@@ -36,13 +32,15 @@ const Video = ({ video }) => {
   }
 
   return (
-    <div className="video-home">
-      <Link to={`/watch?v=${video.id}`}>
-        <div className="poster text-right static">
-          <img loading="lazy" src={video.posterURL} width="500" height="200px" style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
-        </div>
-      </Link>
+    <div className="video-home flex flex-col space-y-6">
+      <div>
+        <Link to={`/watch?v=${video.id}`}>
+          <div className="text-right w-full h-44 sm:h-32 lg:h-32">
+            <img loading="lazy" src={video.posterURL} width="500" height="200px" style={{ width: 'inherit', height: 'inherit' }} alt="cover" className="object-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+            <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
+          </div>
+        </Link>
+      </div>
       <div className="ml-2 mr-2">
         <h3 className="font-bold text-sm capitalize -mt-4">{formatTitle(video.title)}</h3>
         <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
