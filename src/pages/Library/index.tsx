@@ -10,7 +10,7 @@ const Library = () => {
   const user = useContext(UserContext);
   return (
     <Layout>
-      {!user && null}
+      {!user && <div className="text-center mt-6">You must be signed in to access your library</div>}
       {user && <Main userId={user.uid} />}
     </Layout>
   )
