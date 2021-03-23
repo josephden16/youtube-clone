@@ -19,7 +19,7 @@ const Layout = ({ children }) => {
           <div className={navOpen ? 'transition-transform lg:mr-16' : 'hideSidebar lg:mr-0 transition-transform'}>
             <SideBar />
           </div>
-          <main>{children}</main>
+          <main className="w-full">{children}</main>
         </div>
       </div>
       <MobileFooter />

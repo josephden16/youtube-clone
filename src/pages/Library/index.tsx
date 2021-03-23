@@ -32,7 +32,6 @@ const Main = ({ userId }) => {
         const data = snapshot.data();
         videos.push(data);
         if (index === size - 1) {
-          console.log(videos);
           setLikedVideos(videos);
         }
       });
@@ -53,7 +52,6 @@ const Main = ({ userId }) => {
         const data = snapshot.data();
         videos.push(data);
         if (index === size - 1) {
-          console.log(videos);
           setWatchLaterVideos(videos);
         }
       });
@@ -64,7 +62,7 @@ const Main = ({ userId }) => {
   if (!userId) return null;
 
   return (
-    <div className="lg:mt-2 lg:-ml-1 w-full space-y-10">
+    <div className="lg:mt-2 lg:-ml-4 w-full space-y-10">
       <LikedVideos likedVideos={likedVideos} />
       <WatchLaterVideos watchLaterVideos={watchLaterVideos} />
     </div>
@@ -136,8 +134,8 @@ const Video = ({ video }) => {
   return (
     <div className="w-full m-auto sm:w-4/5 lg:w-auto xl:w-64">
       <Link to={`/watch?v=${video.id}`}>
-        <div className="poster text-right static">
-          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+        <div className="text-right static">
+          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="h-44 lg:h-32 rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </Link>

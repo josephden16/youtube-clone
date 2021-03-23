@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
 import Layout from '../../components/Layout';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../components/providers/AuthProvider';
 import loadingImg from '../../images/loading.svg';
 import './subscriptions.css';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCompactDisc } from '@fortawesome/free-solid-svg-icons';
 
 
 const Subscriptions = () => {
@@ -13,11 +15,19 @@ const Subscriptions = () => {
 
   return (
     <Layout>
-      {!user && null}
-      {user && <Main user={user} />}
+      <Switch>
+        <Route path="/subscriptions/all">
+          <AllSubscriptions user={user} />
+        </Route>
+        <Route exact path="/subscriptions">
+          {!user && null}
+          {user && <Main user={user} />}
+        </Route>
+      </Switch>
     </Layout>
   )
 }
+
 
 const Main = ({ user }) => {
   return (
@@ -27,6 +37,52 @@ const Main = ({ user }) => {
       </div>
       <div className="m-10">
         <Videos user={user} />
+      </div>
+    </div>
+  )
+}
+
+const AllSubscriptions = ({ user }) => {
+  const [subscriptions, setSubscriptions] = useState([]);
+  useEffect(() => {
+    const fetchSubscriptions = async () => {
+      const userId = user.uid;
+      const subscriptionsRef = firestore.collection("users").doc(userId).collection("subscriptions");
+      try {
+        const snapshot = await subscriptionsRef.get();
+        const size = snapshot.docs.length;
+        let subs = [];
+        snapshot.docs.forEach(async (doc, index) => {
+          const channelRef = firestore.collection("channels").doc(doc.id);
+          const snapshot = await channelRef.get();
+          const data = { id: snapshot.id, ...doc.data() };
+          subs.push(data);
+          if (index === size - 1) {
+            setSubscriptions(subs);
+          }
+        })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchSubscriptions();
+  }, [user]);
+
+  if (!user) return null;
+
+  return (
+    <div className="lg:-ml-3 w-full">
+      <h1 className="text-xl font-bold"><span>All Subscriptions</span> <FontAwesomeIcon icon={faCompactDisc} /></h1>
+      <div className="space-y-4 mt-7 flex flex-col lg:flex-row lg:flex-wrap lg:space-y-0 lg:space-x-4">
+        {subscriptions && subscriptions.map((channel, index) => (
+          <div key={index}>
+            <Link to={"/channel/" + channel.id} className="flex lg:grid space-x-2 lg:grid-cols-1 lg:space-x-0 lg:place-items-center items-center space-y-1 hover:opacity-70">
+              <img src={channel.channelPhotoURL} className="w-12 lg:w-14 rounded-circle" alt="channel" />
+              <span className="text-base text-center lg:text-sm">{channel.channelDisplayName}</span>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   )
@@ -144,11 +200,11 @@ const Channels = ({ user }) => {
   if (!subscriptions) return null;
 
   return (
-    <div className="flex flex-row space-x-4 lg:space-x-7 items-center lg:items-start overflow-hidden whitespace-nowrap">
+    <div className="flex flex-row ml-1 lg:ml-0 space-x-4 lg:space-x-7 items-center lg:items-start overflow-hidden whitespace-nowrap">
       {subscriptions.length > 0 && subscriptions.map((channel: any, index: number) => (
         <Channel key={index} channel={channel} />
       ))}
-      <button className="m-auto uppercase font-bold ml-6">see all</button>
+      <Link to="/subscriptions/all" className="m-auto text-sm uppercase font-bold ml-6">see all</Link>
     </div>
   )
 }
@@ -163,8 +219,8 @@ const Video = ({ video }) => {
   return (
     <div className="video">
       <Link to={`/watch?v=${video.id}`}>
-        <div className="poster text-right static">
-          <img loading="lazy" src={video.posterURL} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+        <div className="text-right static">
+          <img loading="lazy" src={video.posterURL} width="500" height="200" alt={video.title} className="h-44 lg:h-32 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </Link>

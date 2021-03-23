@@ -431,7 +431,7 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
           <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
             <button style={{ outline: 'none' }} onClick={handleLike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsUp} /> {data.likes}</button>
             <button style={{ outline: 'none' }} onClick={handleUnlike} className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}</button>
-            <button style={{ outline: 'none' }} onClick={saveToWatchLater} className="space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faClock} /><span className="text-xs lg:text-sm capitalize">watch later</span></button>
+            <button style={{ outline: 'none' }} onClick={saveToWatchLater} className="flex items-center space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"><FontAwesomeIcon icon={faClock} /><span className="text-xs lg:text-sm capitalize">watch later</span></button>
           </div>
         </div>
       </div>
@@ -499,7 +499,6 @@ const Comments = ({ videoId, commentsCount }) => {
 
 
   if (loading) return <Loading loading={loading} msg="Fetching comments..." />;
-
 
   return (
     <div className="mt-5 mb-10 lg:ml-3 lg:mr-3">
@@ -642,7 +641,7 @@ const Video = ({ video }) => {
     <div className="video">
       <a href={`/watch?v=${video.id}`}>
         <div className="text-right static">
-          <img src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <img src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </a>

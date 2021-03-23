@@ -22,7 +22,6 @@ const Channel = ({ match }) => {
   // class name states for each tab (updated whenever the URL changes)
   const [homeClass, setHomeClass] = useState("")
   const [videoClass, setVideoClass] = useState("")
-  const [playlistClass, setPlaylistClass] = useState("")
 
   let location = useLocation();
 
@@ -34,30 +33,25 @@ const Channel = ({ match }) => {
       case (match.url):
         setHomeClass(activeClass);
         setVideoClass(defaultClass);
-        setPlaylistClass(defaultClass);
         break;
       case (`${match.url}/videos`):
         setHomeClass(defaultClass);
         setVideoClass(activeClass);
-        setPlaylistClass(defaultClass);
         break;
 
       case (`${match.url}/about`):
         setHomeClass(defaultClass);
         setVideoClass(defaultClass);
-        setPlaylistClass(defaultClass);
         break;
 
       case (`${match.url}/playlists`):
         setHomeClass(defaultClass);
         setVideoClass(defaultClass);
-        setPlaylistClass(activeClass);
         break;
 
       default:
         setHomeClass(activeClass);
         setVideoClass(defaultClass);
-        setPlaylistClass(defaultClass);
         break;
     }
   }, [location.pathname, match.url])
@@ -186,9 +180,6 @@ const Channel = ({ match }) => {
             <Link className={videoClass} to={`${url}/videos`}>
               Videos
             </Link>
-            <Link className={playlistClass} to={`${url}/playlists`}>
-              Playlists
-            </Link>
             <li className="flex items-center mb-1 lg:block space-x-4">
               <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
               <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
@@ -196,7 +187,6 @@ const Channel = ({ match }) => {
           </ul>
         </section>
         <Switch>
-          <Route path={`${match.url}/playlists`} component={Playlist} />
           <Route path={`${match.url}/videos`} render={() => <Videos channelName={data.channelName} id={id} videos={videos} />} />
           <Route exact path={path} render={() => <Home data={data} videos={videos} />} />
         </Switch>
@@ -221,8 +211,8 @@ const Home = ({ data, videos }) => {
         <div>
           <div className="flex flex-col w-11/12 sm:w-96 mb-8">
             <Link to={`/watch?v=${videos[0].id}`}>
-              <div className="poster text-right static">
-                <img loading="lazy" src={videos[0].posterURL} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+              <div className="text-right static">
+                <img loading="lazy" src={videos[0].posterURL} alt={videos[0].title} className="w-full h-48 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
                 <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(videos[0].duration, 10))}</span>
               </div>
               <div className="text-left ml-1 lg:ml-0">
@@ -253,11 +243,6 @@ const Home = ({ data, videos }) => {
   )
 }
 
-const Playlist = () => {
-  return (
-    <div className="text-center text-sm">This channel has no playlists</div>
-  )
-}
 
 const Videos = ({ id, videos, channelName }) => {
   let user = useContext(UserContext);
@@ -293,8 +278,8 @@ const Video = ({ video }) => {
   return (
     <div className="w-11/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
       <a href={`/watch?v=${video.id}`}>
-        <div className="poster text-right static">
-          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+        <div className="text-right static">
+          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt={video.title} className="h-44 lg:h-32 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </a>
@@ -314,5 +299,5 @@ const Video = ({ video }) => {
 }
 
 export default Channel;
-// TODO: add discussion tab later
-//TODO: fix  component not adapting to route change
+// TODO: add discussion feature later
+//TODO:  add playlist feature in the future
