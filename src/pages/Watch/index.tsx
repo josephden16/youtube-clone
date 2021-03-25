@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useRef, Component } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
@@ -7,12 +7,12 @@ import { firestore } from '../../firebase';
 import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
 import SideBar from '../../components/SideBar';
-import { faClock, faHeart, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import MobileFooter from '../../components/MobileFooter';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { formatTime, getDiff, formatVideoTime, formatTitle, formatChannelName } from '../../utils';
 import { toast } from 'react-toastify';
+import { faClock, faHeart, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import loadingImg from '../../images/loading.svg';
 import './watch.css';
 
@@ -29,6 +29,10 @@ const Watch = () => {
   const [channelData, setChannelData] = useState(null);
   const [videoOptions, setVideoOptions] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [checked, setCheck] = useState(false);
+  const [relatedVideos, seteRelatedVideos] = useState(null);
+
+
 
   //fetch data andsubscribe to changes in firestore
   useEffect(() => {
@@ -67,8 +71,30 @@ const Watch = () => {
   }, [])
 
 
+  useEffect(() => {
+    const fetchRelatedVideos = async () => {
+      const ref = await firestore
+        .collection("videos")
+        .where("id", "!=", v)
+        .limit(10)
+        .get();
+      const data = ref.docs.map(doc => {
+        return {
+          id: doc.id,
+          ...doc.data()
+        }
+      });
+      seteRelatedVideos(data);
+    }
+    fetchRelatedVideos();
+  }, [v]);
+
   const handleSideBar = () => {
     setNavOpen(!navOpen);
+  }
+
+  const handleSwitch = () => {
+    setCheck(!checked);
   }
 
   return (
@@ -82,8 +108,8 @@ const Watch = () => {
           <SideBar />
         </div>
         <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full lg:space-x-10">
-          <VideoPlayer videoOptions={videoOptions} setChannelData={setChannelData} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
-          <RelatedVideos videoId={v} />
+          <VideoPlayer autoplay={checked} nextVideoId={relatedVideos ? relatedVideos[0].id : ''} videoOptions={videoOptions} setChannelData={setChannelData} channelData={channelData} setVideoData={setVideoData} videoId={v} data={videoData} loading={loading} />
+          <RelatedVideos relatedVideos={relatedVideos} checked={checked} handleSwitch={handleSwitch} videoId={v} />
         </main>
       </div>
       <MobileFooter />
@@ -100,30 +126,7 @@ const Loading = ({ loading, msg }) => {
   )
 }
 
-const RelatedVideos = ({ videoId }) => {
-  const [relatedVideos, seteRelatedVideos] = useState(null);
-  const [checked, setCheck] = useState(false);
-
-  useEffect(() => {
-    const fetchRelatedVideos = async () => {
-      const ref = await firestore
-        .collection("videos")
-        .where("id", "!=", videoId)
-        .get();
-      const data = ref.docs.map(doc => {
-        return {
-          id: doc.id,
-          ...doc.data()
-        }
-      });
-      seteRelatedVideos(data);
-    }
-    fetchRelatedVideos();
-  }, [videoId]);
-
-  const handleSwitch = () => {
-    setCheck(!checked);
-  }
+const RelatedVideos = ({ videoId, checked, handleSwitch, relatedVideos }) => {
 
   return (
     <div className="space-y-6 ml-3 mr-3 lg:m-0">
@@ -178,11 +181,11 @@ class Player extends Component {
 }
 
 
-const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData, videoOptions, videoId }) => {
+const VideoPlayer = ({ data, channelData, nextVideoId, autoplay, loading, setVideoData, setChannelData, videoOptions, videoId }) => {
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
-  // const video = useRef(null);
+  const history = useHistory();
 
   const openDescription = () => {
     setOpen(!open);
@@ -328,7 +331,14 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
     }
   }
 
+
   const handlePlay = async (evt: any) => {
+    if ((evt.target.currentTime >= data.duration) && autoplay) {
+      history.push(`/watch?v=${nextVideoId}`);
+      document.location.reload();
+      return;
+    }
+
     if (viewed) return;
     let currentTime = evt.target.currentTime;
     if (currentTime > 1) {

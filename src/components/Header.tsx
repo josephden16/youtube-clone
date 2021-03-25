@@ -18,7 +18,7 @@ const Profile = ({ user, handleModal, handleSignIn }) => {
     ) 
   }
   return (
-    <button style={{ outline: 'none' }} onClick={handleSignIn} className="focus:text-opacity-60 space-x-1 pb-1 pt-1 flex items-center outline-none border-1 rounded-sm border-red dark:border-lightGray ml-3 -mr-2 mt-1 lg:mb-1">
+    <button style={{ outline: 'none' }} onClick={handleSignIn} className="focus:text-opacity-60 space-x-1 pb-1 pt-1 flex items-center outline-none border-1 rounded-sm border-red dark:border-lightGray ml-3 -mr-1 mt-1 lg:mb-1">
       <FontAwesomeIcon icon={faUser} className="text-red  dark:text-lightGray ml-1 lg:mt-0" style={{ fontSize: '15px' }} />
       <span className="pr-1 text-xs dark:text-lightGray text-red">SIGN IN</span>
     </button>
