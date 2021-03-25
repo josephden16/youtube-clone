@@ -1,13 +1,12 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link, Switch, Route } from 'react-router-dom';
-import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
 import Layout from '../../components/Layout';
+import Authentication from '../../components/Authentication';
+import Video from '../../components/Video';
 import { firestore } from '../../firebase';
 import { UserContext } from '../../components/providers/AuthProvider';
 import loadingImg from '../../images/loading.svg';
 import './subscriptions.css';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCompactDisc } from '@fortawesome/free-solid-svg-icons';
 
 
 const Subscriptions = () => {
@@ -20,7 +19,12 @@ const Subscriptions = () => {
           <AllSubscriptions user={user} />
         </Route>
         <Route exact path="/subscriptions">
-          {!user && null}
+          {!user &&
+            <div className="text-center mt-8 space-y-3">
+              <div>You must be signed in to view your subscriptions</div>
+              <Authentication /> 
+            </div>
+          }
           {user && <Main user={user} />}
         </Route>
       </Switch>
@@ -73,7 +77,7 @@ const AllSubscriptions = ({ user }) => {
 
   return (
     <div className="lg:-ml-3 w-full">
-      <h1 className="text-xl font-bold"><span>All Subscriptions</span> <FontAwesomeIcon icon={faCompactDisc} /></h1>
+      <h1 className="text-xl lg:text-3xl font-bold">All Subscriptions &#127909;</h1>
       <div className="space-y-4 mt-7 flex flex-col lg:flex-row lg:flex-wrap lg:space-y-0 lg:space-x-4">
         {subscriptions && subscriptions.map((channel, index) => (
           <div key={index}>
@@ -126,9 +130,12 @@ const Videos = ({ user }) => {
               })
           });
         })
+        .catch(() => {
+          setLoading(false);
+          setVideos(null);
+        })
       setLoading(false);
     }
-
     fetchVideos()
 
   }, [user.uid]);
@@ -163,7 +170,7 @@ const Channel = ({ channel }) => {
   return (
     <div>
       <Link to={"/channel/" + channel.id} className="flex flex-col items-center space-y-1 hover:opacity-70">
-        <img src={channel.channelPhotoURL} className="w-14 lg:w-14 rounded-circle" alt="channel" />
+        <img src={channel.channelPhotoURL} className="w-12 lg:w-14 rounded-circle" alt="channel" />
         <span className="text-xs lg:text-sm">{channel.channelDisplayName}</span>
       </Link>
     </div>
@@ -200,44 +207,13 @@ const Channels = ({ user }) => {
   if (!subscriptions) return null;
 
   return (
-    <div className="flex flex-row ml-1 lg:ml-0 space-x-4 lg:space-x-7 items-center lg:items-start overflow-hidden whitespace-nowrap">
+    <div className="flex flex-row ml-2 lg:ml-0 space-x-4 lg:space-x-7 items-center lg:items-start overflow-hidden whitespace-nowrap">
       {subscriptions.length > 0 && subscriptions.map((channel: any, index: number) => (
         <Channel key={index} channel={channel} />
       ))}
-      <Link to="/subscriptions/all" className="m-auto text-sm uppercase font-bold ml-6">see all</Link>
+      <Link to="/subscriptions/all" className="m-auto text-xs lg:text-sm uppercase font-bold ml-6">see all</Link>
     </div>
   )
 }
-
-const Video = ({ video }) => {
-  let time: string = "some time ago";
-
-  if (video.timeUploaded) {
-    time = formatTime(video.timeUploaded.seconds);
-  }
-
-  return (
-    <div className="video">
-      <Link to={`/watch?v=${video.id}`}>
-        <div className="text-right static">
-          <img loading="lazy" src={video.posterURL} width="500" height="200" alt={video.title} className="h-44 lg:h-32 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
-        </div>
-      </Link>
-      <div className="ml-2 mr-2">
-        <h3 className="font-bold text-sm capitalize -mt-4">{video.title && formatTitle(video.title)}</h3>
-        <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
-          <div className="space-x-2 text-sm">
-            <span>{video.views} views</span>
-            <span>&middot;</span>
-            <span>{time}</span>
-          </div>
-          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
-        </div>
-      </div>
-    </div>
-  )
-};
-
 
 export default Subscriptions;

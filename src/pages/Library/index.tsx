@@ -1,16 +1,21 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Link } from 'react-router-dom'
+import Authentication from '../../components/Authentication';
 import Layout from '../../components/Layout';
 import { UserContext } from '../../components/providers/AuthProvider';
+import Video from '../../components/Video';
 import { firestore } from '../../firebase';
-import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
 
 
 const Library = () => {
   const user = useContext(UserContext);
   return (
     <Layout>
-      {!user && <div className="text-center mt-6">You must be signed in to access your library</div>}
+      {!user &&
+        <div className="text-center mt-8 space-y-3">
+          <div>You must be signed in to access your library.</div>
+          <Authentication />
+        </div>
+      }
       {user && <Main userId={user.uid} />}
     </Layout>
   )
@@ -122,37 +127,5 @@ const LikedVideos = ({ likedVideos }) => {
     </section>
   )
 }
-
-//components
-const Video = ({ video }) => {
-  let time: string = "some time ago";
-
-  if (video.timeUploaded) {
-    time = formatTime(video.timeUploaded.seconds);
-  }
-
-  return (
-    <div className="w-full m-auto sm:w-4/5 lg:w-auto xl:w-64">
-      <Link to={`/watch?v=${video.id}`}>
-        <div className="text-right static">
-          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="h-44 lg:h-32 rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
-        </div>
-      </Link>
-      <div className="ml-2 mr-2 mb-3">
-        <h3 className="font-bold text-sm capitalize -mt-4">{formatTitle(video.title)}</h3>
-        <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
-          <div className="space-x-2 text-sm">
-            <span>{video.views} views</span>
-            <span>&middot;</span>
-            <span>{time}</span>
-          </div>
-          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 
 export default Library;

@@ -13,7 +13,7 @@ const Profile = ({ user, handleModal, handleSignIn }) => {
   if (user) {
     return (
       <button style={{outline: 'none'}} onClick={handleModal}>
-        <img  className=" rounded-circle mt-1 lg:-mt-1 ml-2 cursor-pointer" style={{ width: '30px', height: '30px' }} src={user.photoURL} alt="profile" />
+        <img  className="hover:opacity-70 rounded-circle mt-1 lg:-mt-1 ml-2 cursor-pointer" style={{ width: '30px', height: '30px' }} src={user.photoURL} alt="profile" />
       </button>
     ) 
   }
@@ -124,7 +124,7 @@ const Header = (props: any) => {
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
           <div className="hidden lg:block lg:ml-24 lg:mt-1">
-            <input style={{ width: '460px', paddingTop: '5px', paddingBottom: '5px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-black dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
+            <input style={{ width: '460px', paddingTop: '5px', paddingBottom: '5px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
             <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8 text-sm" icon={faSearch} /></button>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">

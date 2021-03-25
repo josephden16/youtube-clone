@@ -1,14 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UserContext } from '../../components/providers/AuthProvider';
 import { Link, Switch, Route, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import VideoUpload from '../../components/VideoUpload';
+import Layout from '../../components/Layout';
+import Video from '../../components/Video';
 import { firestore } from '../../firebase';
-import { formatTime, formatVideoTime, formatChannelName, formatTitle } from '../../utils';
-import { UserContext } from '../../components/providers/AuthProvider';
+import { formatTime, formatVideoTime } from '../../utils';
 import { toast } from 'react-toastify';
 import loadingImg from '../../images/loading.svg';
-import Layout from '../../components/Layout';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import './channel.css';
 
 
@@ -266,38 +267,7 @@ const Videos = ({ id, videos, channelName }) => {
   )
 }
 
-//components
-const Video = ({ video }) => {
-  let time: string = "some time ago";
-
-  if (video.timeUploaded) {
-    time = formatTime(video.timeUploaded.seconds);
-  }
-
-
-  return (
-    <div className="w-11/12 m-auto sm:ml-0 sm:w-60 sm:justify-self-start  lg:w-auto xl:w-64">
-      <a href={`/watch?v=${video.id}`}>
-        <div className="text-right static">
-          <img loading="lazy" src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt={video.title} className="h-44 lg:h-32 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-          <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
-        </div>
-      </a>
-      <div className="ml-2 mr-2">
-        <h3 className="font-bold text-sm capitalize -mt-4">{formatTitle(video.title)}</h3>
-        <div className="dark:text-lightGray text-dark text-xs lg:text-sm flex justify-between">
-          <div className="space-x-2 text-sm">
-            <span>{video.views} views</span>
-            <span>&middot;</span>
-            <span>{time}</span>
-          </div>
-          <div><Link to={`/channel/${video.channelId}`} className="text-sm font-bold hover:text-gray">{formatChannelName(video.channelName)}</Link></div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 export default Channel;
-// TODO: add discussion feature later
+
+//TODO: add discussion feature later
 //TODO:  add playlist feature in the future

@@ -19,8 +19,8 @@ const SideBar = () => {
         <li className={getClassName('/') + ` space-x-3 items-center flex hover:text-red cursor-pointer`}>
           <Link to="/" className="space-x-3 -p-3 flex items-center"><FontAwesomeIcon icon={faHome} /> <span className="text-sm">Home</span></Link>
         </li>
-        <li className={getClassName('/trending-videos') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
-          <Link to="/trending-videos" className="space-x-4 flex items-center"><FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span></Link>
+        <li className={getClassName('/trending') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
+          <Link to="/trending" className="space-x-4 flex items-center"><FontAwesomeIcon icon={faFire} /> <span className="text-sm">Trending</span></Link>
         </li>
         {user && <li className={getClassName('/subscriptions') + ' hover:text-red items-center flex transition-colors cursor-pointer'}>
           <Link to="/subscriptions" className="space-x-3 flex items-center"><FontAwesomeIcon icon={faCompactDisc} /> <span className="text-sm">Subscriptions</span></Link>
@@ -41,18 +41,22 @@ const Subscriptions = ({ user }) => {
     const fetchSubscriptions = async () => {
       const userId = user.uid;
       const subscriptionsRef = firestore.collection("users").doc(userId).collection("subscriptions");
-      const snapshot = await subscriptionsRef.get();
-      let channels = [];
-      let size = snapshot.docs.length;
-      snapshot.docs.forEach(async (doc, index) => {
-        const channelRef = firestore.collection("channels").doc(doc.id);
-        const snapshot = await channelRef.get();
-        const data = { channelId: snapshot.id, ...snapshot.data() };
-        channels.push(data);
-        if (index === size - 1) {
-          setSubscriptions(channels);
-        }
-      });
+      try {
+        const snapshot = await subscriptionsRef.get();
+        let channels = [];
+        let size = snapshot.docs.length;
+        snapshot.docs.forEach(async (doc, index) => {
+          const channelRef = firestore.collection("channels").doc(doc.id);
+          const snapshot = await channelRef.get();
+          const data = { channelId: snapshot.id, ...snapshot.data() };
+          channels.push(data);
+          if (index === size - 1) {
+            setSubscriptions(channels);
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     fetchSubscriptions();
@@ -62,7 +66,7 @@ const Subscriptions = ({ user }) => {
 
   return (
     <ul className={subscriptions ? "dark:text-lightGray m-0 mt-16 space-y-4 text-gray" : 'hidden'}>
-      {subscriptions.length > 0 && <h2 className="dark:text-white font-bold text-xl mb-4">Subscriptions</h2>}
+      {subscriptions.length > 0 && <h2 className="dark:text-white text-dark font-bold text-xl mb-4">Subscriptions</h2>}
       {subscriptions && subscriptions.map((channel: any) => (
         <li key={channel.channelId}>
           <Link to={`/channel/${channel.channelId}`} className="flex space-x-3 hover:opacity-80">

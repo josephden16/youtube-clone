@@ -208,37 +208,49 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
         video: firestore.collection("videos").doc(data.id),
         timeAdded: new Date()
       });
-      await firestore.collection("videos").doc(videoId).set({ likes: likes + 1, unlikes: unlikes - 1 }, { merge: true });
-      await unlikdedVideoDocumentRef.delete();
-      setVideoData({
-        likes: likes + 1,
-        unlikes: unlikes - 1,
-        ...data
-      });
-      toast.dark("Added to your liked videos");
-      return;
+      try {
+        await firestore.collection("videos").doc(videoId).set({ likes: likes + 1, unlikes: unlikes - 1 }, { merge: true });
+        await unlikdedVideoDocumentRef.delete();
+        setVideoData({
+          likes: likes + 1,
+          unlikes: unlikes - 1,
+          ...data
+        });
+        toast.dark("Added to your liked videos");
+        return;
+      } catch (error) {
+        console.log(error);
+      }
     }
 
     let likeSnapshot = await likdedVideoDocumentRef.get();
     if (likeSnapshot.exists) {
-      firestore.collection("videos").doc(videoId).set({ likes: likes - 1 }, { merge: true });
-      setVideoData({
-        likes: likes - 1,
-        ...data
-      });
-      await likdedVideoDocumentRef.delete();
-      toast.dark("Removed from your liked videos");
+      try {
+        firestore.collection("videos").doc(videoId).set({ likes: likes - 1 }, { merge: true });
+        setVideoData({
+          likes: likes - 1,
+          ...data
+        });
+        await likdedVideoDocumentRef.delete();
+        toast.dark("Removed from your liked videos");
+      } catch (error) {
+        toast.error("Operation failed.")
+      }
     } else {
-      likedVideosCollectionRef.doc(data.id).set({
-        video: firestore.collection("videos").doc(data.id),
-        timeAdded: new Date()
-      });
-      setVideoData({
-        likes: likes + 1,
-        ...data
-      });
-      await firestore.collection("videos").doc(videoId).set({ likes: likes + 1 }, { merge: true });
-      toast.dark("Added to your liked videos");
+      try {
+        likedVideosCollectionRef.doc(data.id).set({
+          video: firestore.collection("videos").doc(data.id),
+          timeAdded: new Date()
+        });
+        setVideoData({
+          likes: likes + 1,
+          ...data
+        });
+        await firestore.collection("videos").doc(videoId).set({ likes: likes + 1 }, { merge: true });
+        toast.dark("Added to your liked videos");
+      } catch (error) {
+        toast.error("Operation failed.")
+      }
     }
   }
 
@@ -258,46 +270,62 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
 
     let likeSnapshot = await likdedVideoDocumentRef.get();
     if (likeSnapshot.exists) {
-      unlikedVideosCollectionRef.doc(data.id).set({
-        video: firestore.collection("videos").doc(data.id),
-        timeAdded: new Date()
-      })
-      firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1, likes: likes - 1 }, { merge: true });
-      setVideoData({
-        likes: likes - 1,
-        unlikes: unlikes + 1,
-        ...data
-      });
-      return;
+      try {
+        unlikedVideosCollectionRef.doc(data.id).set({
+          video: firestore.collection("videos").doc(data.id),
+          timeAdded: new Date()
+        })
+        firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1, likes: likes - 1 }, { merge: true });
+        setVideoData({
+          likes: likes - 1,
+          unlikes: unlikes + 1,
+          ...data
+        });
+        return;
+      } catch (error) {
+        toast.error("Operation failed.")
+      }
     }
 
     let snapshot = await unlikdedVideoDocumentRef.get();
     if (snapshot.exists) {
-      firestore.collection("videos").doc(videoId).set({ unlikes: unlikes - 1 }, { merge: true });
-      setVideoData({
-        unlikes: unlikes - 1,
-        ...data
-      });
-      await unlikdedVideoDocumentRef.delete();
-      toast.dark("Dislike removed");
+      try {
+        firestore.collection("videos").doc(videoId).set({ unlikes: unlikes - 1 }, { merge: true });
+        setVideoData({
+          unlikes: unlikes - 1,
+          ...data
+        });
+        await unlikdedVideoDocumentRef.delete();
+        toast.dark("Dislike removed");
+      } catch (error) {
+        toast.error("Operation failed");
+      }
     } else {
-      unlikedVideosCollectionRef.doc(data.id).set({
-        video: firestore.collection("videos").doc(data.id),
-        timeAdded: new Date()
-      });
-      firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1 }, { merge: true });
-      setVideoData({
-        unlikes: unlikes + 1,
-        ...data
-      });
-      toast.dark("You disliked this video");
+      try {
+        unlikedVideosCollectionRef.doc(data.id).set({
+          video: firestore.collection("videos").doc(data.id),
+          timeAdded: new Date()
+        });
+        firestore.collection("videos").doc(videoId).set({ unlikes: unlikes + 1 }, { merge: true });
+        setVideoData({
+          unlikes: unlikes + 1,
+          ...data
+        });
+        toast.dark("You disliked this video");
+      } catch (error) {
+        toast.error("Operation failed");
+      }
     }
   }
 
   const getIPAddress = async () => {
-    let res = await fetch("https://api64.ipify.org?format=json");
-    let ip = await res.json();
-    return ip.ip;
+    try {
+      let res = await fetch("https://api64.ipify.org?format=json");
+      let ip = await res.json();
+      return ip.ip;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const handlePlay = async (evt: any) => {
@@ -309,27 +337,31 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
       let ipRef = firestore.collection("videos").doc(videoId).collection("views").doc(ipAddress);
       let videoRef = firestore.collection("videos").doc(videoId);
 
+      try {
+        let snapshot = await ipRef.get();
+        let viewsData = snapshot.data();
 
-      let snapshot = await ipRef.get();
-      let viewsData = snapshot.data();
-
-      if (!snapshot.exists) {
-        await videoRef.set({ views: data.views + 1 }, { merge: true });
-        await ipRef.set({
-          ip: ipAddress,
-          timeViewed: new Date()
-        })
-      } else {
-        let timeViewed = viewsData.timeViewed.seconds;
-        let diff = getDiff(timeViewed);
-        if (diff >= 86400) {
+        if (!snapshot.exists) {
           await videoRef.set({ views: data.views + 1 }, { merge: true });
           await ipRef.set({
             ip: ipAddress,
             timeViewed: new Date()
           })
+        } else {
+          let timeViewed = viewsData.timeViewed.seconds;
+          let diff = getDiff(timeViewed);
+          if (diff >= 86400) {
+            await videoRef.set({ views: data.views + 1 }, { merge: true });
+            await ipRef.set({
+              ip: ipAddress,
+              timeViewed: new Date()
+            })
+          }
+          return;
         }
-        return;
+
+      } catch (error) {
+        toast.error("Operation failed");
       }
     }
   }
@@ -406,9 +438,13 @@ const VideoPlayer = ({ data, channelData, loading, setVideoData, setChannelData,
     const snapshot = await videoRef.get();
 
     if (!snapshot.exists) {
-      await videoRef.set({
-        timeAdded: new Date(),
-      });
+      try {
+        await videoRef.set({
+          timeAdded: new Date(),
+        });
+      } catch (error) {
+        toast.error("Operation failed");
+      }
       toast.success("Saved to watch later.")
     } else {
       videoRef.delete();
@@ -512,6 +548,7 @@ const Comments = ({ videoId, commentsCount }) => {
     </div>
   )
 }
+
 
 const AddComment = ({ user, videoId, commentsCount, fetchComments }) => {
   const [comment, setComment] = useState("");
@@ -641,13 +678,13 @@ const Video = ({ video }) => {
     <div className="video">
       <a href={`/watch?v=${video.id}`}>
         <div className="text-right static">
-          <img src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <img src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="h-44 lg:h-32 rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </a>
       <div className="transition-colors ml-2 mr-2">
         <h3 className="font-bold capitalize text-sm -mt-4">{formatTitle(video.title)}</h3>
-        <div className="dark:text-lightGray text-gray text-xs flex justify-between">
+        <div className="text-gray dark:text-lightGray text-xs flex justify-between">
           <div className="space-x-2">
             <span>{video.views} views</span>
             <span>&middot;</span>

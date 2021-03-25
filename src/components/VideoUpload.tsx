@@ -58,8 +58,8 @@ const VideoUpload = ({ channelId, channelName }) => {
       return;
     }
 
-    if (!description) {
-      toast.error("Enter a description for your video");
+    if (!description && description.length < 20) {
+      toast.error("Enter a description for your video of the required length");
       return;
     }
     const { type } = videoFile.current.files[0];

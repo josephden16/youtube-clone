@@ -9,14 +9,18 @@ const VideosProvider = (props: any) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const snapshot = await firestore.collection("videos").orderBy("timeUploaded", "desc").get();
-      const videos = snapshot.docs.map(doc => {
-        return {
-          id: doc.id,
-          ...doc.data()
-        }
-      })
-      setVideos(videos);
+      try {
+        const snapshot = await firestore.collection("videos").orderBy("timeUploaded", "desc").get();
+        const videos = snapshot.docs.map(doc => {
+          return {
+            id: doc.id,
+            ...doc.data()
+          }
+        })
+        setVideos(videos);
+      } catch (error) {
+        console.log(error);
+      }
     }
     fetchData()
   }, [])

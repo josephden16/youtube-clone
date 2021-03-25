@@ -3,6 +3,7 @@ import Watch from './pages/Watch';
 import Channel from './pages/Channel';
 import Library from './pages/Library';
 import Subscriptions from './pages/Subscriptions';
+import Trending from './pages/Trending';
 
 
 const routes = [
@@ -32,6 +33,11 @@ const routes = [
     title: 'Subscriptions',
     path: '/subscriptions',
     component: Subscriptions
+  },
+  {
+    title: 'Trending',
+    path: '/trending',
+    component: Trending
   }
 ]
 
