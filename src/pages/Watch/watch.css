@@ -62,6 +62,29 @@
   background: #ff0000;
 }
 
+.video-poster {
+  height: 110px;
+}
+
+@media screen and (min-width: 360px) {
+  .video-poster {
+    height: 134px;
+  }
+}
+
+@media screen and (min-width: 400px) {
+  .video-poster {
+    height: 150px;
+  }
+}
+
+
+@media screen and (min-width: 460px) {
+  .video-poster {
+    height: 173px;
+  }
+}
+
 @media screen and (min-width: 500px) {
   .video {
     width: 350px;
@@ -69,6 +92,9 @@
 }
 
 @media screen and (min-width: 1024px) {
+  .video-poster {
+    height: 130px;
+  }
   .videoPlayer {
     /* width: 1000px; */
     border-radius: 0;

@@ -32,10 +32,9 @@ const Subscriptions = () => {
   )
 }
 
-
 const Main = ({ user }) => {
   return (
-    <div className="flex flex-col lg:-ml-3 xl:-ml-5">
+    <div className="flex flex-col w-full lg:-ml-3 xl:-ml-5">
       <div className="no-scrollbar ml-2 lg:ml-0">
         <Channels user={user} />
       </div>
@@ -143,7 +142,7 @@ const Videos = ({ user }) => {
   return (
     <>
       {loading && <Loading />}
-      <div className="grid grid-cols-1 w-full space-y-12 lg:-ml-10 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-12">
+      <div className="grid grid-cols-1 w-full space-y-12 lg:-ml-10 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-14">
         {videos && videos.map((video: any, index: number) => (
           <Video key={index} video={video} />
         ))}

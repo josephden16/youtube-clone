@@ -70,6 +70,8 @@ const Main = ({ userId }) => {
     <div className="lg:mt-2 lg:-ml-4 w-full space-y-10">
       <LikedVideos likedVideos={likedVideos} />
       <WatchLaterVideos watchLaterVideos={watchLaterVideos} />
+      {!watchLaterVideos && <div className="text-center mt-7">No videos saved to watch later</div>}
+      {!likedVideos && <div className="text-center mt-7">No liked videos</div>}
     </div>
   )
 }

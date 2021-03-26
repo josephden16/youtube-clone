@@ -1,6 +1,7 @@
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useRef, useState } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { firestore, storage } from '../firebase';
 import loadingImg from '../images/loading.svg';
@@ -67,11 +68,13 @@ const VideoUpload = ({ channelId, channelName }) => {
     // console.log(videoFile.current.files[0]);
 
     if (videoFile) {
+      let videoFileName = uuidv4();
+      let posterFileName = uuidv4();
       setLoading(true);
       if (posterFile.current.files.length > 0) {
         storage.ref()
           .child('posters')
-          .child(posterFile.current.name)
+          .child(posterFileName)
           .put(posterFile.current.files[0])
           .then(response => response.ref.getDownloadURL())
           .then(posterURL => {
@@ -79,7 +82,7 @@ const VideoUpload = ({ channelId, channelName }) => {
             toast.success("Poster file uploaded");
             storage.ref()
               .child('videos')
-              .child(videoFile.current.name)
+              .child(videoFileName)
               .put(videoFile.current.files[0])
               .then(response => response.ref.getDownloadURL())
               .then(videoURL => {
@@ -119,9 +122,10 @@ const VideoUpload = ({ channelId, channelName }) => {
             setLoading(false);
           })
       } else {
+        let videoFileName = uuidv4();
         storage.ref()
           .child('videos')
-          .child(videoFile.current.name)
+          .child(videoFileName)
           .put(videoFile.current.files[0])
           .then(response => response.ref.getDownloadURL())
           .then(videoURL => {
@@ -144,6 +148,7 @@ const VideoUpload = ({ channelId, channelName }) => {
               .then(() => {
                 toast.success("Video upload successful 🎉");
                 setLoading(false);
+                document.location.reload();
               })
               .catch(() => {
                 toast.error("Upload failed");
@@ -168,19 +173,22 @@ const VideoUpload = ({ channelId, channelName }) => {
         <form className="mt-6 dark:text-black flex flex-col space-y-5">
           <input onChange={(evt) => setTitle(evt.target.value)} type="text" style={{ outline: 'none' }} className="focus-within:border-red bg-lightGray p-2 w-11/12 lg:w-96 rounded-md" name="title" placeholder="title*" title="title" />
           <textarea onChange={(evt) => setDescription(evt.target.value)} style={{ outline: 'none' }} className="focus-within:border-red bg-lightGray p-2 w-11/12 lg:w-96 rounded-md" name="description" title="description" minLength={20} maxLength={3000} placeholder="description* (between 20-3000 characters)"></textarea>
-          <div className="dark:text-lightGray text-black text-sm space-x-2 font-bold w-11/12 lg:w-96 flex flex-row flex-nowrap">
+          <div className="items-center dark:text-lightGray text-black text-sm space-x-2 font-bold w-11/12 lg:w-96 flex flex-row flex-nowrap">
             <label htmlFor="poster" className="w-56 space-x-3 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80">
               <input ref={posterFile} type="file" className="hidden" accept="image/*" id="poster" name="poster" placeholder="Video poster" title="poster" />
               <FontAwesomeIcon icon={faUpload} /> <span>Attach Poster (optional)</span>
             </label>
+            {/* <span>{posterFile.current && posterFile.current.files[0].name}</span> */}
+
           </div>
-          <div className="dark:text-lightGray text-black text-sm w-11/12 font-bold lg:w-96 space-x-2">
+          <div className="flex flex-row items-center dark:text-lightGray text-black text-sm w-11/12 font-bold lg:w-96 space-x-2">
             <label htmlFor="video" className="flex items-center space-x-3 w-56 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80">
               <input accept="video/*" className="hidden" onChange={updateDuration} ref={videoFile} type="file" name="file" id="video" />
               <FontAwesomeIcon icon={faUpload} /> <span>Attach Video</span>
             </label>
+            {/* <span>{videoFile.current && videoFile.current.files[0].name}</span> */}
           </div>
-          <button disabled={loading ? true : false} onClick={handleSubmit} className="bg-red  text-white hover:opacity-80 font-bold rounded-md w-32 p-2 flex flex-col items-center cursor-pointer">
+          <button disabled={loading ? true : false} onClick={handleSubmit} className="bg-red h-11  text-white hover:opacity-90 font-bold rounded-md w-32 p-2 flex flex-col items-center cursor-pointer">
             <span className={loading ? 'flex' : 'hidden'}>
               <img src={loadingImg} className="w-8" alt="loading..." />
             </span>

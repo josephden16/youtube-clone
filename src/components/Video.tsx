@@ -17,7 +17,6 @@ const Video = ({ video }) => {
   if (video.timeUploaded) {
     time = formatTime(video.timeUploaded.seconds);
   }
-
   return (
     <div className="video-home flex flex-col space-y-5">
       <div>

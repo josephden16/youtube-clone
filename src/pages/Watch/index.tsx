@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext, useRef, Component } from 'react
 import { Link, useHistory } from 'react-router-dom'
 import { useLocation } from 'react-router-dom';
 import videojs from 'video.js';
-import 'video.js/dist/video-js.css';
 import { firestore } from '../../firebase';
 import Switch from '@bit/codyooo.rc-demo.switch';
 import Header from '../../components/Header';
@@ -14,6 +13,7 @@ import { formatTime, getDiff, formatVideoTime, formatTitle, formatChannelName } 
 import { toast } from 'react-toastify';
 import { faClock, faHeart, faThumbsDown, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import loadingImg from '../../images/loading.svg';
+import 'video.js/dist/video-js.css';
 import './watch.css';
 
 
@@ -22,6 +22,7 @@ const useQuery = () => {
 }
 
 const Watch = () => {
+
   let query = useQuery();
   let v = query.get("v");
   const [navOpen, setNavOpen] = useState(false);
@@ -47,7 +48,9 @@ const Watch = () => {
         sources: [{
           src: data.videoURL,
           type: data.type
-        }]
+        }],
+        aspectRatio: '16:9',
+        fill: true,
       }
 
       const channelRef = firestore.collection("channels").doc(data.channelId);
@@ -99,11 +102,10 @@ const Watch = () => {
 
   return (
     <div className="watch dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
-      <div className="hidden text-center">Video id: {v}</div>
-      <div className="">
+      <div>
         <Header sidebar={true} handleMenu={handleSideBar} />
       </div>
-      <div className="flex flex-row">
+      <div className="block lg:flex lg:flex-row">
         <div className={navOpen ? 'transition-transform mr-16' : 'hideSidebar transition-transform'}>
           <SideBar />
         </div>
@@ -219,7 +221,7 @@ const VideoPlayer = ({ data, channelData, nextVideoId, autoplay, loading, setVid
           unlikes: unlikes - 1,
           ...data
         });
-        toast.dark("Added to your liked videos");
+        toast.success("Added to your liked videos");
         return;
       } catch (error) {
         console.log(error);
@@ -235,7 +237,7 @@ const VideoPlayer = ({ data, channelData, nextVideoId, autoplay, loading, setVid
           ...data
         });
         await likdedVideoDocumentRef.delete();
-        toast.dark("Removed from your liked videos");
+        toast.success("Removed from your liked videos");
       } catch (error) {
         toast.error("Operation failed.")
       }
@@ -299,7 +301,7 @@ const VideoPlayer = ({ data, channelData, nextVideoId, autoplay, loading, setVid
           ...data
         });
         await unlikdedVideoDocumentRef.delete();
-        toast.dark("Dislike removed");
+        toast.success("Dislike removed");
       } catch (error) {
         toast.error("Operation failed");
       }
@@ -314,7 +316,7 @@ const VideoPlayer = ({ data, channelData, nextVideoId, autoplay, loading, setVid
           unlikes: unlikes + 1,
           ...data
         });
-        toast.dark("You disliked this video");
+        toast.success("You disliked this video");
       } catch (error) {
         toast.error("Operation failed");
       }
@@ -688,7 +690,7 @@ const Video = ({ video }) => {
     <div className="video">
       <a href={`/watch?v=${video.id}`}>
         <div className="text-right static">
-          <img src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="h-44 lg:h-32 rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
+          <img src={video.posterURL} style={{ width: '100%' }} width="500" height="200px" alt="cover" className="video-poster object-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
           <span className="text-xs relative right-3 bottom-8 bg-gray  opacity-80 text-white pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(video.duration, 10))}</span>
         </div>
       </a>
@@ -708,5 +710,4 @@ const Video = ({ video }) => {
 };
 
 export default Watch;
-//TODO: Add Comments and ability to delete them
-//TODO: Put all data fetching functions in root function
+//TODO: Add  ability to delete comments
