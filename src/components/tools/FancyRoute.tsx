@@ -9,10 +9,10 @@ nprogress.configure({ easing: 'ease-out', speed: 1000, trickleSpeed: 500, showSp
 
 class FancyRoute extends React.Component {
   props: any;
-  componentWillMount() {
-    nprogress.start()
+  constructor(props: any) {
+    super(props);
+    nprogress.start();
   }
-
   componentDidMount() {
     nprogress.done()
   }
