@@ -1,12 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { Link, Switch, Route, useParams, useRouteMatch, useLocation } from 'react-router-dom';
-import VideoUpload from '../../components/VideoUpload';
-import Layout from '../../components/Layout';
-import Video from '../../components/Video';
-import { firestore } from '../../firebase';
-import { formatTime, formatVideoTime } from '../../utils';
 import { toast } from 'react-toastify';
+import Layout from '../../components/Layout';
+import Videos from '../../components/channel/Videos';
+import Home from '../../components/channel/Home';
+import { firestore } from '../../firebase';
 import loadingImg from '../../images/loading.svg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +13,6 @@ import './channel.css';
 
 
 const Channel = ({ match }) => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   let { path, url } = useRouteMatch();
   const { id } = useParams<{ id: string }>();
   const [data, setData] = useState(null);
@@ -88,7 +86,6 @@ const Channel = ({ match }) => {
   }, [id]);
 
 
-
   const handleSubscribe = async () => {
     if (!user) {
       toast.error("You must be signed in to subscribe");
@@ -149,6 +146,7 @@ const Channel = ({ match }) => {
     }
   }
 
+
   if (!data || !id) return (
     <div className="flex flex-col items-center h-full mt-8 lg:mt-20">
       <img src={loadingImg} className="w-12 text-center" alt="loading" />
@@ -196,76 +194,7 @@ const Channel = ({ match }) => {
   )
 }
 
-//Tabs
-const Home = ({ data, videos }) => {
 
-  if (!(videos && data)) return null;
-
-  let time: string = "some time ago";
-
-  if (videos[0].timeUploaded) {
-    time = formatTime(videos[0].timeUploaded.seconds);
-  }
-  return (
-    <section>
-      {videos &&
-        <div>
-          <div className="flex flex-col w-11/12 sm:w-96 mb-8">
-            <Link to={`/watch?v=${videos[0].id}`}>
-              <div className="text-right static">
-                <img loading="lazy" src={videos[0].posterURL} alt={videos[0].title} className="w-full h-48 text-center rounded-3xl hover:opacity-80 transition-opacity duration-300 cursor-pointer" />
-                <span className="relative right-3 bottom-8 bg-gray opacity-90 text-white text-xs pt-1 pb-1 pl-2 pr-2 rounded-xl">{formatVideoTime(parseInt(videos[0].duration, 10))}</span>
-              </div>
-              <div className="text-left ml-1 lg:ml-0">
-                <h2 className="font-bold text-2xl lg:text-xl mb-3">{videos[0].title}</h2>
-                <p className="dark:text-lightGray mb-3">
-                  {videos[0].description}
-                </p>
-                <p className="dark:text-lightGray text-sm mb-3">
-                  {videos[0].views} views  ·  {time}
-                </p>
-              </div>
-            </Link>
-          </div>
-
-          <div>
-            <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{data.channelName}'s Videos &#127909;</h2>
-            <div className="flex flex-col space-y-8 sm:grid sm:grid-cols-2 md:space-y-0 md:space-x-0 md:gap-8 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
-              {videos && videos.map((video: any, index: number) => (
-                <Video key={index} video={video} />
-              ))}
-            </div>
-          </div>
-        </div>}
-      {
-        !videos && <div className="text-left">This channel has no videos</div>
-      }
-    </section>
-  )
-}
-
-
-const Videos = ({ id, videos, channelName }) => {
-  let user = useContext(UserContext);
-  return (
-    <section>
-      <div>
-        {(user && user.uid === id) && <VideoUpload channelName={channelName} channelId={id} />}
-      </div>
-      <div>
-        <h2 className="hidden lg:block mb-4 font-bold text-2xl">Uploads &#127909;</h2>
-        <div className="flex flex-col space-y-8 md:space-y-0 md:grid md:grid-cols-2 lg:grid-cols-3 md:gap-8 xl:grid-cols-4 lg:space-y-0">
-          {videos && videos.map((video: any, index: number) => (
-            <Video key={index} video={video} />
-          ))}
-          {
-            !videos && <div className="text-left">This channel has no videos</div>
-          }
-        </div>
-      </div>
-    </section>
-  )
-}
 
 export default Channel;
 
