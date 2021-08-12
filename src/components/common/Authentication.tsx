@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { signInWithGoogle, signOut } from '../../firebase';
-import googleIcon from '../images/google-symbol.svg';
+import googleIcon from '../../images/google-symbol.svg';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../providers/AuthProvider';
 

@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { toast } from 'react-toastify';
 import { firestore, storage } from '../../firebase';
-import loadingImg from '../images/loading.svg';
+import loadingImg from '../../images/loading.svg';
 
 
 const VideoUpload = ({ channelId, channelName }) => {
