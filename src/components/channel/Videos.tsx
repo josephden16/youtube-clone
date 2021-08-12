@@ -1,7 +1,7 @@
 import {useContext} from "react";
 import { UserContext } from "../providers/AuthProvider";
-import VideoUpload from "../VideoUpload";
-import Video from "../Video";
+import VideoUpload from "./VideoUpload";
+import Video from "../common/Video";
 
 
 export default function Videos({ id, videos, channelName }) {

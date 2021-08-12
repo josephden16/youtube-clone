@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { firestore } from "../../firebase";
-import Video from "../Video";
+import Video from "../common/Video";
 import Loading from "./Loading";
 
 

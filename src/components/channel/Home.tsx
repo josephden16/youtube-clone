@@ -1,7 +1,6 @@
-import React from 'react'
 import { Link } from 'react-router-dom'
 import { formatTime, formatVideoTime } from '../../utils';
-import Video from '../Video';
+import Video from '../common/Video';
 
 
 export default function Home({ data, videos }) {
