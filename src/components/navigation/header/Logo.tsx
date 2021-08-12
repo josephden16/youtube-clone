@@ -1,5 +1,5 @@
-import logoLight from '../../images/logo-light.svg';
-import logoDark from '../../images/logo-dark.svg';
+import logoLight from '../../../images/logo-dark.svg';
+import logoDark from '../../../images/logo-light.svg';
 
 
 const Logo = ({ theme }) => {
