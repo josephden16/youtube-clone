@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import Video from '../../components/Video';
-import Layout from '../../components/Layout';
+import Video from '../../components/common/Video';
+import Layout from '../../components/common/Layout';
 import './trending.css';
 import { firestore } from '../../firebase';
 

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import { UserContext } from '../../components/providers/AuthProvider';
 import { Link, Switch, Route, useParams, useRouteMatch, useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Layout from '../../components/Layout';
+import Layout from '../../components/common/Layout';
 import Videos from '../../components/channel/Videos';
 import Home from '../../components/channel/Home';
 import { firestore } from '../../firebase';

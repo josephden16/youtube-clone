@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { VideosContext } from '../../components/providers/VideosProvider';
-import Video from '../../components/Video';
-import Layout from '../../components/Layout';
+import Video from '../../components/common/Video';
+import Layout from '../../components/common/Layout';
 import './home.css';
 
 

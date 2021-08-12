@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Header from '../../components/Header';
-import SideBar from '../../components/SideBar';
-import MobileFooter from '../../components/MobileFooter';
+import Header from '../../components/navigation/Header';
+import SideBar from '../../components/navigation/SideBar';
+import MobileFooter from '../../components/navigation/MobileFooter';
 import { firestore } from '../../firebase';
 import VideoPlayer from '../../components/watch/VideoPlayer';
 import RelatedVideos from '../../components/watch/RelatedVideos';

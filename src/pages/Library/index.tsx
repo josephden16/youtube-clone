@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
-import Authentication from '../../components/Authentication';
-import Layout from '../../components/Layout';
+import Authentication from '../../components/common/Authentication';
+import Layout from '../../components/common/Layout';
 import Main from '../../components/library/Main';
 import { UserContext } from '../../components/providers/AuthProvider';
 

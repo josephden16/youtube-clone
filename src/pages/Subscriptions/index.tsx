@@ -1,9 +1,9 @@
 import React, { useContext } from 'react';
 import { Switch, Route } from 'react-router-dom';
-import Layout from '../../components/Layout';
+import Layout from '../../components/common/Layout';
 import AllSubscriptions from '../../components/subscriptions/AllSubscriptions';
 import Main from '../../components/subscriptions/Main';
-import Authentication from '../../components/Authentication';
+import Authentication from '../../components/common/Authentication';
 import { UserContext } from '../../components/providers/AuthProvider';
 import './subscriptions.css';
 
