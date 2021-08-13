@@ -88,7 +88,7 @@ const Header = (props: any) => {
                 <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
               </Link>
             }
-            <ThemeToggle className="focus:outline-black ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
+            <ThemeToggle className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4" handleThemeToggle={handleThemeToggle} />
             <Profile handleSignIn={handleSignIn} handleModal={handleModal} user={user} />
           </div>
         </div>
