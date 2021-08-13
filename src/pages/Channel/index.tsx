@@ -15,7 +15,7 @@ import './channel.css';
 const Channel = ({ match }) => {
   let { path, url } = useRouteMatch();
   const { id } = useParams<{ id: string }>();
-  const [data, setData] = useState(null);
+  const [channelData, setChannelData] = useState(null);
   const [videos, setVideos] = useState(null);
   const user = useContext(UserContext);
   // class name states for each tab (updated whenever the URL changes)
@@ -61,7 +61,7 @@ const Channel = ({ match }) => {
       let snapshot = await channelRef.get();
       if (snapshot.exists) {
         let data = { id: snapshot.id, ...snapshot.data() };
-        setData(data);
+        setChannelData(data);
       }
     }
     const fetchChannelVideos = async () => {
@@ -85,6 +85,49 @@ const Channel = ({ match }) => {
     fetchChannelVideos();
   }, [id]);
 
+  const subscribeToChannel = async (userRef: any, channelRef: any, subscriberRef: any, channelId: any, userId: any) => {
+    try {
+      await userRef.collection("subscriptions").doc(channelId).set({
+        channelId: channelId,
+        channelPhotoURL: channelData.channelPhotoURL,
+        channelDisplayName: channelData.channelName
+      }, { merge: true })
+      await subscriberRef.set({
+        userId: userId,
+        userDisplayName: user.displayName
+      }, { merge: true });
+      await channelRef.set({
+        subscribersCount: channelData.subscribersCount + 1
+      }, { merge: true });
+      setChannelData({
+        ...channelData,
+        subscribersCount: channelData.subscribersCount + 1
+      })
+      toast.success("You've subscribed to this channel");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to subscribe to channel");
+    }
+  }
+
+  const unsubscribeFromChannel = async (userRef: any, channelRef: any, subscriberRef: any, channelId: any) => {
+    try {
+      await subscriberRef.delete();
+      await userRef.collection("subscriptions").doc(channelId).delete();
+      await channelRef.set({
+        subscribersCount: channelData.subscribersCount - 1
+      }, { merge: true });
+      setChannelData({
+        ...channelData,
+        subscribersCount: channelData.subscribersCount - 1
+      })
+      toast.success("You've unsubscribed from this channel");
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to unsubscribe from channel");
+    }
+  }
+
 
   const handleSubscribe = async () => {
     if (!user) {
@@ -92,7 +135,7 @@ const Channel = ({ match }) => {
       return;
     }
 
-    const channelId = data.id;
+    const channelId = channelData.id;
     const userId = user.uid;
     const userRef = firestore.collection("users").doc(userId);
     const channelRef = firestore.collection("channels").doc(channelId);
@@ -105,54 +148,20 @@ const Channel = ({ match }) => {
     }
 
     if (!(snapshot.exists)) {
-      try {
-        await userRef.collection("subscriptions").doc(channelId).set({
-          channelId: channelId,
-          channelPhotoURL: data.channelPhotoURL,
-          channelDisplayName: data.channelName
-        }, { merge: true })
-        await subscriberRef.set({
-          userId: userId,
-          userDisplayName: user.displayName
-        }, { merge: true });
-        await channelRef.set({
-          subscribersCount: data.subscribersCount + 1
-        }, { merge: true });
-        setData({
-          ...data,
-          subscribersCount: data.subscribersCount + 1
-        })
-        toast.success("You've subscribed to this channel");
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to subscribe to channel");
-      }
+      subscribeToChannel(userRef, channelRef, subscriberRef, channelId, userId);
     } else {
-      try {
-        await subscriberRef.delete();
-        await userRef.collection("subscriptions").doc(channelId).delete();
-        await channelRef.set({
-          subscribersCount: data.subscribersCount - 1
-        }, { merge: true });
-        setData({
-          ...data,
-          subscribersCount: data.subscribersCount - 1
-        })
-        toast.success("You've unsubscribed from this channel");
-      } catch (error) {
-        console.log(error);
-        toast.error("Failed to unsubscribe from channel");
-      }
+      unsubscribeFromChannel(userRef, channelRef, subscriberRef, channelId);
     }
   }
 
 
-  if (!data || !id) return (
+  if (!channelData || !id) return (
     <div className="flex flex-col items-center h-full mt-8 lg:mt-20">
       <img src={loadingImg} className="w-12 text-center" alt="loading" />
       <span>Fetching Channel Data</span>
     </div>
   );
+
 
   return (
     <Layout>
@@ -160,15 +169,15 @@ const Channel = ({ match }) => {
         <section className="flex flex-col md:flex-row md:justify-between lg:items-center space-y-3 ml-2 lg:-ml-2 xl:-ml-1 md:mr-3">
           <div className="flex flex-col md:flex-row md:items-center md:space-x-4  lg:space-x-6">
             <div>
-              <img className="w-20 lg:w-auto rounded-circle" src={data.channelPhotoURL} alt="channel owner" />
+              <img className="w-20 lg:w-auto rounded-circle" src={channelData.channelPhotoURL} alt="channel owner" />
             </div>
             <div>
-              <h2 className="font-bold lg:text-xl">{data.channelName}</h2>
-              <div className="dark:text-lightGray">{data.subscribersCount} subscribed</div>
+              <h2 className="font-bold lg:text-xl">{channelData.channelName}</h2>
+              <div className="dark:text-lightGray">{channelData.subscribersCount} subscribed</div>
             </div>
           </div>
           <div>
-            <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {data.subscribersCount}</button>
+            <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {channelData.subscribersCount}</button>
           </div>
         </section>
         <section className="ml-2 lg:ml-0 no-scrollbar w-80 sm:w-full">
@@ -186,8 +195,8 @@ const Channel = ({ match }) => {
           </ul>
         </section>
         <Switch>
-          <Route path={`${match.url}/videos`} render={() => <Videos channelName={data.channelName} id={id} videos={videos} />} />
-          <Route exact path={path} render={() => <Home data={data} videos={videos} />} />
+          <Route path={`${match.url}/videos`} render={() => <Videos channelName={channelData.channelName} id={id} videos={videos} />} />
+          <Route exact path={path} render={() => <Home channelData={channelData} videos={videos} />} />
         </Switch>
       </div>
     </Layout>

@@ -3,8 +3,8 @@ import { formatTime, formatVideoTime } from '../../utils';
 import Video from '../common/Video';
 
 
-export default function Home({ data, videos }) {
-  if (!(videos && data)) return null;
+export default function Home({ channelData, videos }) {
+  if (!(videos && channelData)) return null;
 
   let time: string = "some time ago";
 
@@ -36,7 +36,7 @@ export default function Home({ data, videos }) {
           </div>
 
           <div>
-            <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{data.channelName}'s Videos &#127909;</h2>
+            <h2 className="text-center sm:text-left lg:block ml-1 mb-6 font-bold text-2xl">{channelData.channelName}'s Videos &#127909;</h2>
             <div className="flex flex-col space-y-8 sm:grid sm:grid-cols-2 md:space-y-0 md:space-x-0 md:gap-8 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
               {videos && videos.map((video: any, index: number) => (
                 <Video key={index} video={video} />
