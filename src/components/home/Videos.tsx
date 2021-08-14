@@ -1,7 +1,8 @@
 import Video from "../common/Video"
 
 
-const Videos = ({ videos, loading }) => {
+const Videos = ({ videos, loading, error }) => {
+  console.log(error);
   if (videos) {
     return (
       <>
@@ -10,14 +11,17 @@ const Videos = ({ videos, loading }) => {
         ))}
       </>
     )
-  } else if (loading) {
-    return <div className="text-center w-full">Loading...</div>
-
-  } else if (!videos && !loading) {
-    return <div>Failed to fetch videos</div>
-  } else {
-    return <div>Failed to fetch videos</div>
   }
+
+  if (loading) {
+    return <div className="text-center w-full">Loading...</div>
+  }
+
+  if (error) {
+    return <div className="text-center w-full">Failed to fetch videos</div>
+  }
+
+  return <div className="text-center w-full">Failed to fetch videos</div>
 }
 
 export default Videos;

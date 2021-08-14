@@ -5,15 +5,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import UserProvider from './components/providers/AuthProvider';
-import VideosProvider from './components/providers/VideosProvider';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
       <UserProvider>
-        <VideosProvider>
-          <App />
-        </VideosProvider>
+        <App />
       </UserProvider>
     </Router>
   </React.StrictMode>,
