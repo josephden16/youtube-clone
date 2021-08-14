@@ -3,10 +3,14 @@
   margin: auto;
 }
 
+.openSidebar {
+  transform: none;
+  transition: transform 300ms ease-out;
+}
+
 .hideSidebar {
-  position: absolute;
-  clip: rect(1px, 1px, 1px, 1px);
-  transform: translateX(-300px);
+  transform: translateX(-100%);
+  transition: transform 300ms ease-out;
 }
 
 .poster > img {

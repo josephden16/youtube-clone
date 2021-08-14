@@ -9,6 +9,21 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
   -webkit-tap-highlight-color: transparent;
 }
+
+@keyframes mobileSearch {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+.mobile-search-animation {
+  animation: mobileSearch 300ms ease-out;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

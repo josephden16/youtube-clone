@@ -9,11 +9,11 @@ const Home = () => {
   const videos = useContext(VideosContext);
 
   if (!videos) return null;
-
+  // 
   return (
     <Layout>
       <div className="lg:mt-8 lg:-ml-4 xl:-ml-5 w-full block space-y-16">
-        <section className="flex flex-wrap  space-y-12  sm:grid sm:space-y-0 sm:gap-5 sm:grid-cols-3  lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:space-y-0 lg:gap-8">
+        <section className="flex flex-wrap space-y-12 sm:space-y-0 sm:grid sm:gap-5 sm:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8">
           {videos && videos.map(video => (
             <Video key={video.id} video={video} />
           ))}

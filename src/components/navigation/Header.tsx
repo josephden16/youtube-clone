@@ -69,7 +69,7 @@ const Header = (props: any) => {
       <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
 
         <div className="flex">
-          <button onClick={handleMenuClick} className={props.sidebar ? "lg:mt-3 hidden lg:block mr-4 dark:focus:outline-white focus:outline-black" : "hidden"}>
+          <button style={{outline: 'transparent'}} onClick={handleMenuClick} className={props.sidebar ? "relative lg:top-2 hidden lg:block mr-4 dark:focus:outline-white" : "hidden"}>
             <FontAwesomeIcon style={{ fontSize: '18px' }} icon={faBars} />
           </button>
           <Link to="/">
@@ -78,11 +78,11 @@ const Header = (props: any) => {
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
           <div className="hidden lg:block lg:ml-24 lg:mt-1">
-            <input style={{ width: '460px', paddingTop: '5px', paddingBottom: '5px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
-            <button><FontAwesomeIcon className="dark:text-white text-black relative -left-8 text-sm" icon={faSearch} /></button>
+            <input style={{ width: '460px', paddingTop: '6px', paddingBottom: '6px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
+            <span><FontAwesomeIcon className="dark:text-white text-black relative -left-8 text-sm" icon={faSearch} /></span>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
-            <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '7px', fontSize: '16px' }} icon={faSearch} /></button>
+            <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '6px', fontSize: '16px' }} icon={faSearch} /></button>
             {user &&
               <Link to={`/channel/${user.uid}/videos`}>
                 <FontAwesomeIcon style={{ fontSize: '17px' }} className="dark:text-lightGray hidden text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0" icon={faVideo} />
