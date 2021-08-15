@@ -4,6 +4,7 @@ import Channel from './pages/Channel';
 import Library from './pages/Library';
 import Subscriptions from './pages/Subscriptions';
 import Trending from './pages/Trending';
+import Search from './pages/Search';
 
 
 const routes = [
@@ -38,6 +39,11 @@ const routes = [
     title: 'Trending',
     path: '/trending',
     component: Trending
+  },
+  {
+    title: 'Search',
+    path: '/search',
+    component: Search
   }
 ]
 

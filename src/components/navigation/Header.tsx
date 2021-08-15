@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 import { signInWithGoogle, signOut } from '../../firebase';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faExchangeAlt, faSearch, faSignOutAlt, faUserAlt, faVideo } from '@fortawesome/free-solid-svg-icons';
@@ -14,7 +14,9 @@ const Header = (props: any) => {
   const [isOpen, setOpen] = useState(false);
   const [theme, setTheme] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const user = useContext(UserContext);
+  const history = useHistory();
 
   const handleModal = (): void => {
     setModalOpen(!modalOpen);
@@ -63,13 +65,23 @@ const Header = (props: any) => {
     return;
   }
 
+  const handleSearchEntry = (searchQuery: string) => {
+    setSearchQuery(searchQuery);
+  }
+
+  const handleSearch = () => {
+    if (searchQuery !== "") {
+      history.push(`/search?q=${searchQuery}`);
+    }
+  }
+
 
   return (
     <>
       <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
 
         <div className="flex">
-          <button style={{outline: 'transparent'}} onClick={handleMenuClick} className={props.sidebar ? "relative lg:top-2 hidden lg:block mr-4 dark:focus:outline-white" : "hidden"}>
+          <button style={{ outline: 'transparent' }} onClick={handleMenuClick} className={props.sidebar ? "relative lg:top-2 hidden lg:block mr-4 dark:focus:outline-white" : "hidden"}>
             <FontAwesomeIcon style={{ fontSize: '18px' }} icon={faBars} />
           </button>
           <Link to="/">
@@ -78,8 +90,10 @@ const Header = (props: any) => {
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
           <div className="hidden lg:block lg:ml-24 lg:mt-1">
-            <input style={{ width: '460px', paddingTop: '6px', paddingBottom: '6px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-md placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="search" name="search" placeholder="Search" title="search" />
-            <span><FontAwesomeIcon className="dark:text-white text-black relative -left-8 text-sm" icon={faSearch} /></span>
+            <input onChange={(evt) => handleSearchEntry(evt.target.value)} style={{ width: '460px', paddingTop: '6px', paddingBottom: '6px' }} className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-lg placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none" type="text" name="search" placeholder="Search" title="search"  />
+            <button style={{ paddingTop: '3px', paddingBottom: '6px', paddingLeft: '11px', paddingRight: '11px', left: '-34px' }} className="bg-gray dark:bg-dark shadow-md relative rounded-circle" onClick={handleSearch}>
+              <FontAwesomeIcon className="text-white text-sm" icon={faSearch} />
+            </button>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden"><FontAwesomeIcon className="dark:text-lightGray text-gray" style={{ marginTop: '6px', fontSize: '16px' }} icon={faSearch} /></button>
@@ -106,7 +120,7 @@ const Header = (props: any) => {
           <span>Sign out</span> <FontAwesomeIcon icon={faSignOutAlt} />
         </button>
       </div>
-      <MobileSearch open={isOpen} handleClose={closeSearch} />
+      <MobileSearch open={isOpen} handleClose={closeSearch} handleSearch={handleSearch} handleSearchEntry={handleSearchEntry} />
     </>
   )
 }
