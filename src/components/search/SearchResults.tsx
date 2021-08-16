@@ -1,7 +1,12 @@
 import Video from "../common/Video";
+import VideoLoadingSkeleton from "../loading/VideoLoadingSkeleton";
 
 
 const SearchResults = ({ loading, error, searchResults }) => {
+  const numberOfLoadingSkeletons = 20;
+  const loadingSkeletonArray = Array(numberOfLoadingSkeletons).fill(null).map((_, index) => index);
+
+
   if (searchResults && searchResults.length > 0) {
     return (
       <div className="flex flex-wrap space-y-12 sm:space-y-0 sm:grid sm:gap-5 sm:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 w-full">
@@ -16,7 +21,13 @@ const SearchResults = ({ loading, error, searchResults }) => {
 
   return (
     <div>
-      {loading && <div className="text-center">Loading...</div>}
+      {loading &&
+        <div className="flex flex-wrap space-y-12 sm:space-y-0 sm:grid sm:gap-5 sm:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 w-full">
+          {loadingSkeletonArray && loadingSkeletonArray.map((item: number) => (
+            <VideoLoadingSkeleton key={item} />
+          ))}
+        </div>
+      }
       {error && <div className="text-center">{error}</div>}
       {
         (searchResults && searchResults.length > 0) && searchResults.map((video: any, index: number) => (

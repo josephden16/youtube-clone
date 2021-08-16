@@ -48,7 +48,7 @@ const Search = () => {
 
   return (
     <Layout>
-      <div>
+      <div className="lg:mt-8 lg:-ml-4 xl:-ml-5 w-full block space-y-16">
         <SearchResults loading={loading} error={error} searchResults={searchResults} />
       </div>
     </Layout>
