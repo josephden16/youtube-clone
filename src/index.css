@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Mulish:wght@400;700&display=swap");
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   height: 100%;
@@ -18,6 +19,20 @@ html, body {
   to {
     transform: translateY(0);
   }
+}
+
+@keyframes skeletonAnimation {
+  from {
+    background-position: 0%;
+  }
+
+  to {
+    background-position: 100%;
+  }
+}
+
+.skeleton-animation {
+  animation: skeletonAnimation 1000ms ease-in infinite;
 }
 
 .mobile-search-animation {

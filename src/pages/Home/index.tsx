@@ -43,9 +43,7 @@ const Home = () => {
   return (
     <Layout>
       <div className="lg:mt-8 lg:-ml-4 xl:-ml-5 w-full block space-y-16">
-        <section className="flex flex-wrap space-y-12 sm:space-y-0 sm:grid sm:gap-5 sm:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 w-full">
-          <Videos videos={videos} loading={loading} error={error} />
-        </section>
+        <Videos videos={videos} loading={loading} error={error} />
       </div>
     </Layout>
   )
