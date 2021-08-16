@@ -63,7 +63,7 @@ const Watch = () => {
       unsubscribeFromFirestore();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [videoId]);
 
 
   useEffect(() => {
@@ -93,12 +93,12 @@ const Watch = () => {
   }
 
   return (
-    <div className="watch dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4">
+    <div className="watch dark:bg-dark pb-20 lg:pb-0 lg:mr-4 lg:ml-4 lg:mb-10">
       <div>
         <Header sidebar={true} handleMenu={handleSideBar} />
       </div>
       <div className="block lg:flex lg:flex-row">
-        <div className={navOpen ? 'transition-transform mr-16' : 'hideSidebar transition-transform'}>
+        <div className={navOpen ? 'transition-transform mr-16 xl:w-56' : 'hideSidebar transition-transform'}>
           <SideBar />
         </div>
         <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full lg:space-x-10">

@@ -1,7 +1,6 @@
 import { faClock, faThumbsDown, faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
-import { useHistory } from "react-router-dom";
 import { formatTime, getDiff } from "../../utils";
 import { UserContext } from "../providers/AuthProvider";
 import Comments from "./Comments";
@@ -17,7 +16,6 @@ export default function VideoPlayer({ data, channelData, nextVideoId, autoplay, 
   const user = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
-  const history = useHistory();
 
   const toggleDescription = () => {
     setOpen(!open);
@@ -165,8 +163,7 @@ export default function VideoPlayer({ data, channelData, nextVideoId, autoplay, 
 
   const handlePlay = async (evt: any) => {
     if ((evt.target.currentTime >= data.duration) && autoplay) {
-      history.push(`/watch?v=${nextVideoId}`);
-      document.location.reload();
+      window.location.href = (`/watch?v=${nextVideoId}`);
       return;
     }
 
@@ -201,9 +198,7 @@ export default function VideoPlayer({ data, channelData, nextVideoId, autoplay, 
           return;
         }
 
-      } catch (error) {
-        toast.error("Operation failed");
-      }
+      } catch (error) {}
     }
   }
 
