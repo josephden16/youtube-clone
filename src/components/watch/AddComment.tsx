@@ -51,7 +51,7 @@ export default function AddComment({ user, videoId, commentsCount, fetchComments
         <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray placeholder-lightGray outline-none" />
       </div>
       <div className="flex justify-end">
-        <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-white hover:opacity-70 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
+        <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-white focus-within:opacity-50 hover:opacity-50 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-gray uppercase">Comment</button>
       </div>
     </div>
   )

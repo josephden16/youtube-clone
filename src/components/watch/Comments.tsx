@@ -40,7 +40,7 @@ export default function Comments({ videoId, commentsCount }) {
   return (
     <div className="mt-5 mb-10 lg:ml-3 lg:mr-3">
       <div className="ml-4 lg:ml-1">
-        <span className="font-bold">Comments {commentsCount}</span>
+        <span className="font-bold">Comments - {commentsCount}</span>
       </div>
       {user && <AddComment videoId={videoId} fetchComments={fetchData} commentsCount={commentsCount} user={user} />}
       <div className="space-y-8 ml-2 lg:ml-0">
