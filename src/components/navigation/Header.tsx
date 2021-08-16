@@ -78,8 +78,7 @@ const Header = (props: any) => {
 
   return (
     <>
-      <header className="transition-colors dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
-
+      <header className="dark:bg-dark flex ml-2 items-center mr-2 lg:ml-0 lg:mr-0 pt-1">
         <div className="flex">
           <button style={{ outline: 'transparent' }} onClick={handleMenuClick} className={props.sidebar ? "relative lg:top-2 hidden lg:block mr-4 dark:focus:outline-white" : "hidden"}>
             <FontAwesomeIcon style={{ fontSize: '18px' }} icon={faBars} />

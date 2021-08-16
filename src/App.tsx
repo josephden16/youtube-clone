@@ -8,7 +8,7 @@ import routes from './routes';
 
 function App() {
   return (
-    <div className="App dark:bg-dark dark:text-white transition-all duration-300 flex flex-col">
+    <div className="App dark:bg-dark dark:text-white flex flex-col">
       <Switch>
         {
           routes.map((route, i) => {
