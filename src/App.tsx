@@ -1,23 +1,14 @@
-import React from 'react';
-import { Switch } from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
-import FancyRoute from './components/tools/FancyRoute';
-import routes from './routes';
+import React from "react";
+import { QueryClient, QueryClientProvider } from "react-query";
+import Base from "./components/base";
 
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <div className="App dark:bg-dark dark:text-white flex flex-col">
-      <Switch>
-        {
-          routes.map((route, i) => {
-            return <FancyRoute key={i} {...route} />
-          })
-        }
-      </Switch>
-      <ToastContainer className="font-sans" />
-    </div>
+    <QueryClientProvider client={queryClient}>
+      <Base />
+    </QueryClientProvider>
   );
 }
 
