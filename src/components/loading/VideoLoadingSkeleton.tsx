@@ -1,6 +1,6 @@
 function VideoLoadingSkeleton() {
   return (
-    <div className="video-home flex flex-col space-y-5">
+    <div className="video-home animate-pulse flex flex-col space-y-5">
       <div>
         <div className="skeleton-animation bg-lightGray dark:bg-lightGray2 text-right w-full h-44 sm:h-32 lg:h-32 rounded-3xl">
         </div>
