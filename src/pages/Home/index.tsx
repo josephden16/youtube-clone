@@ -9,7 +9,7 @@ const Home = () => {
 
   return (
     <Layout>
-      <div className="lg:mt-8 lg:-ml-4 xl:-ml-5 w-full h-full flex flex-col justify-center space-y-16">
+      <div className="px-1 mt-6 lg:mt-8 lg:-ml-4 xl:-ml-5 w-full h-full flex flex-col justify-center space-y-16">
         <Videos videos={videos} loading={loading} error={errorMessage} retry={retry} />
       </div>
     </Layout>

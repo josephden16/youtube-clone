@@ -3,9 +3,6 @@ import VideoLoadingSkeleton from "../loading/VideoLoadingSkeleton";
 
 
 const SearchResults = ({ loading, error, searchResults }) => {
-  const numberOfLoadingSkeletons = 20;
-  const loadingSkeletonArray = Array(numberOfLoadingSkeletons).fill(null).map((_, index) => index);
-
 
   if (searchResults && searchResults.length > 0) {
     return (
@@ -23,9 +20,7 @@ const SearchResults = ({ loading, error, searchResults }) => {
     <div>
       {loading &&
         <div className="flex flex-wrap space-y-12 sm:space-y-0 sm:grid sm:gap-5 sm:grid-cols-3 lg:grid lg:grid-cols-3 xl:grid-cols-4 lg:gap-8 w-full">
-          {loadingSkeletonArray && loadingSkeletonArray.map((item: number) => (
-            <VideoLoadingSkeleton key={item} />
-          ))}
+          <VideoLoadingSkeleton amount={20} />
         </div>
       }
       {error && <div className="text-center">{error}</div>}
