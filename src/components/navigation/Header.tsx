@@ -1,14 +1,9 @@
 import { useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { signInWithGoogle, signOut } from "../../firebase";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faBars,
-  faSearch,
-  faSignOutAlt,
-  faUserAlt,
-  faVideo,
-} from "@fortawesome/free-solid-svg-icons";
+import { FaVideo, FaSearch, FaRegUser } from "react-icons/fa";
+import { AiOutlineMenu } from "react-icons/ai";
+import { GoSignOut } from "react-icons/go";
 import { UserContext } from "../providers/AuthProvider";
 import Profile from "./header/Profile";
 import Logo from "./header/Logo";
@@ -93,7 +88,7 @@ const Header = (props: any) => {
                 : "hidden"
             }
           >
-            <FontAwesomeIcon style={{ fontSize: "18px" }} icon={faBars} />
+            <AiOutlineMenu size="1.22em" />
           </button>
           <Link to="/">
             <Logo theme={theme} />
@@ -125,23 +120,21 @@ const Header = (props: any) => {
               className="bg-gray dark:bg-dark shadow-md relative rounded-circle"
               onClick={handleSearch}
             >
-              <FontAwesomeIcon className="text-white text-sm" icon={faSearch} />
+              <FaSearch />
             </button>
           </div>
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden">
-              <FontAwesomeIcon
+              <FaSearch
                 className="dark:text-lightGray text-gray"
-                style={{ marginTop: "6px", fontSize: "16px" }}
-                icon={faSearch}
+                style={{ marginTop: "4px", fontSize: "16px" }}
               />
             </button>
             {user && (
               <Link to={`/channel/${user.uid}/videos`}>
-                <FontAwesomeIcon
-                  style={{ fontSize: "17px" }}
+                <FaVideo
+                  size="17px"
                   className="dark:text-lightGray hidden text-gray md:mr-2 md:mt-2 lg:mr-4 lg:mt-0"
-                  icon={faVideo}
                 />
               </Link>
             )}
@@ -168,7 +161,7 @@ const Header = (props: any) => {
         {user && (
           <button className="space-x-2 flex items-center justify-center hover:opacity-70 w-full font-bold">
             <Link to={`/channel/${user.uid}`}>
-              <span>Your Channel</span> <FontAwesomeIcon icon={faUserAlt} />
+              <span>Your Channel</span> <FaRegUser size="1.2em" />
             </Link>
           </button>
         )}
@@ -176,7 +169,7 @@ const Header = (props: any) => {
           onClick={handleSignOut}
           className="space-x-2 hover:opacity-70 w-full font-bold"
         >
-          <span>Sign out</span> <FontAwesomeIcon icon={faSignOutAlt} />
+          <span>Sign out</span> <GoSignOut />
         </button>
       </div>
       <MobileSearch

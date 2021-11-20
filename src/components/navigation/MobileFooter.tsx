@@ -1,11 +1,8 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import {
-  faCompactDisc,
-  faFolder,
-  faHome,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BiHome } from "react-icons/bi";
+import { MdOutlineSubscriptions } from "react-icons/md";
+import {AiOutlineFolder} from "react-icons/ai";
 
 const MobileFooter = () => {
   const location = useLocation();
@@ -24,20 +21,20 @@ const MobileFooter = () => {
       <div className="flex dark:text-lightGray text-gray justify-between">
         <Link to="/" className={getClassName("/")}>
           <div className="flex text-center items-center flex-col">
-            <FontAwesomeIcon icon={faHome} />
+            <BiHome size="1.2em" />
             <span className="text-xs">Home</span>
           </div>
         </Link>
         <Link to="/subscriptions" className={getClassName("/subscriptions")}>
           <div className="flex flex-col items-center text-center">
-            <FontAwesomeIcon icon={faCompactDisc} />
+            <MdOutlineSubscriptions size="1.2em"/>
             <span className="text-xs">Subscriptions</span>
           </div>
         </Link>
 
         <Link to="/library" className={getClassName("/library")}>
           <div className="flex flex-col items-center text-c enter">
-            <FontAwesomeIcon icon={faFolder} />
+            <AiOutlineFolder size="1.2em" />
             <span className="text-xs">Library</span>
           </div>
         </Link>

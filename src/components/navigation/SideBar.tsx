@@ -1,11 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import { useUserSubscriptions } from "../../api/hooks/subscription";
-import {
-  faFolder,
-  faHome,
-  faCompactDisc,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { BiHome } from "react-icons/bi";
+import { MdOutlineSubscriptions } from "react-icons/md";
+import {AiOutlineFolder} from "react-icons/ai";
 import Subscriptions from "./sidebar/Subscriptions";
 
 const SideBar = ({ user }) => {
@@ -26,7 +23,7 @@ const SideBar = ({ user }) => {
           }
         >
           <Link to="/" className="space-x-3 -p-3 flex items-center">
-            <FontAwesomeIcon icon={faHome} />{" "}
+            <BiHome size={"1.2em"} />
             <span className="text-sm">Home</span>
           </Link>
         </li>
@@ -38,7 +35,7 @@ const SideBar = ({ user }) => {
             }
           >
             <Link to="/subscriptions" className="space-x-3 flex items-center">
-              <FontAwesomeIcon icon={faCompactDisc} />{" "}
+              <MdOutlineSubscriptions size={"1.2em"} />
               <span className="text-sm">Subscriptions</span>
             </Link>
           </li>
@@ -50,12 +47,15 @@ const SideBar = ({ user }) => {
           }
         >
           <Link to="/library" className="space-x-3 flex items-center">
-            <FontAwesomeIcon icon={faFolder} />{" "}
+            <AiOutlineFolder size={"1.2em"}/>
             <span className="text-sm">Library</span>
           </Link>
         </li>
       </ul>
-      <Subscriptions subscriptions={subscriptions} loading={subscriptionsLoading} />
+      <Subscriptions
+        subscriptions={subscriptions}
+        loading={subscriptionsLoading}
+      />
     </nav>
   );
 };

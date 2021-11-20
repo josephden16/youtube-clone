@@ -1,5 +1,5 @@
-import { faMoon, faSun } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IoSunnyOutline } from "react-icons/io5";
+import { FaMoon } from "react-icons/fa";
 
 const ThemeToggle = ({ handleThemeToggle, className }) => {
   const isDarkModeEnabled = document.documentElement.classList.contains("dark");
@@ -12,10 +12,9 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
         className={className}
         onClick={handleThemeToggle}
       >
-        <FontAwesomeIcon
-          style={{ fontSize: "17px", color: "black" }}
+        <FaMoon
+          style={{ fontSize: "20px", color: "black" }}
           className="mt-1 lg:mt-2"
-          icon={faMoon}
         />
       </button>
     );
@@ -27,10 +26,9 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
       className={className}
       onClick={handleThemeToggle}
     >
-      <FontAwesomeIcon
-        style={{ fontSize: "18px", color: "gold" }}
+      <IoSunnyOutline
+        style={{ fontSize: "22px", color: "gold" }}
         className="mt-1 lg:mt-2"
-        icon={faSun}
       />
     </button>
   );

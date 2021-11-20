@@ -1,9 +1,3 @@
-import {
-  faClock,
-  faThumbsDown,
-  faThumbsUp,
-} from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useContext, useState } from "react";
 import { formatTime, getDiff } from "../../utils";
 import { UserContext } from "../providers/AuthProvider";
@@ -14,6 +8,7 @@ import { toast } from "react-toastify";
 import { firestore } from "../../firebase";
 import { useQueryClient } from "react-query";
 import VideoPlayerSkeleton from "./VideoPlayerSkeleton";
+import { FiThumbsUp, FiThumbsDown, FiClock } from "react-icons/fi";
 
 export default function VideoPlayer({
   data,
@@ -368,28 +363,30 @@ export default function VideoPlayer({
           <span className="dark:text-lightGray text-sm text-gray lg:mt-4">
             {data.views} views
           </span>
-          <div className="dark:text-lightGray text-gray flex flex-row mt-2 pb-6 space-x-2">
+          <div className="dark:text-lightGray text-gray flex flex-row items-center mt-2 pb-6 space-x-2">
             <button
               style={{ outline: "none" }}
               onClick={handleLike}
-              className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"
+              className="flex flex-row space-x-1 items-center btn transition-colors shadow-md dark:bg-dark2 bg-lightGray h-9 pl-4 text-sm pr-4 rounded-full"
             >
-              <FontAwesomeIcon icon={faThumbsUp} /> {data.likes}
+              <FiThumbsUp size="1.2em" />
+              <span>{data.likes}</span>
             </button>
             <button
               style={{ outline: "none" }}
               onClick={handleUnlike}
-              className="btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"
+              className="flex flex-row space-x-1 items-center btn transition-colors shadow-md dark:bg-dark2 bg-lightGray h-9 pl-4 text-sm pr-4 rounded-full"
             >
-              <FontAwesomeIcon icon={faThumbsDown} /> {data.unlikes}
+              <FiThumbsDown size="1.2em" />
+              <span>{data.unlikes}</span>
             </button>
             <button
               style={{ outline: "none" }}
               onClick={saveToWatchLater}
-              className="flex items-center space-x-3 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray pl-4 pb-2 pt-2 text-sm pr-4 rounded-full"
+              className="flex items-center space-x-0 btn transition-colors shadow-md dark:bg-dark2 bg-lightGray h-9 pl-4 text-sm pr-4 rounded-full"
             >
-              <FontAwesomeIcon icon={faClock} />
-              <span className="text-xs lg:text-sm capitalize">watch later</span>
+              <FiClock size="1.2em" /><sup className="font-bold text-base">+</sup>
+              {/* <span className="text-xs lg:text-sm capitalize">watch later</span> */}
             </button>
           </div>
         </div>

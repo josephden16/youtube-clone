@@ -1,6 +1,5 @@
 import  { useContext } from "react";
-import { faSearch } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {FaSearch} from "react-icons/fa";
 import { Link, useRouteMatch } from "react-router-dom";
 import { UserContext } from "../providers/AuthProvider";
 import { channelDataQueryKey } from "../../api/hooks/channel";
@@ -140,7 +139,7 @@ export default function ChannelData({ channelData, homeClass, videoClass, loadin
           </Link>
           <li className="flex items-center mb-1 lg:block space-x-4">
             <button className="outline-none">
-              <FontAwesomeIcon icon={faSearch} />
+              <FaSearch size="1.1em" />
             </button>
             <input
               className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray"
