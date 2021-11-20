@@ -1,22 +1,25 @@
 import { Link } from 'react-router-dom'
 import { formatTime, formatVideoTime } from '../../utils';
 import Video from '../common/Video';
+import ChannelHomeSkeleton from './ChannelHomeSkeleton';
 
 
-export default function Home({ channelData, videos }) {
-  if (!(videos && channelData)) return null;
-
+export default function Home({ channelData, videos, loading }) {
+  
   let time: string = "some time ago";
-
-  if (videos[0].timeUploaded) {
+  
+  if (videos && videos[0].timeUploaded) {
     time = formatTime(videos[0].timeUploaded.seconds);
   }
-
+  
+  if (loading) return <ChannelHomeSkeleton />
+  
+  if (!(videos && channelData)) return null;
 
   return (
     <section>
       {videos &&
-        <div>
+        <div className="mx-2">
           <div className="flex flex-col w-11/12 sm:w-96 mb-8">
             <Link to={`/watch?v=${videos[0].id}`}>
               <div className="text-right static">

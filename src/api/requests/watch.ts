@@ -11,7 +11,7 @@ export const getVideo = async ({ queryKey }) => {
       .collection("channels")
       .doc(videoData.channelId);
     const channelSnapshot = await channelRef.get();
-    const channelData = channelSnapshot.data();
+    const channelData = { id: channelSnapshot.id, ...channelSnapshot.data() };
 
     return {
       videoData,
@@ -62,7 +62,7 @@ export const getComments = async ({ queryKey }) => {
         ...doc.data(),
       };
     });
-  
+
     return comments;
   } catch (err) {
     throw err;

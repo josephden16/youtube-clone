@@ -1,49 +1,50 @@
-import { useContext, useEffect, useState } from 'react';
-import { UserContext } from '../../components/providers/AuthProvider';
-import { Link, Switch, Route, useParams, useRouteMatch, useLocation } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import Layout from '../../components/common/Layout';
-import Videos from '../../components/channel/Videos';
-import Home from '../../components/channel/Home';
-import { firestore } from '../../firebase';
-import loadingImg from '../../images/loading.svg';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import './channel.css';
-
+import { useEffect, useState } from "react";
+import { useParams, useLocation } from "react-router-dom";
+import Layout from "../../components/common/Layout";
+import "./channel.css";
+import {
+  channelDataQueryKey,
+  channelVideosQueryKey,
+  useChannelData,
+  useChannelVideos,
+} from "../../api/hooks/channel";
+import { useQueryClient } from "react-query";
+import ChannelData from "../../components/channel/ChannelData";
+import ChannelControl from "../../components/channel/ChannelControl";
 
 const Channel = ({ match }) => {
-  let { path, url } = useRouteMatch();
   const { id } = useParams<{ id: string }>();
-  const [channelData, setChannelData] = useState(null);
-  const [videos, setVideos] = useState(null);
-  const user = useContext(UserContext);
   // class name states for each tab (updated whenever the URL changes)
-  const [homeClass, setHomeClass] = useState("")
-  const [videoClass, setVideoClass] = useState("")
+  const [homeClass, setHomeClass] = useState("");
+  const [videoClass, setVideoClass] = useState("");
 
   let location = useLocation();
+  const queryClient = useQueryClient();
+  const { channelData, channelDataLoading } = useChannelData(id);
+  const { channelVideos, channelVideosLoading } = useChannelVideos(id);
+  console.log("loading: ", channelVideosLoading);
 
-  // changes the styles of the active tab
+  // make changes based on current location
   useEffect(() => {
-    const defaultClass = "dark:hover:border-red dark:hover:text-red hover:text-red hover:border-red transition-all pb-1 border-white dark:border-dark border-b-2";
+    const defaultClass =
+      "dark:hover:border-red dark:hover:text-red hover:text-red hover:border-red transition-all pb-1 border-white dark:border-dark border-b-2";
     const activeClass = "pb-1 border-b-2 border-red dark:border-red text-red";
     switch (location.pathname) {
-      case (match.url):
+      case match.url:
         setHomeClass(activeClass);
         setVideoClass(defaultClass);
         break;
-      case (`${match.url}/videos`):
+      case `${match.url}/videos`:
         setHomeClass(defaultClass);
         setVideoClass(activeClass);
         break;
 
-      case (`${match.url}/about`):
+      case `${match.url}/about`:
         setHomeClass(defaultClass);
         setVideoClass(defaultClass);
         break;
 
-      case (`${match.url}/playlists`):
+      case `${match.url}/playlists`:
         setHomeClass(defaultClass);
         setVideoClass(defaultClass);
         break;
@@ -53,157 +54,31 @@ const Channel = ({ match }) => {
         setVideoClass(defaultClass);
         break;
     }
-  }, [location.pathname, match.url])
 
-  useEffect(() => {
-    const fetchdata = async () => {
-      const channelRef = firestore.collection('channels').doc(id);
-      let snapshot = await channelRef.get();
-      if (snapshot.exists) {
-        let data = { id: snapshot.id, ...snapshot.data() };
-        setChannelData(data);
-      }
-    }
-    const fetchChannelVideos = async () => {
-      const ref = firestore
-        .collection("videos")
-        .where("channelId", "==", id).orderBy("timeUploaded", "desc");
-      const snapshot = await ref.get();
-      if (!snapshot.empty) {
-        let videos = snapshot.docs.map((doc) => {
-          return (
-            {
-              id: doc.id,
-              ...doc.data()
-            }
-          )
-        });
-        setVideos(videos);
-      }
-    }
-    fetchdata();
-    fetchChannelVideos();
-  }, [id]);
-
-  const subscribeToChannel = async (userRef: any, channelRef: any, subscriberRef: any, channelId: any, userId: any) => {
-    try {
-      await userRef.collection("subscriptions").doc(channelId).set({
-        channelId: channelId,
-        channelPhotoURL: channelData.channelPhotoURL,
-        channelDisplayName: channelData.channelName
-      }, { merge: true })
-      await subscriberRef.set({
-        userId: userId,
-        userDisplayName: user.displayName
-      }, { merge: true });
-      await channelRef.set({
-        subscribersCount: channelData.subscribersCount + 1
-      }, { merge: true });
-      setChannelData({
-        ...channelData,
-        subscribersCount: channelData.subscribersCount + 1
-      })
-      toast.success("You've subscribed to this channel");
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to subscribe to channel");
-    }
-  }
-
-  const unsubscribeFromChannel = async (userRef: any, channelRef: any, subscriberRef: any, channelId: any) => {
-    try {
-      await subscriberRef.delete();
-      await userRef.collection("subscriptions").doc(channelId).delete();
-      await channelRef.set({
-        subscribersCount: channelData.subscribersCount - 1
-      }, { merge: true });
-      setChannelData({
-        ...channelData,
-        subscribersCount: channelData.subscribersCount - 1
-      })
-      toast.success("You've unsubscribed from this channel");
-    } catch (error) {
-      console.log(error);
-      toast.error("Failed to unsubscribe from channel");
-    }
-  }
-
-
-  const handleSubscribe = async () => {
-    if (!user) {
-      toast.error("You must be signed in to subscribe");
-      return;
-    }
-
-    const channelId = channelData.id;
-    const userId = user.uid;
-    const userRef = firestore.collection("users").doc(userId);
-    const channelRef = firestore.collection("channels").doc(channelId);
-    const subscriberRef = channelRef.collection("subscribers").doc(userId);
-    const snapshot = await subscriberRef.get();
-
-    if (userId === channelId) {
-      toast.warning("You can't subscribe to your own channel");
-      return;
-    }
-
-    if (!(snapshot.exists)) {
-      subscribeToChannel(userRef, channelRef, subscriberRef, channelId, userId);
-    } else {
-      unsubscribeFromChannel(userRef, channelRef, subscriberRef, channelId);
-    }
-  }
-
-
-  if (!channelData || !id) return (
-    <div className="flex flex-col items-center h-full mt-8 lg:mt-20">
-      <img src={loadingImg} className="w-12 text-center" alt="loading" />
-      <span>Fetching Channel Data</span>
-    </div>
-  );
-
+    queryClient.invalidateQueries(channelDataQueryKey);
+    queryClient.invalidateQueries(channelVideosQueryKey);
+  }, [location.pathname, match.url, queryClient]);
 
   return (
     <Layout>
-      <div className="lg:mt-4 lg:-ml-3 flex flex-col w-full space-y-16">
-        <section className="flex flex-col md:flex-row md:justify-between lg:items-center space-y-3 ml-2 lg:-ml-2 xl:-ml-1 md:mr-3">
-          <div className="flex flex-col md:flex-row md:items-center md:space-x-4  lg:space-x-6">
-            <div>
-              <img className="w-20 lg:w-auto rounded-circle" src={channelData.channelPhotoURL} alt="channel owner" />
-            </div>
-            <div>
-              <h2 className="font-bold lg:text-xl">{channelData.channelName}</h2>
-              <div className="dark:text-lightGray">{channelData.subscribersCount} subscribed</div>
-            </div>
-          </div>
-          <div>
-            <button onClick={handleSubscribe} className="bg-red rounded-3xl pb-2 pt-2 pl-3 pr-3 text-white">Subscribe {channelData.subscribersCount}</button>
-          </div>
-        </section>
-        <section className="ml-2 lg:ml-0 no-scrollbar w-80 sm:w-full">
-          <ul className="flex flex-row m-0 p-0 space-x-6 lg:space-x-12 items-center text-sm lg:text-base dark:text-lightGray dark:border-dark">
-            <Link className={homeClass} to={`${url}`}>
-              Home
-            </Link>
-            <Link className={videoClass} to={`${url}/videos`}>
-              Videos
-            </Link>
-            <li className="flex items-center mb-1 lg:block space-x-4">
-              <button className="outline-none"><FontAwesomeIcon icon={faSearch} /></button>
-              <input className="dark:bg-dark placeholder-black dark:placeholder-lightGray dark:text-lightGray border-b-2 outline-none dark:border-lightGray" type="search" placeholder="Search channel..." />
-            </li>
-          </ul>
-        </section>
-        <Switch>
-          <Route path={`${match.url}/videos`} render={() => <Videos channelName={channelData.channelName} id={id} videos={videos} />} />
-          <Route exact path={path} render={() => <Home channelData={channelData} videos={videos} />} />
-        </Switch>
+      <div className="mt-10 lg:mt-4 lg:-ml-1 flex flex-col w-full space-y-16">
+        <ChannelData
+          channelData={channelData}
+          homeClass={homeClass}
+          videoClass={videoClass}
+          loading={channelDataLoading}
+        />
+        <ChannelControl
+          match={match}
+          channelData={channelData}
+          channelId={id}
+          channelVideos={channelVideos}
+          loading={channelVideosLoading}
+        />
       </div>
     </Layout>
-  )
-}
-
-
+  );
+};
 
 export default Channel;
 

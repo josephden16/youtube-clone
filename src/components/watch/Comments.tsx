@@ -7,15 +7,15 @@ import Comment from "./Comment";
 import CommentsSkeleton from "./CommentsSkeleton";
 
 export default function Comments({ videoId, commentsCount }) {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const queryClient = useQueryClient();
   const { comments, loading } = useComments(videoId);
-  
+
   const refetchComments = () => {
     queryClient.invalidateQueries(commentsQueryKey);
-  }
+  };
 
-  if (loading) return <CommentsSkeleton amount={5} />
+  if (loading) return <CommentsSkeleton amount={5} />;
 
   return (
     <div className="mt-5 mb-10 lg:ml-3 lg:mr-3">

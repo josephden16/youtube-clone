@@ -8,7 +8,7 @@ import { UserContext } from "../../components/providers/AuthProvider";
 import "./subscriptions.css";
 
 const Subscriptions = () => {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   return (
     <Layout>

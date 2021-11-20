@@ -1,3 +1,4 @@
+import { rejects } from "assert";
 import { firestore } from "../../firebase";
 
 export const getUserSubscriptionVideos = async ({ queryKey }) => {
@@ -59,17 +60,25 @@ export const getUserSubscriptions = async ({ queryKey }) => {
       const channelRef = firestore.collection("channels").doc(doc.id);
       const promise = new Promise((resolve, reject) => {
         const snapshot = channelRef.get();
-        snapshot.then((doc) => {
-          const data = { id: doc.id, ...doc.data() };
-          resolve(data);
-        });
+        snapshot
+          .then((doc) => {
+            const data = { id: doc.id, ...doc.data() };
+            resolve(data);
+          })
+          .catch((err) => {
+            rejects(err);
+          });
       });
       return promise;
     });
     return new Promise((resolve, reject) => {
-      Promise.all(subscriptionPromises).then((subscriptions) => {
-        resolve(subscriptions);
-      });
+      Promise.all(subscriptionPromises)
+        .then((subscriptions) => {
+          resolve(subscriptions);
+        })
+        .catch((err) => {
+          rejects(err);
+        });
     });
   } catch (error) {
     throw error;

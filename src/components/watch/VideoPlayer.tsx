@@ -24,7 +24,7 @@ export default function VideoPlayer({
   videoId,
   queryKey,
 }) {
-  const user = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [open, setOpen] = useState(false);
   const [viewed, setViewed] = useState(false);
   const queryClient = useQueryClient();
@@ -347,7 +347,7 @@ export default function VideoPlayer({
   // if (loading)
   //   return <Loading loading={loading} msg={"Fetching video data..."} />;
 
-  if (loading) return <VideoPlayerSkeleton /> 
+  if (loading) return <VideoPlayerSkeleton />;
 
   return (
     <div>

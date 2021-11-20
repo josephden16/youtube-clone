@@ -1,4 +1,12 @@
-const Profile = ({ user, handleModal, handleSignIn }) => {
+const Profile = ({ user, handleModal, handleSignIn, loading }) => {
+  if (loading)
+    return (
+      <div
+        className="rounded-circle bg-lightGray3 dark:bg-lightGray2 animate-pulse h-4 w-32"
+        style={{ width: "30px", height: "30px" }}
+      />
+    );
+
   if (user) {
     return (
       <button style={{ outline: "none" }} onClick={handleModal}>
@@ -17,7 +25,9 @@ const Profile = ({ user, handleModal, handleSignIn }) => {
       onClick={handleSignIn}
       className="focus:text-opacity-60 space-x-1 py-1 px-3 ml-3 -mr-1 mt-1 lg:mb-1 flex items-center outline-none border-1 rounded-md border-red dark:border-lightGray"
     >
-      <span className="text-xs dark:text-lightGray text-red font-semibold">SIGN IN</span>
+      <span className="text-xs dark:text-lightGray text-red font-semibold">
+        SIGN IN
+      </span>
     </button>
   );
 };

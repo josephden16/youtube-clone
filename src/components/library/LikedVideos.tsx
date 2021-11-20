@@ -1,10 +1,13 @@
-import Video from "../watch/Video";
+import Video from "../common/Video";
+import LikedVideosSkeleton from "./LikedVideosSkeleton";
 
-
-export default function LikedVideos({ likedVideos }) {
+export default function LikedVideos({ likedVideos, loading }) {  
+  if (loading) return <LikedVideosSkeleton />
+  
   if (!likedVideos) return null;
+
   return (
-    <section className="border-b-1 pb-2 border-lightGray dark:border-gray w-full">
+    <section className="border-b-1 pb-4 border-lightGray dark:border-gray w-full">
       <div className="flex flex-row w-full justify-center lg:justify-between">
         <div className="flex flex-row w-full justify-center lg:justify-between sm:mb-10 mb-8">
           <div>
@@ -18,7 +21,7 @@ export default function LikedVideos({ likedVideos }) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
+      <div className="mx-1 flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
         {likedVideos && likedVideos.map((video: any, index: number) => (
           <Video key={index} video={video} />
         ))}

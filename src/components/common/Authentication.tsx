@@ -5,7 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from '../providers/AuthProvider';
 
 const Authentication = () => {
-  const user: any = useContext(UserContext);
+  const {user} = useContext(UserContext);
 
   const handleSignOut = () => {
     signOut();

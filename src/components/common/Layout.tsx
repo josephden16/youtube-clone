@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import Header from '../navigation/Header';
 import SideBar from '../navigation/SideBar';
 import MobileFooter from '../navigation/MobileFooter';
+import { UserContext } from '../providers/AuthProvider';
 
 
 const Layout = ({ children }) => {
+  const {user} = useContext(UserContext);
   const [navOpen, setNavOpen] = useState(true);
 
   const handleSideBar = () => {
@@ -17,7 +19,7 @@ const Layout = ({ children }) => {
         <Header sidebar={true} handleMenu={handleSideBar} />
         <div className="flex w-full pt-0 lg:pt-4 md:space-x-8 lg:space-x-11 xl:space-x-1">
           <div className={navOpen ? 'openSidebar lg:mr-11 xl:w-56' : 'hideSidebar lg:mr-0'}>
-            <SideBar />
+            <SideBar user={user} />
           </div>
           <main className="w-full">{children}</main>
         </div>

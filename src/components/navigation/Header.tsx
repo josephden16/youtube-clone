@@ -20,7 +20,7 @@ const Header = (props: any) => {
   const [theme, setTheme] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const user = useContext(UserContext);
+  const { user, loading } = useContext(UserContext);
   const history = useHistory();
 
   const handleModal = (): void => {
@@ -150,6 +150,7 @@ const Header = (props: any) => {
               handleThemeToggle={handleThemeToggle}
             />
             <Profile
+              loading={loading}
               handleSignIn={handleSignIn}
               handleModal={handleModal}
               user={user}

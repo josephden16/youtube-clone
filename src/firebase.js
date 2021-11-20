@@ -44,7 +44,7 @@ export const signInWithGoogle = () => {
           email,
           photoURL,
           createdAt
-        }).then(() => console.log("user created successfully"))
+        }).then(() => {})
           .catch((error) => console.log(`failed to create user, Error: ${error}`));
       }
     })

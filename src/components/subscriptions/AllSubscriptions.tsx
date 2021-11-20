@@ -7,7 +7,7 @@ export default function AllSubscriptions({ user }) {
   const [subscriptions, setSubscriptions] = useState([]);
   useEffect(() => {
     const fetchSubscriptions = async () => {
-      const userId = user.uid;
+      const userId = user?.uid;
       const subscriptionsRef = firestore.collection("users").doc(userId).collection("subscriptions");
       try {
         const snapshot = await subscriptionsRef.get();

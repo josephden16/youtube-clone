@@ -1,17 +1,17 @@
-import React, { useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
+import { useUserSubscriptions } from "../../api/hooks/subscription";
 import {
   faFolder,
   faHome,
   faCompactDisc,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { UserContext } from "../providers/AuthProvider";
 import Subscriptions from "./sidebar/Subscriptions";
 
-const SideBar = () => {
+const SideBar = ({ user }) => {
   const location = useLocation();
-  const user = useContext(UserContext);
+  const userId = user?.uid;
+  const { subscriptions, subscriptionsLoading } = useUserSubscriptions(userId);
   const getClassName = (path: string) => {
     return location.pathname === path ? "text-red" : "";
   };
@@ -49,13 +49,13 @@ const SideBar = () => {
             " hover:text-red items-center flex transition-colors cursor-pointer"
           }
         >
-          <Link to="library" className="space-x-3 flex items-center">
+          <Link to="/library" className="space-x-3 flex items-center">
             <FontAwesomeIcon icon={faFolder} />{" "}
             <span className="text-sm">Library</span>
           </Link>
         </li>
       </ul>
-      {user && <Subscriptions user={user} />}
+      <Subscriptions subscriptions={subscriptions} loading={subscriptionsLoading} />
     </nav>
   );
 };

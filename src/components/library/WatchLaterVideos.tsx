@@ -1,10 +1,15 @@
-import Video from "../watch/Video";
+import Video from "../common/Video";
+import VideoLoadingSkeleton from "../loading/VideoLoadingSkeleton";
+import WatchLaterSkeleton from "./WatchLaterSkeleton";
 
+export default function WatchLaterVideos({ watchLaterVideos, loading }) {
 
-export default function WatchLaterVideos({ watchLaterVideos }) {
+  if (loading) return <WatchLaterSkeleton />;
+
   if (!watchLaterVideos) return null;
+
   return (
-    <section className="border-b-1 pb-2 border-lightGray dark:border-gray w-full">
+    <section className="border-b-1 pb-4 border-lightGray dark:border-gray w-full">
       <div className="flex flex-row w-full justify-center lg:justify-between">
         <div className="flex flex-row w-full justify-center mb-8 sm:mb-10 lg:justify-between">
           <div>
@@ -18,10 +23,15 @@ export default function WatchLaterVideos({ watchLaterVideos }) {
           </div>
         </div>
       </div>
-      <div className="flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
+      <div className="mx-1 flex flex-col space-y-8 sm:grid sm:space-y-0 sm:grid-cols-2 sm:gap-6 lg:grid-cols-3 lg:space-y-0 xl:grid-cols-4">
         {watchLaterVideos && watchLaterVideos.map((video: any, index: number) => (
           <Video key={index} video={video} />
         ))}
+        {
+          (loading) && (
+            <VideoLoadingSkeleton amount={4} />
+          )
+        }
       </div>
       {/* <div className="text-center mt-4 text-lg lg:hidden"><button className="uppercase text-sm">see all</button></div> */}
     </section>
