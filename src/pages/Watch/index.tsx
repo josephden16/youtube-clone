@@ -25,7 +25,7 @@ const Watch = () => {
       <main className="layout mt-3 lg:-ml-1 lg:mt-10 w-full lg:space-x-10">
         <VideoPlayer
           autoplay={checked}
-          nextVideoId={relatedVideos ? relatedVideos[0].id : ""}
+          nextVideoId={relatedVideos ? relatedVideos[0]?.id : ""}
           channelData={data?.channelData}
           videoId={videoId}
           data={data?.videoData}
