@@ -23,9 +23,9 @@ const Profile = ({ user, handleModal, handleSignIn, loading }) => {
     <button
       style={{ outline: "none" }}
       onClick={handleSignIn}
-      className="focus:text-opacity-60 space-x-1 py-1 px-3 ml-3 -mr-1 mt-1 lg:mb-1 flex items-center outline-none border-1 rounded-md border-red dark:border-lightGray"
+      className="focus:text-opacity-60 space-x-1 py-1 px-3 ml-3 -mr-1 mt-1 lg:mb-1 flex items-center outline-none border-2 rounded-md border-black dark:border-lightGray"
     >
-      <span className="text-xs dark:text-lightGray text-red font-semibold">
+      <span className="text-xs dark:text-lightGray text-black font-semibold">
         SIGN IN
       </span>
     </button>

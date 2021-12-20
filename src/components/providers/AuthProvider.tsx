@@ -23,6 +23,7 @@ const UserProvider = (props: any) => {
         });
       } else {
         setUser(null);
+        setLoading(false);
       }
     });
 
