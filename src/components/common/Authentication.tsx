@@ -13,7 +13,7 @@ const Authentication = () => {
 
   return (
     <div className="transistion-colors dark:bg-dark flex flex-col space-y-3 items-center text-center mb-2">
-      <button onClick={signInWithGoogle} className="dark:bg-dark dark:text-lightGray items-center justify-center text-center bg-lightGray text-gray inline-flex space-x-2 font-bold shadow-md pt-3 pb-3 pl-10 pr-10">
+      <button onClick={signInWithGoogle} className="rounded-lg dark:bg-dark dark:text-lightGray items-center justify-center text-center bg-lightGray text-gray inline-flex space-x-2 font-bold shadow-md pt-3 pb-3 pl-10 pr-10">
         <img className="w-4" alt="google" src={googleIcon} /> <span>Sign in with Google</span>
       </button>
       <button onClick={handleSignOut} className={!user ? 'hidden' : "bg-red rounded-md text-lightGray w-24 pt-2 pb-2"}>
