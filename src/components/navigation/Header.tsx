@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { KeyboardEvent, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { signInWithGoogle, signOut } from "../../firebase";
 import { FaVideo, FaSearch, FaRegUser } from "react-icons/fa";
@@ -69,6 +69,12 @@ const Header = (props: any) => {
     setSearchQuery(searchQuery);
   };
 
+  const handleEnterKeyPress = (evt: KeyboardEvent<HTMLInputElement>) => {
+    if (evt.key === "Enter") {
+      handleSearch();
+    }
+  }
+
   const handleSearch = () => {
     if (searchQuery !== "") {
       history.push(`/search?q=${searchQuery}`);
@@ -98,6 +104,7 @@ const Header = (props: any) => {
           <div className="hidden lg:block lg:ml-24 lg:mt-1">
             <input
               onChange={(evt) => handleSearchEntry(evt.target.value)}
+              onKeyPress={(evt) => handleEnterKeyPress(evt)}
               style={{
                 width: "460px",
                 paddingTop: "6px",
@@ -110,14 +117,7 @@ const Header = (props: any) => {
               title="search"
             />
             <button
-              style={{
-                paddingTop: "3px",
-                paddingBottom: "6px",
-                paddingLeft: "11px",
-                paddingRight: "11px",
-                left: "-34px",
-              }}
-              className="bg-gray dark:bg-dark shadow-md relative rounded-circle"
+              className="relative rounded-circle text-center top-1 right-9 py-2 px-2"
               onClick={handleSearch}
             >
               <FaSearch />
@@ -177,6 +177,7 @@ const Header = (props: any) => {
         handleClose={closeSearch}
         handleSearch={handleSearch}
         handleSearchEntry={handleSearchEntry}
+        handleEnterKeyPress={handleEnterKeyPress}
       />
     </>
   );

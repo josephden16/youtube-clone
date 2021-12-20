@@ -5,6 +5,8 @@ const MobileSearch = ({
   handleClose,
   handleSearch,
   handleSearchEntry,
+  handleEnterKeyPress
+
 }) => {
   return (
     <div
@@ -22,6 +24,7 @@ const MobileSearch = ({
       </button>
       <input
         onChange={(evt) => handleSearchEntry(evt.target.value)}
+        onKeyPress={(evt) => handleEnterKeyPress(evt)}
         style={{ width: "100%" }}
         className="dark:bg-dark2 bg-lightGray ml-0 pt-1 pb-1 pl-4 pr-4 rounded-3xl outline-none"
         type="text"
