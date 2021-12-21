@@ -22,7 +22,6 @@ const Channel = ({ match }) => {
   const queryClient = useQueryClient();
   const { channelData, channelDataLoading } = useChannelData(id);
   const { channelVideos, channelVideosLoading } = useChannelVideos(id);
-  console.log("loading: ", channelVideosLoading);
 
   // make changes based on current location
   useEffect(() => {
