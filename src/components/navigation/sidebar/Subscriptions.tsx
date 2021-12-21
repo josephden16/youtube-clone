@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import SubscriptionsSkeleton from "./SubscriptionsSkeleton";
 
 const Subscriptions = ({ loading, subscriptions }) => {
-  if (loading) return <SubscriptionsSkeleton amount={4} />;
+  if (loading) return <SubscriptionsSkeleton amount={8} />;
 
   if (!subscriptions && !loading) return null;
 
@@ -10,7 +10,7 @@ const Subscriptions = ({ loading, subscriptions }) => {
     <ul
       className={
         subscriptions
-          ? "dark:text-lightGray m-0 mt-16 space-y-4 text-black"
+          ? "dark:text-lightGray m-0 mt-10 space-y-4 text-black"
           : "hidden"
       }
     >
