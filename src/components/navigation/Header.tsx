@@ -73,13 +73,19 @@ const Header = (props: any) => {
     if (evt.key === "Enter") {
       handleSearch();
     }
-  }
+  };
 
   const handleSearch = () => {
     if (searchQuery !== "") {
       history.push(`/search?q=${searchQuery}`);
     }
   };
+
+  const goToProfilePage = () => {
+    if (!user) return;
+  
+    history.push(`/channel/${user.uid}`);
+  }
 
   return (
     <>
@@ -117,7 +123,7 @@ const Header = (props: any) => {
               title="search"
             />
             <button
-              style={{top: "3px"}}
+              style={{ top: "3px" }}
               className="relative rounded-circle text-center right-9 py-2 px-2"
               onClick={handleSearch}
             >
@@ -160,17 +166,17 @@ const Header = (props: any) => {
         }
       >
         {user && (
-          <button className="space-x-2 flex items-center justify-center hover:opacity-70 w-full font-bold">
-            <Link to={`/channel/${user.uid}`}>
-              <span>Your Channel</span> <FaRegUser size="1.2em" />
-            </Link>
+          <button onClick={goToProfilePage} className="rounded-md space-x-2 hover:opacity-75 w-full font-bold flex flex-row items-center text-sm justify-center">
+            <span>Your Profile</span>
+            <FaRegUser size="1.2em" />
           </button>
         )}
         <button
           onClick={handleSignOut}
-          className="space-x-2 hover:opacity-70 w-full font-bold"
+          className="rounded-md space-x-2 hover:opacity-70 w-full font-bold flex flex-row items-center text-sm justify-center"
         >
-          <span>Sign out</span> <GoSignOut />
+          <span>Sign out</span>
+          <GoSignOut className="relative" style={{ top: "2px" }} />
         </button>
       </div>
       <MobileSearch
