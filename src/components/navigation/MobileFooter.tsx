@@ -18,7 +18,7 @@ const MobileFooter = () => {
       style={{ borderTop: "1px solid" }}
       className="transition-colors dark:bg-dark dark:text-gray fixed w-full text-lightGray pb-2 pt-2 mt-4 pl-6 pr-6 bottom-0 bg-white lg:hidden"
     >
-      <div className="flex dark:text-lightGray text-gray justify-between">
+      <div className="flex dark:text-lightGray text-black justify-between">
         <Link to="/" className={getClassName("/")}>
           <div className="flex text-center items-center flex-col">
             <BiHome size="1.2em" />

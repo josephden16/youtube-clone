@@ -360,10 +360,10 @@ export default function VideoPlayer({
           {data.title}
         </h1>
         <div className="lg:flex lg:flex-row lg:justify-between">
-          <span className="dark:text-lightGray text-sm text-gray lg:mt-4">
+          <span className="dark:text-lightGray text-sm text-black lg:mt-4">
             {data.views} views
           </span>
-          <div className="dark:text-lightGray text-gray flex flex-row items-center mt-2 pb-6 space-x-2">
+          <div className="dark:text-lightGray text-black flex flex-row items-center mt-2 pb-6 space-x-2">
             <button
               style={{ outline: "none" }}
               onClick={handleLike}
@@ -413,7 +413,7 @@ export default function VideoPlayer({
                 >
                   {channelData && channelData.channelName}
                 </a>
-                <span className="dark:text-lightGray text-gray">
+                <span className="dark:text-lightGray text-black">
                   {channelData && channelData.subscribersCount} subscribed
                 </span>
               </div>
@@ -427,7 +427,7 @@ export default function VideoPlayer({
             </button>
           </div>
         </div>
-        <div className={open ? "text-gray" : "hideText mb-2"}>
+        <div className={open ? "text-black" : "hideText mb-2"}>
           <p className="dark:text-lightGray lg:ml-16 text-sm mb-3">
             Published {formatTime(data.timeUploaded.seconds)}
           </p>
@@ -445,7 +445,7 @@ export default function VideoPlayer({
         <button
           onClick={toggleDescription}
           style={{ outline: "none" }}
-          className="dark:text-lightGray mt-2 uppercase text-gray text-sm font-bold"
+          className="dark:text-lightGray mt-2 uppercase text-black text-sm font-bold"
         >
           {open ? "show less" : "show more"}
         </button>

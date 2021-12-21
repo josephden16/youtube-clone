@@ -21,7 +21,7 @@ const Video = ({ video }) => {
       </div>
       <div className="ml-2 mr-2">
         <h3 className="font-bold text-sm capitalize -mt-4">{formatTitle(video.title)}</h3>
-        <div className="dark:text-lightGray text-gray text-xs lg:text-sm flex justify-between">
+        <div className="dark:text-lightGray text-black text-xs lg:text-sm flex justify-between">
           <div className="space-x-2 text-sm">
             <span>{video.views} views</span>
             <span>&middot;</span>

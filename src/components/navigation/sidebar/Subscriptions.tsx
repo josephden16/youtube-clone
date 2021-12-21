@@ -10,7 +10,7 @@ const Subscriptions = ({ loading, subscriptions }) => {
     <ul
       className={
         subscriptions
-          ? "dark:text-lightGray m-0 mt-16 space-y-4 text-gray"
+          ? "dark:text-lightGray m-0 mt-16 space-y-4 text-black"
           : "hidden"
       }
     >

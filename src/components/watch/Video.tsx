@@ -17,7 +17,7 @@ export default function Video({ video }) {
       </a>
       <div className="transition-colors ml-2 mr-2">
         <h3 className="font-bold capitalize text-sm -mt-4">{formatTitle(video.title)}</h3>
-        <div className="text-gray dark:text-lightGray text-xs flex justify-between">
+        <div className="text-black dark:text-lightGray text-xs flex justify-between">
           <div className="space-x-2">
             <span>{video.views} views</span>
             <span>&middot;</span>

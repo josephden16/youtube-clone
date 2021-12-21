@@ -40,7 +40,7 @@ const MobileSearch = ({
           paddingRight: "11px",
           left: "-34px",
         }}
-        className="bg-gray dark:bg-dark shadow-md relative rounded-circle"
+        className="bg-lightGray dark:bg-dark2 relative rounded-circle"
         onClick={handleSearch}
       >
         <FaSearch />

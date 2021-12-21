@@ -15,7 +15,7 @@ const SideBar = ({ user }) => {
 
   return (
     <nav className="transition-colors hidden lg:flex lg:flex-col lg:ml-0">
-      <ul className="dark:text-lightGray m-0 w-full space-y-5 text-gray mt-6">
+      <ul className="dark:text-lightGray m-0 w-full space-y-5 text-black mt-6">
         <li
           className={
             getClassName("/") +

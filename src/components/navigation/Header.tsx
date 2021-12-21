@@ -110,14 +110,15 @@ const Header = (props: any) => {
                 paddingTop: "6px",
                 paddingBottom: "6px",
               }}
-              className="dark:bg-dark2 text-sm -mt-2 md:-mt-0 shadow-lg placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none"
+              className="dark:bg-dark2 text-sm -mt-2 md:mt-0 placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none"
               type="text"
               name="search"
               placeholder="Search"
               title="search"
             />
             <button
-              className="relative rounded-circle text-center top-1 right-9 py-2 px-2"
+              style={{top: "3px"}}
+              className="relative rounded-circle text-center right-9 py-2 px-2"
               onClick={handleSearch}
             >
               <FaSearch />
@@ -126,7 +127,7 @@ const Header = (props: any) => {
           <div className="md:-mt-0 lg:mt-0 lg:mr-4 flex align-middle items-center">
             <button onClick={openSearch} className="mt-1 md:mr-2 lg:hidden">
               <FaSearch
-                className="dark:text-lightGray text-gray"
+                className="dark:text-lightGray text-black"
                 style={{ marginTop: "4px", fontSize: "16px" }}
               />
             </button>
@@ -139,7 +140,7 @@ const Header = (props: any) => {
               </Link>
             )}
             <ThemeToggle
-              className="ml-4 mt-1 mr-2 lg:-mt-1 lg:ml-3 lg:mr-4"
+              className="ml-4 mt-1 mr-2 lg:mt-1 lg:ml-3 lg:mr-4"
               handleThemeToggle={handleThemeToggle}
             />
             <Profile
