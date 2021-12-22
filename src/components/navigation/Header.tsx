@@ -146,7 +146,7 @@ const Header = (props: any) => {
               </Link>
             )}
             <ThemeToggle
-              className="ml-4 mt-1 mr-2 lg:mt-1 lg:ml-3 lg:mr-4"
+              className="ml-4 mt-1 mr-2 lg:mt-1 lg:ml-3 lg:mr-2"
               handleThemeToggle={handleThemeToggle}
             />
             <Profile
@@ -167,7 +167,7 @@ const Header = (props: any) => {
       >
         {user && (
           <button onClick={goToProfilePage} className="rounded-md space-x-2 hover:opacity-75 w-full font-bold flex flex-row items-center text-sm justify-center">
-            <span>Your Profile</span>
+            <span>Your Channel</span>
             <FaRegUser size="1.2em" />
           </button>
         )}

@@ -13,8 +13,8 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
         onClick={handleThemeToggle}
       >
         <FaMoon
-          style={{ fontSize: "20px", color: "black" }}
-          className="mt-1 lg:mt-2"
+          style={{ fontSize: "18px", color: "black" }}
+          className="mt-1 lg:mt-1"
         />
       </button>
     );
@@ -27,7 +27,7 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
       onClick={handleThemeToggle}
     >
       <IoSunnyOutline
-        style={{ fontSize: "22px", color: "gold" }}
+        style={{ fontSize: "20px", color: "gold" }}
         className="mt-1 lg:mt-2"
       />
     </button>
