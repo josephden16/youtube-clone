@@ -137,7 +137,7 @@ export default function ChannelData({ channelData, homeClass, videoClass, loadin
           <Link className={videoClass} to={`${url}/videos`}>
             Videos
           </Link>
-          <li className="flex items-center mb-1 lg:block space-x-4">
+          {/* <li className="flex items-center mb-1 lg:block space-x-4">
             <button className="outline-none">
               <FaSearch size="1.1em" />
             </button>
@@ -146,7 +146,7 @@ export default function ChannelData({ channelData, homeClass, videoClass, loadin
               type="search"
               placeholder="Search channel..."
             />
-          </li>
+          </li> */}
         </ul>
       </div>
     </section>
