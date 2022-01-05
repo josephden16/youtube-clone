@@ -5,10 +5,12 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import UserProvider from './components/providers/AuthProvider';
+import ScrollToTop from './ScrollToTop';
 
 ReactDOM.render(
   <React.StrictMode>
     <Router>
+      <ScrollToTop />
       <UserProvider>
         <App />
       </UserProvider>
