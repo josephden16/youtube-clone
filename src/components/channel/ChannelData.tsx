@@ -1,5 +1,4 @@
 import  { useContext } from "react";
-import {FaSearch} from "react-icons/fa";
 import { Link, useRouteMatch } from "react-router-dom";
 import { UserContext } from "../providers/AuthProvider";
 import { channelDataQueryKey } from "../../api/hooks/channel";

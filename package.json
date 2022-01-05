@@ -5,6 +5,7 @@
   "dependencies": {
     "@bit/codyooo.rc-demo.switch": "^0.0.5",
     "@craco/craco": "^6.1.1",
+    "@headlessui/react": "^1.4.2",
     "@tailwindcss/postcss7-compat": "^2.0.2",
     "algoliasearch": "^4.10.3",
     "autoprefixer": "^9",

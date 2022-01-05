@@ -5,7 +5,7 @@ import { toast } from "react-toastify";
 import { firestore, storage } from "../../firebase";
 import loadingImg from "../../images/loading.svg";
 
-const VideoUpload = ({ channelId, channelName }) => {
+const VideoUpload = ({ channelId, channelName, user }) => {
   const [loading, setLoading] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -186,6 +186,8 @@ const VideoUpload = ({ channelId, channelName }) => {
     handleUpload();
     resetInputs();
   };
+
+  if (!user) return null;
 
   return (
     <>
