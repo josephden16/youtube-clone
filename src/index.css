@@ -39,6 +39,10 @@ body {
   animation: mobileSearch 300ms ease-out;
 }
 
+.no-outline {
+  outline: none;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

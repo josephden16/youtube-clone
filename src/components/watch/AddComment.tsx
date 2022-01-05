@@ -48,7 +48,7 @@ export default function AddComment({ user, videoId, commentsCount, fetchComments
     <div className="space-y-3 mt-4 ml-2 mr-2 mb-6">
       <div className="flex ml-2 lg:ml-0 space-x-4 lg:space-x-6 justify-items-start">
         <img src={user.photoURL} className="rounded-circle w-8 lg:w-10" alt={user.displayName} />
-        <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray placeholder-black outline-none" />
+        <input ref={inputField} onChange={(evt) => setComment(evt.target.value)} type="text" placeholder="Add a comment" className="dark:bg-dark dark:border-gray text-sm w-full border-b-1 border-lightGray dark:placeholder-white placeholder-black outline-none" />
       </div>
       <div className="flex justify-end">
         <button style={{ outline: 'none' }} onClick={postComment} className="dark:bg-dark2 dark:text-white focus-within:opacity-50 hover:opacity-50 transition-colors text-xs lg:text-sm bg-lightGray font-bold pl-3 pr-3 pt-2 pb-2 text-black uppercase">Comment</button>
