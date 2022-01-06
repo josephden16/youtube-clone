@@ -1,4 +1,4 @@
-import { AiFillEdit } from "react-icons/ai";
+// import { AiFillEdit } from "react-icons/ai";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import {
@@ -15,10 +15,10 @@ const ManageVideo = ({ video, updateCurrentVideo, openDeleteModal }) => {
     time = formatTime(video.timeUploaded.seconds);
   }
 
-  const handleEdit = () => {
-    // open modal
-    updateCurrentVideo(video);
-  }
+  // const handleEdit = () => {
+  //   // open modal
+  //   // updateCurrentVideo(video);
+  // }
 
   const handleDelete = () => {
     // open modal

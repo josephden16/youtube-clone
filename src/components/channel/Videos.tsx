@@ -11,15 +11,15 @@ export default function Videos({ id, videos, channelName, loading }) {
   const { user } = useContext(UserContext);
   const [selectedVideoData, setSelectedVideoData] = useState(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  // const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
   const updateCurrentVideo = (video: any): void => {
     setSelectedVideoData(video);
   };
 
-  const openEditModal = () => {
-    setIsEditModalOpen(true);
-  };
+  // const openEditModal = () => {
+  //   setIsEditModalOpen(true);
+  // };
 
   const openDeleteModal = () => {
     setIsDeleteModalOpen(true);
