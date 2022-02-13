@@ -13,8 +13,8 @@ const VideoUpload = ({ channelId, channelName, user }) => {
   const [posterURL, setPosterURL] = useState("");
   const [duration, setDuration] = useState(null);
 
-  const videoFile: any = useRef(null);
-  const posterFile: any = useRef(null);
+  const videoFile = useRef(null);
+  const posterFile = useRef(null);
   const defaultPoster: string =
     "https://firebasestorage.googleapis.com/v0/b/fir-fc298.appspot.com/o/posters%2Fdefault(1).webp?alt=media&token=72d58d6b-0968-4071-ae3a-cbb8bef5631b";
   const videoRef = firestore.collection("videos");
@@ -139,30 +139,35 @@ const VideoUpload = ({ channelId, channelName, user }) => {
       });
   };
 
-  const validateFormData = (): void => {
-    if (!videoFile) {
+  const validateFormData = (): boolean => {
+    let isValid: boolean = true;
+    if (videoFile.current?.files.length < 1) {
       toast.error("A video file must be selected");
-      return;
+      isValid = false;
     }
 
     if (!title) {
       toast.error("Enter a title for your video");
-      return;
+      isValid = false;
     }
 
     if (!description && description.length < 20) {
       toast.error("Enter a description for your video of the required length");
-      return;
+      isValid = false;
     }
+    return isValid;
   };
 
   const resetInputs = (): void => {
     setPosterURL("");
     setVideoURL("");
+    videoFile.current = null;
   };
 
   const handleUpload = () => {
-    validateFormData();
+    const isFormValid: boolean = validateFormData();
+
+    if (!isFormValid) return;
 
     const { type } = videoFile.current.files[0];
     if (loading) {
@@ -213,7 +218,7 @@ const VideoUpload = ({ channelId, channelName, user }) => {
             maxLength={3000}
             placeholder="description* (between 20-3000 characters)"
           ></textarea>
-          <div className="items-center dark:text-lightGray text-black text-sm space-x-2 font-bold w-11/12 lg:w-96 flex flex-row flex-nowrap">
+          <div className="dark:text-lightGray text-black text-sm space-x-2 font-bold w-11/12 lg:w-96 flex flex-col flex-nowrap">
             <label
               htmlFor="poster"
               className="flex flex-row items-center w-56 space-x-3 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80"
@@ -230,9 +235,11 @@ const VideoUpload = ({ channelId, channelName, user }) => {
               />
               <ImAttachment size="1.2em" /> <span>Attach Poster</span>
             </label>
-            {/* <span>{posterFile.current && posterFile.current.files[0].name}</span> */}
+            <span>
+              {posterFile.current && posterFile.current.files[0]?.name}
+            </span>
           </div>
-          <div className="flex flex-row items-center dark:text-lightGray text-black text-sm w-11/12 font-bold lg:w-96 space-x-2">
+          <div className="flex flex-col dark:text-lightGray text-black text-sm w-11/12 font-bold lg:w-96 space-x-2">
             <label
               htmlFor="video"
               className="flex items-center space-x-3 w-56 bg-red text-white font-bold rounded-md p-2 cursor-pointer hover:opacity-80"
@@ -249,11 +256,13 @@ const VideoUpload = ({ channelId, channelName, user }) => {
               <ImAttachment size="1.2em" className="text-white" />
               <span>Attach Video</span>
             </label>
-            {/* <span>{videoFile.current && videoFile.current.files[0].name}</span> */}
+            <span className="">
+              {videoFile.current && videoFile.current.files[0]?.name}
+            </span>
           </div>
           <button
             disabled={loading ? true : false}
-            onClick={handleSubmit}
+            onClick={!loading ? handleSubmit : null}
             className="bg-red h-11  text-white hover:opacity-90 font-bold rounded-md w-32 p-2 flex flex-col items-center cursor-pointer"
           >
             <span className={loading ? "flex" : "hidden"}>

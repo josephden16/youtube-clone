@@ -14,7 +14,7 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
       >
         <FaMoon
           style={{ fontSize: "18px", color: "black" }}
-          className="mt-1 lg:mt-1"
+          className="mt-1 lg:mt-2"
         />
       </button>
     );

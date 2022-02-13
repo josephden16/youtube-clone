@@ -83,9 +83,9 @@ const Header = (props: any) => {
 
   const goToProfilePage = () => {
     if (!user) return;
-  
+
     history.push(`/channel/${user.uid}`);
-  }
+  };
 
   return (
     <>
@@ -113,8 +113,8 @@ const Header = (props: any) => {
               onKeyPress={(evt) => handleEnterKeyPress(evt)}
               style={{
                 width: "460px",
-                paddingTop: "6px",
-                paddingBottom: "6px",
+                paddingTop: "7px",
+                paddingBottom: "7px",
               }}
               className="dark:bg-dark2 text-sm -mt-2 md:mt-0 placeholder-gray dark:placeholder-white dark:text-white bg-lightGray pl-4 pr-9 rounded-3xl outline-none"
               type="text"
@@ -146,7 +146,7 @@ const Header = (props: any) => {
               </Link>
             )}
             <ThemeToggle
-              className="ml-4 mt-1 mr-2 lg:mt-1 lg:ml-3 lg:mr-2"
+              className="ml-4 mt-1 mr-2 lg:mt-0 lg:ml-3 lg:mr-2"
               handleThemeToggle={handleThemeToggle}
             />
             <Profile
@@ -166,7 +166,10 @@ const Header = (props: any) => {
         }
       >
         {user && (
-          <button onClick={goToProfilePage} className="rounded-md space-x-2 hover:opacity-75 w-full font-bold flex flex-row items-center text-sm justify-center">
+          <button
+            onClick={goToProfilePage}
+            className="rounded-md space-x-2 hover:opacity-75 w-full font-bold flex flex-row items-center text-sm justify-center"
+          >
             <span>Your Channel</span>
             <FaRegUser size="1.2em" />
           </button>
