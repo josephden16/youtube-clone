@@ -43,7 +43,9 @@ export default function Videos({ id, videos, channelName, loading }) {
         closeDeleteModal={closeDeleteModal}
         selectedVideoData={selectedVideoData}
       />
-      <VideoUpload user={user} channelName={channelName} channelId={id} />
+      {user.uid === id && (
+        <VideoUpload user={user} channelName={channelName} channelId={id} />
+      )}
       <ManageUploads
         videos={videos}
         updateCurrentVideo={updateCurrentVideo}
