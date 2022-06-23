@@ -42,6 +42,7 @@ export default function Videos({ id, videos, channelName, loading }) {
         <VideoUpload user={user} channelName={channelName} channelId={id} />
       )}
       <ManageUploads
+        channelId={id}
         videos={videos}
         updateCurrentVideo={updateCurrentVideo}
         openDeleteModal={openDeleteModal}
