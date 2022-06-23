@@ -1,11 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  formatChannelName,
-  formatTitle,
-  formatVideoTime,
-  formatTime,
-} from "../../utils";
+import { formatVideoTime, formatTime } from "../../utils";
 
 const Video = ({ video }) => {
   let time: string = "some time ago";
@@ -37,8 +32,8 @@ const Video = ({ video }) => {
         </Link>
       </div>
       <div className="ml-2 mr-2">
-        <h3 className="font-bold text-sm capitalize -mt-4">
-          {formatTitle(video.title)}
+        <h3 className="font-bold text-sm capitalize -mt-4 truncate">
+          {video.title}
         </h3>
         <div className="dark:text-lightGray text-black text-xs lg:text-sm flex justify-between">
           <div className="space-x-2 text-sm">
@@ -49,9 +44,9 @@ const Video = ({ video }) => {
           <div>
             <Link
               to={`/channel/${video.channelId}`}
-              className="text-sm font-bold hover:text-gray"
+              className="text-sm font-bold hover:text-gray truncate"
             >
-              {formatChannelName(video.channelName)}
+              {video.channelName}
             </Link>
           </div>
         </div>
