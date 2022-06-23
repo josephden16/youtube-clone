@@ -31,9 +31,6 @@ export const searchVideos = async (searchQuery: string) => {
         ...doc.data(),
       };
     });
-
-    console.log(videos);
-
     if (videos && videos.length > 0) {
       const filteredVideos = videos.filter(
         (video: any) =>
@@ -41,8 +38,6 @@ export const searchVideos = async (searchQuery: string) => {
           video.description.toLowerCase().indexOf(searchQuery) > -1 ||
           video.channelName.toLowerCase().indexOf(searchQuery) > -1
       );
-
-      console.log(filteredVideos);
       return filteredVideos;
     }
     return [];
