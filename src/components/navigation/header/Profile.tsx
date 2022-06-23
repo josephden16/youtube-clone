@@ -24,7 +24,7 @@ const Profile = ({
       <Popover className="relative">
         <Popover.Button style={{ outline: "none" }} onClick={handleModal}>
           <img
-            className="hover:opacity-70 rounded-circle mt-1 lg:mt-1 ml-2 cursor-pointer"
+            className="hover:opacity-70 rounded-circle mt-2 lg:mt-1 ml-2 cursor-pointer"
             style={{ width: "30px", height: "30px" }}
             src={user.photoURL}
             alt="profile"
