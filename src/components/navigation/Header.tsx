@@ -147,7 +147,7 @@ const Header = (props: any) => {
               </Link>
             )}
             <ThemeToggle
-              className="ml-4 mt-1 mr-2 lg:mt-0 lg:ml-3 lg:mr-2"
+              className="ml-4 mr-2 lg:mt-0 lg:ml-3 lg:mr-2"
               handleThemeToggle={handleThemeToggle}
             />
             <Profile

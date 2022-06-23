@@ -14,7 +14,7 @@ const Profile = ({
   if (loading)
     return (
       <div
-        className="rounded-circle bg-lightGray3 dark:bg-lightGray2 animate-pulse h-4 w-32 mt-1 lg:mt-2"
+        className="rounded-circle bg-lightGray3 dark:bg-lightGray2 animate-pulse"
         style={{ width: "30px", height: "30px" }}
       />
     );

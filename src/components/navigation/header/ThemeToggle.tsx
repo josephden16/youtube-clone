@@ -1,9 +1,9 @@
 import { IoSunnyOutline } from "react-icons/io5";
 import { FaMoon } from "react-icons/fa";
+import { useTheme } from "../../providers/ThemeProvider";
 
 const ThemeToggle = ({ handleThemeToggle, className }) => {
-  const isDarkModeEnabled = document.documentElement.classList.contains("dark");
-  let currentTheme = isDarkModeEnabled ? "dark" : "light";
+  const { theme: currentTheme } = useTheme();
 
   if (currentTheme === "light") {
     return (
@@ -12,10 +12,7 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
         className={className}
         onClick={handleThemeToggle}
       >
-        <FaMoon
-          style={{ fontSize: "18px", color: "black" }}
-          className="mt-1 lg:mt-2"
-        />
+        <FaMoon style={{ fontSize: "18px", color: "black" }} className="mt-1" />
       </button>
     );
   }
@@ -28,7 +25,7 @@ const ThemeToggle = ({ handleThemeToggle, className }) => {
     >
       <IoSunnyOutline
         style={{ fontSize: "20px", color: "gold" }}
-        className="mt-1 lg:mt-2"
+        className="mt-1"
       />
     </button>
   );
