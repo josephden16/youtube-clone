@@ -1,4 +1,5 @@
 // import { AiFillEdit } from "react-icons/ai";
+import { useContext } from "react";
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import {
@@ -7,13 +8,21 @@ import {
   formatVideoTime,
   formatTime,
 } from "../../utils";
+import { UserContext } from "../providers/AuthProvider";
 
-const ManageVideo = ({ video, updateCurrentVideo, openDeleteModal }) => {
+const ManageVideo = ({
+  video,
+  updateCurrentVideo,
+  openDeleteModal,
+  channelId,
+}) => {
   let time: string = "some time ago";
 
   if (video.timeUploaded) {
     time = formatTime(video.timeUploaded.seconds);
   }
+
+  const { user } = useContext(UserContext);
 
   // const handleEdit = () => {
   //   // open modal
@@ -24,7 +33,7 @@ const ManageVideo = ({ video, updateCurrentVideo, openDeleteModal }) => {
     // open modal
     updateCurrentVideo(video);
     openDeleteModal();
-  }
+  };
 
   return (
     <div className="relative video-home flex flex-col space-y-5">
@@ -32,9 +41,11 @@ const ManageVideo = ({ video, updateCurrentVideo, openDeleteModal }) => {
         {/* <button style={{outline: 'none'}} onClick={handleEdit}>
           <AiFillEdit />
         </button> */}
-        <button style={{outline: 'none'}} onClick={handleDelete}>
-          <FaTrash className="text-red" />
-        </button>
+        {channelId === user.uid && (
+          <button style={{ outline: "none" }} onClick={handleDelete}>
+            <FaTrash className="text-red" />
+          </button>
+        )}
       </div>
       <div>
         <Link to={`/watch?v=${video.id}`}>

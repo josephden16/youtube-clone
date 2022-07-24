@@ -1,18 +1,19 @@
 import { KeyboardEvent, useContext, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { signInWithGoogle, signOut } from "../../firebase";
-import { FaVideo, FaSearch, FaRegUser } from "react-icons/fa";
+import { FaVideo, FaSearch } from "react-icons/fa";
 import { AiOutlineMenu } from "react-icons/ai";
-import { GoSignOut } from "react-icons/go";
 import { UserContext } from "../providers/AuthProvider";
 import Profile from "./header/Profile";
 import Logo from "./header/Logo";
 import ThemeToggle from "./header/ThemeToggle";
 import MobileSearch from "./header/MobileSearch";
+import { Theme } from "../../typings";
+import { useTheme } from "../providers/ThemeProvider";
 
 const Header = (props: any) => {
+  const { updateThemeContext } = useTheme();
   const [isOpen, setOpen] = useState(false);
-  const [theme, setTheme] = useState(null);
   const [modalOpen, setModalOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const { user, loading } = useContext(UserContext);
@@ -46,8 +47,8 @@ const Header = (props: any) => {
     }
   };
 
-  const changeTheme = (theme: string): void => {
-    setTheme(theme);
+  const changeTheme = (theme: Theme): void => {
+    updateThemeContext(theme);
   };
 
   const openSearch = (): void => {
@@ -103,7 +104,7 @@ const Header = (props: any) => {
             <AiOutlineMenu size="1.22em" />
           </button>
           <Link to="/">
-            <Logo theme={theme} />
+            <Logo />
           </Link>
         </div>
         <div className="flex justify-end lg:justify-between w-full md:w-full md:mt-1">
@@ -146,7 +147,7 @@ const Header = (props: any) => {
               </Link>
             )}
             <ThemeToggle
-              className="ml-4 mt-1 mr-2 lg:mt-0 lg:ml-3 lg:mr-2"
+              className="ml-4 mr-2 lg:mt-0 lg:ml-3 lg:mr-2"
               handleThemeToggle={handleThemeToggle}
             />
             <Profile
@@ -154,34 +155,12 @@ const Header = (props: any) => {
               handleSignIn={handleSignIn}
               handleModal={handleModal}
               user={user}
+              handleSignOut={handleSignOut}
+              goToProfilePage={goToProfilePage}
             />
           </div>
         </div>
       </header>
-      <div
-        className={
-          modalOpen
-            ? "dark:bg-dark2 bg-lightGray rounded-md p-2 space-y-3 absolute right-4 mt-3 lg:right-8 z-40 w-52 opacity-100 transition-opacity"
-            : "hidden opacity-0"
-        }
-      >
-        {user && (
-          <button
-            onClick={goToProfilePage}
-            className="rounded-md space-x-2 hover:opacity-75 w-full font-bold flex flex-row items-center text-sm justify-center"
-          >
-            <span>Your Channel</span>
-            <FaRegUser size="1.2em" />
-          </button>
-        )}
-        <button
-          onClick={handleSignOut}
-          className="rounded-md space-x-2 hover:opacity-70 w-full font-bold flex flex-row items-center text-sm justify-center"
-        >
-          <span>Sign out</span>
-          <GoSignOut className="relative" style={{ top: "2px" }} />
-        </button>
-      </div>
       <MobileSearch
         open={isOpen}
         handleClose={closeSearch}

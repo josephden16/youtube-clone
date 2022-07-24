@@ -3,7 +3,6 @@ import VideoLoadingSkeleton from "../loading/VideoLoadingSkeleton";
 import ErrorImage from "../../images/error.png";
 
 const Videos = ({ videos, loading, error, retry }) => {
-
   if (Array.isArray(videos) && videos.length > 0) {
     return (
       <>
@@ -34,9 +33,7 @@ const Videos = ({ videos, loading, error, retry }) => {
             className="w-20"
           />
         </div>
-        <div className="font-semibold">
-          Failed to fetch videos
-        </div>
+        <div className="font-semibold">Failed to fetch videos</div>
         <button
           style={{ outline: "0px" }}
           onClick={retry}
@@ -53,7 +50,9 @@ const Videos = ({ videos, loading, error, retry }) => {
       <div>
         <img draggable={false} src={ErrorImage} alt="error" className="w-20" />
       </div>
-      <div className="font-semibold text-dark dark:text-lightGray">Failed to fetch videos</div>
+      <div className="font-semibold text-dark dark:text-lightGray">
+        Failed to fetch videos
+      </div>
       <button
         style={{ outline: "0px" }}
         onClick={retry}

@@ -13,7 +13,7 @@ export const useVideo = (videoId: string) => {
   return {
     videoLoading: isLoading,
     errorMessage: isError,
-    data: data,
+    data: data || null,
     retry: refetch,
   };
 };
@@ -33,8 +33,8 @@ export const useRelatedVideos = (currentVideoId: string) => {
 };
 
 export const useComments = (videoId: string) => {
-  const {data, isLoading, isError, refetch} = useQuery(
-    [commentsQueryKey, {videoId}],
+  const { data, isLoading, isError, refetch } = useQuery(
+    [commentsQueryKey, { videoId }],
     getComments
   );
 
